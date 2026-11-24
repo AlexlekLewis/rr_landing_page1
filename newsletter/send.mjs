@@ -14,7 +14,7 @@
 //   - From is Andy, Reply-To is Andy, so replies reach a person
 //   - addresses never leave Supabase/Resend: nothing is printed except counts
 import { readFileSync } from 'node:fs';
-import { build, buildText } from './build.mjs';
+import { build, buildText, POSTAL } from './build.mjs';
 
 const FROM = process.env.NEWSLETTER_FROM || 'Andy Crook | Royals Academy <andy.crook@rramelbourne.com>';
 const REPLY_TO = process.env.NEWSLETTER_REPLY_TO || 'andy.crook@rramelbourne.com';
@@ -54,7 +54,7 @@ async function sync() {
   if (suppressed.length && GO) await sb('newsletter_suppressions?on_conflict=email', { method: 'POST', body: JSON.stringify(suppressed), headers: { Prefer: 'resolution=ignore-duplicates,return=minimal' } });
   // 2. Push the current audience, split into waves by recency.
   const cutoff = Date.now() - 183 * 864e5;
-  const people = await sb('newsletter_audience?select=email,last_seen');
+  const people = await sb('newsletter_recipients?select=email,last_seen');
   let added = 0;
   for (const p of people) {
     if (known.has(p.email)) continue;
@@ -67,6 +67,8 @@ async function sync() {
 
 async function schedule(file) {
   const issue = JSON.parse(readFileSync(file, 'utf8'));
+  if (POSTAL.includes('[')) throw new Error('footer postal address/ABN is still a placeholder: set NEWSLETTER_POSTAL (Spam Act sender identification)');
+  if (issue.tip?.needsApproval) throw new Error('tip copy is still flagged needsApproval');
   const wave = Number((process.argv.find((a) => a.startsWith('--wave=')) || '--wave=1').split('=')[1]);
   const [row] = await sb(`newsletter_issues?issue_no=eq.${issue.issue}&select=*`);
   if (!row) throw new Error(`issue ${issue.issue} is not in newsletter_issues`);

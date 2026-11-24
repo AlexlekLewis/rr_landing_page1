@@ -4,21 +4,60 @@
   "monthLabel": "December 2026",
   "campaign": "royals-report-01",
   "subjects": [
-    "He’s 15 and just hit 204 off 53 🏏",
-    "Andy’s note: records, runs and India in April"
+    "Sooryavanshi, 15, hits 204 off 53 🏏",
+    "Andy’s note: 2 weeks of Junior Royals left"
   ],
-  "preheader": "Plus our players’ big weekend, Junior Royals before Christmas and gift ideas from the Academy store.",
+  "preheader": "Plus the last Junior Royals sessions before Christmas, our players’ big weekend and gift ideas from $38.50.",
   "greeting": "Hello Royals family,",
   "intro": [
     "Welcome to the first Royals Report. Every second Tuesday I’ll send you a short note on what’s happening across the Academy: how our players are going, what’s coming up, and the best of the wider Royals family.",
-    "It’s been a big fortnight. Our players had one of their best weekends of club cricket, Power League is in full swing at Montmorency Park, and one of the Royals’ own teenagers rewrote the record books.",
-    "Thanks for being part of it."
+    "It’s been a big fortnight. Our players had a big weekend of club cricket, our first touring group is back from the home of the Royals in India, and one of the Royals’ own teenagers rewrote the record books."
   ],
+  "letterCta": {
+    "text": "If your child is 7 to 12, there are two weeks of Junior Royals left before Christmas. Join now and keep your spot for the new year.",
+    "cta": { "label": "Join Junior Royals", "href": "/junior-royals" },
+    "slot": "letter-junior-royals"
+  },
   "signoff": { "name": "Andy Crook", "role": "Academy Director", "photo": "/assets/coaches/andy-crook-halla.jpg" },
+  "ps": { "text": "P.S. Junior Royals payments pause over the Christmas break and you keep your spot. Last sessions: Monday 14 December at Mickleham, Wednesday 16 December at Cranbourne North.", "cta": { "label": "Join now", "href": "/junior-royals" }, "slot": "ps-junior-royals" },
+  "programs": {
+    "kicker": "Coming up",
+    "title": "Find the right program",
+    "items": [
+      {
+        "tag": "Ages 7 to 12 · $44.95 a week",
+        "title": "Junior Royals",
+        "body": "Mondays at Mickleham or Wednesdays at Cranbourne North: 5pm for ages 7 to 9, 6pm for ages 10 to 12. Join before the break: payments pause over Christmas and you keep your spot.",
+        "cta": { "label": "Join Now", "href": "/junior-royals" },
+        "slot": "programs-junior-royals"
+      },
+      {
+        "tag": "One-to-one, or bring a training partner",
+        "title": "Private Coaching",
+        "body": "Train one-to-one with an Academy coach, or share the session with a training partner, at Cranbourne North, Hallam, Mickleham or Ravenhall.",
+        "cta": { "label": "Enquire now", "href": "/private-coaching" },
+        "slot": "programs-private-coaching"
+      },
+      {
+        "tag": "April 2027 · India",
+        "title": "April 2027 India Tour",
+        "body": "About ten days at the Rajasthan Royals High Performance Centre. Registering interest is free and commits you to nothing. We’ll send the dates and price to everyone registered.",
+        "cta": { "label": "Get tour dates", "href": "/tours" },
+        "slot": "programs-india-tour"
+      },
+      {
+        "tag": "Ages 10 to 25",
+        "title": "Performance Squads",
+        "body": "Season-long squads at Mickleham and Cranbourne North. Register now and we’ll tell you first when the next trial dates are set.",
+        "cta": { "label": "Get trial dates", "href": "/performance-squads" },
+        "slot": "programs-performance-squads"
+      }
+    ]
+  },
   "feature": {
     "kicker": "From the Royals family",
     "title": "204 off 53. He’s 15.",
-    "body": "Rajasthan Royals teenager Vaibhav Sooryavanshi hit the fastest hundred (28 balls) and fastest double hundred in List A history, with a world-record 28 sixes, as India A beat the UAE in Doha.",
+    "body": "Rajasthan Royals teenager Vaibhav Sooryavanshi hit the fastest hundred (28 balls) and the fastest double hundred ever in one-day List A cricket, with a world-record 28 sixes, as India A beat the UAE in Doha.",
     "image": "/assets/news/sooryavanshi-204-hero.jpg",
     "alt": "Vaibhav Sooryavanshi: 204 off 53 balls",
     "cta": { "label": "Read the story", "href": "/news/sooryavanshi-204-off-53-record-night" },
@@ -26,57 +65,15 @@
   },
   "players": {
     "kicker": "Our players",
-    "title": "Runs, wickets and wins",
+    "title": "A big weekend of club cricket",
     "cards": [
       {
-        "title": "Unbeaten eighties and a five-for",
-        "body": "Siddhant Goel (86*) and Dhruva Bezawada (81*) carried their bats in Premier Under-18s, and Jake Frederiksen took 5/45 for Diamond Creek’s 1st XI.",
+        "title": "Two unbeaten eighties and five wickets",
+        "body": "Siddhant Goel carried his bat for 86 not out and Dhruva Bezawada made 81 not out in Premier Under-18s. Jake Frederiksen took five wickets for 45 runs for Diamond Creek’s First XI.",
         "image": "/assets/news/weekend-wrap-20-22-nov-header.jpg",
         "alt": "Weekend Wrap, 20 to 22 November: our top performers in club cricket",
-        "cta": { "label": "Weekend Wrap", "href": "/news/weekend-wrap-20-22-november" },
+        "cta": { "label": "Read the Weekend Wrap", "href": "/news/weekend-wrap-20-22-november" },
         "slot": "players-weekend-wrap"
-      },
-      {
-        "title": "Ghotra’s 85 not out",
-        "body": "Jaskaran Ghotra hit 85* off 56 as South-East Melbourne beat North Melbourne by 73 runs in Power League at Montmorency Park.",
-        "image": "/assets/news/power-league-15-nov-ghotra-delivery-wide.jpg",
-        "alt": "Jaskaran Ghotra faces a delivery at Montmorency Park",
-        "cta": { "label": "Match report", "href": "/news/ghotra-85-south-east-melbourne-senior-win" },
-        "slot": "players-power-league"
-      }
-    ]
-  },
-  "programs": {
-    "kicker": "Coming up",
-    "title": "Find the right program",
-    "items": [
-      {
-        "tag": "Ages 7 to 12",
-        "title": "Junior Royals",
-        "body": "Fun, skills-first cricket in small groups by age. $44.95 a week, join any week. Last sessions before Christmas are mid-December.",
-        "cta": { "label": "Join this week", "href": "/junior-royals" },
-        "slot": "programs-junior-royals"
-      },
-      {
-        "tag": "1-to-1 or with a training partner",
-        "title": "Private Coaching",
-        "body": "Work one-on-one with an Academy coach, or share a session with a training partner, at Cranbourne North, Mickleham or Ravenhall.",
-        "cta": { "label": "Enquire now", "href": "/private-coaching" },
-        "slot": "programs-private-coaching"
-      },
-      {
-        "tag": "April 2027 · India",
-        "title": "High Performance Camp",
-        "body": "About ten days at the Rajasthan Royals High Performance Centre. Registering interest is free and commits you to nothing. We’ll send dates and price first to those registered.",
-        "cta": { "label": "Register interest", "href": "/tours" },
-        "slot": "programs-hpc-camp"
-      },
-      {
-        "tag": "Ages 10 to 25",
-        "title": "Performance Squads",
-        "body": "Season-long squads at Mickleham and Cranbourne North. Register now and we’ll tell you first when the next trial dates are set.",
-        "cta": { "label": "Register interest", "href": "/performance-squads" },
-        "slot": "programs-performance-squads"
       }
     ]
   },
@@ -93,17 +90,18 @@
   "tip": {
     "kicker": "From the nets",
     "title": "Training in the heat",
-    "body": "Melbourne summer cricket is hot. Drink before you feel thirsty: a few big mouthfuls before training, then small sips at every drinks break. Wear a cap, re-apply sunscreen at the break, and pack a piece of fruit for after. Recovery starts the minute you walk off.",
+    "body": "Melbourne summer cricket is hot. Drink before you feel thirsty: a few big mouthfuls before training, then small sips at every drinks break. Wear a cap, reapply sunscreen at the break, and pack a piece of fruit for after. Recovery starts the minute you walk off.",
     "needsApproval": true
   },
   "shop": {
     "kicker": "Christmas gift ideas",
     "title": "From the Academy store",
     "items": [
-      { "name": "Training Shirt", "price": "$62.95", "image": "/shop/training-shirt-front.png" },
       { "name": "Academy Cap", "price": "$38.50", "image": "/shop/pink-cap-front.png" },
-      { "name": "Fleece Lined Jacket", "price": "$96.95", "image": "/shop/fleece-jacket-front.png", "note": "Made to order" }
+      { "name": "Training Shorts", "price": "$54.95", "image": "/shop/training-shorts-front.png" },
+      { "name": "Training Shirt", "price": "$62.95", "image": "/shop/training-shirt-front.png" }
     ],
+    "note": "All in stock.",
     "cta": { "label": "Shop the store", "href": "/academy-shop" },
     "slot": "shop-christmas"
   }

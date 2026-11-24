@@ -31,6 +31,7 @@ with real open/click/purchase data (a Sunday 7pm test against Tuesday is the one
 
 ## 2. Who it goes to: `newsletter_audience` (Supabase)
 
+* Sent to `newsletter_recipients` = the audience minus people known only as coach job applicants.
 * Every address ever registered with us: 89 email columns across every sign-up, enquiry,
   payment, waitlist and shop table, plus the canonical player registry. Lower-cased and
   de-duplicated. 1,538 addresses on 24 Nov 2026.

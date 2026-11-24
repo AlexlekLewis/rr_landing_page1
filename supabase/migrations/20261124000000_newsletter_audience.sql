@@ -255,3 +255,9 @@ group by c.email;
 comment on view public.newsletter_audience is 'Every address ever registered with the Academy (all sign-up, enquiry, payment and shop tables + the canonical player registry), lower-cased and de-duplicated, minus newsletter_suppressions, explicit form opt-outs, deleted members and test records. Player-only email columns (under-18s) are deliberately not included. Read with the service role only.';
 revoke all on public.newsletter_audience from anon, authenticated;
 
+
+-- Who is actually sent to: minus addresses known only as coach job applicants/enquirers.
+create or replace view public.newsletter_recipients with (security_invoker = true) as
+select * from public.newsletter_audience
+where not (segments <@ array['coaches']::text[]);
+revoke all on public.newsletter_recipients from anon, authenticated;

@@ -34,6 +34,7 @@ const FONT = "Montserrat,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+export { POSTAL };
 export function build(issue, { preview = false } = {}) {
   const link = (href, slot) => {
     const url = new URL(href, SITE);
@@ -58,8 +59,8 @@ export function build(issue, { preview = false } = {}) {
 <td align="center" bgcolor="${bg}" style="border-radius:6px;mso-padding-alt:14px 24px;">
 <a href="${link(cta.href, slot)}" style="display:inline-block;padding:14px 24px;font-family:${FONT};font-size:16px;line-height:20px;font-weight:700;color:#FFFFFF;text-decoration:none;border-radius:6px;">${esc(cta.label)}&nbsp;&rarr;</a>
 </td></tr></table>`;
-  const textLink = (cta, slot) => `<a href="${link(cta.href, slot)}" style="font-family:${FONT};font-size:15px;font-weight:700;color:${C.pink};text-decoration:none;">${esc(cta.label)}&nbsp;&rarr;</a>`;
-  const kicker = (t, color = C.pink) => `<p class="kick" style="margin:0 0 6px;font-family:${FONT};font-size:12px;line-height:16px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:${color};">${esc(t)}</p>`;
+  const textLink = (cta, slot) => `<a href="${link(cta.href, slot)}" style="font-family:${FONT};font-size:15px;line-height:20px;font-weight:700;color:${C.pink};text-decoration:none;display:inline-block;padding:12px 0;">${esc(cta.label)}&nbsp;&rarr;</a>`;
+  const kicker = (t, color = C.pink, cls = 'kick') => `<p class="${cls}" style="margin:0 0 6px;font-family:${FONT};font-size:12px;line-height:16px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:${color};">${esc(t)}</p>`;
   const h2 = (t) => `<h2 class="t-ink" style="margin:0 0 10px;font-family:${FONT};font-size:24px;line-height:30px;font-weight:800;color:${C.ink};">${esc(t)}</h2>`;
   const p = (t, extra = '') => `<p class="t-body" style="margin:0 0 14px;font-family:${FONT};font-size:16px;line-height:25px;color:${C.ink};${extra}">${esc(t)}</p>`;
   const section = (inner, { bg = C.card, pad = '32px 32px', cls = 'card' } = {}) =>
@@ -84,13 +85,16 @@ export function build(issue, { preview = false } = {}) {
   const letter = section(`
 ${p(i.greeting, 'font-weight:700;')}
 ${i.intro.map((t) => p(t)).join('')}
+${i.letterCta ? `${p(i.letterCta.text, 'font-weight:700;')}<div style="margin:0 0 22px;">${button(i.letterCta.cta, i.letterCta.slot)}</div>` : ''}
+${p('Thanks for being part of it.')}
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:6px;"><tr>
-  <td width="56" valign="middle"><img src="${img(i.signoff.photo)}" width="56" height="56" alt="${esc(i.signoff.name)}" style="display:block;width:56px;height:56px;border-radius:28px;border:2px solid ${C.pink};"></td>
+  <td width="56" valign="middle"><img src="${img(i.signoff.photo)}" width="56" height="56" alt="" style="display:block;width:56px;height:56px;border-radius:28px;border:2px solid ${C.pink};"></td>
   <td valign="middle" style="padding-left:14px;">
     <p class="t-ink" style="margin:0;font-family:${FONT};font-size:16px;line-height:20px;font-weight:800;color:${C.ink};">${esc(i.signoff.name)}</p>
     <p class="t-muted" style="margin:2px 0 0;font-family:${FONT};font-size:14px;line-height:18px;color:${C.muted};">${esc(i.signoff.role)}, Rajasthan Royals Academy Melbourne</p>
   </td>
-</tr></table>`);
+</tr></table>
+${i.ps ? `<p class="t-body" style="margin:22px 0 0;padding-top:18px;border-top:1px solid ${C.line};font-family:${FONT};font-size:15px;line-height:23px;color:${C.ink};">${esc(i.ps.text)} ${textLink(i.ps.cta, i.ps.slot)}</p>` : ''}`);
 
   const f = i.feature;
   const feature = `
@@ -105,7 +109,10 @@ ${section(`${kicker(f.kicker)}${h2(f.title)}${p(f.body)}${button(f.cta, f.slot)}
 <p class="t-body" style="margin:0 0 10px;font-family:${FONT};font-size:15px;line-height:22px;color:${C.ink};">${esc(c.body)}</p>
 ${textLink(c.cta, c.slot)}`;
   const pl = i.players;
-  const players = section(`${kicker(pl.kicker)}${h2(pl.title)}
+  const players = pl.cards.length === 1 ? section(`${kicker(pl.kicker)}${h2(pl.title)}
+<a href="${link(pl.cards[0].cta.href, pl.cards[0].slot)}"><img src="${img(pl.cards[0].image)}" width="536" alt="${esc(pl.cards[0].alt)}" class="fluid" style="display:block;width:100%;max-width:536px;height:auto;border:0;border-radius:6px;margin-top:8px;"></a>
+<h3 class="t-ink" style="margin:16px 0 6px;font-family:${FONT};font-size:19px;line-height:24px;font-weight:800;color:${C.ink};">${esc(pl.cards[0].title)}</h3>
+${p(pl.cards[0].body, 'margin-bottom:4px;')}${textLink(pl.cards[0].cta, pl.cards[0].slot)}`) : section(`${kicker(pl.kicker)}${h2(pl.title)}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:8px;"><tr>
   <td class="col" width="260" valign="top" style="width:260px;padding-right:12px;">${card(pl.cards[0])}</td>
   <td class="col col-2" width="260" valign="top" style="width:260px;padding-left:12px;">${card(pl.cards[1])}</td>
@@ -143,7 +150,7 @@ ${pr.items.map((it, n) => `
   const tip = section(`
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
 <td class="tip" bgcolor="${C.soft}" style="background:${C.soft};border-radius:8px;padding:22px 24px;">
-  ${kicker(t.kicker, C.pinkDark)}
+  ${kicker(t.kicker, C.pinkDark, 'kick kick-tip')}
   <h3 class="t-ink" style="margin:0 0 8px;font-family:${FONT};font-size:19px;line-height:24px;font-weight:800;color:${C.ink};">${esc(t.title)}</h3>
   <p class="t-body" style="margin:0;font-family:${FONT};font-size:15px;line-height:23px;color:${C.ink};">${esc(t.body)}</p>
 </td></tr></table>`, { pad: '28px 32px' });
@@ -158,22 +165,23 @@ ${sh.items.map((it) => `<td class="shopcol" width="33%" valign="top" align="cent
   ${it.note ? `<p class="t-muted" style="margin:2px 0 0;font-family:${FONT};font-size:12px;line-height:16px;color:${C.muted};">${esc(it.note)}</p>` : ''}
 </td>`).join('')}
 </tr></table>
+${sh.note ? p(sh.note, 'font-size:14px;') : ''}
 ${button(sh.cta, sh.slot, { bg: C.blue })}`);
 
   const contact = section(`
 <h3 class="t-ink" style="margin:0 0 8px;font-family:${FONT};font-size:19px;line-height:24px;font-weight:800;color:${C.ink};">Questions? Just reply.</h3>
-<p class="t-body" style="margin:0;font-family:${FONT};font-size:15px;line-height:23px;color:${C.ink};">Replies come straight to me. You can also text us on <a href="sms:0421261825" style="color:${C.pink};font-weight:700;text-decoration:none;">0421&nbsp;261&nbsp;825</a> or email <a href="mailto:info@rramelbourne.com" style="color:${C.pink};font-weight:700;text-decoration:none;">info@rramelbourne.com</a>.</p>`, { pad: '28px 32px' });
+<p class="t-body" style="margin:0;font-family:${FONT};font-size:15px;line-height:23px;color:${C.ink};">Replies come straight to me. You can also text us on <a href="sms:+61421261825" style="color:${C.pink};font-weight:700;text-decoration:none;">0421&nbsp;261&nbsp;825</a> or email <a href="mailto:info@rramelbourne.com" style="color:${C.pink};font-weight:700;text-decoration:none;">info@rramelbourne.com</a>.</p>`, { pad: '28px 32px' });
 
   const footer = `
 <tr><td class="px" bgcolor="${C.dark}" style="background:${C.dark};padding:28px 32px 32px;" align="center">
   <p style="margin:0 0 14px;font-family:${FONT};font-size:13px;line-height:18px;">
-    <a href="${link('/', 'footer-site')}" style="color:#FFFFFF;font-weight:700;text-decoration:none;">rramelbourne.com</a>
-    &nbsp;·&nbsp;<a href="https://www.instagram.com/rramelbourne" style="color:#FFFFFF;font-weight:700;text-decoration:none;">Instagram</a>
-    &nbsp;·&nbsp;<a href="https://www.facebook.com/share/1HsxoaRXWP/" style="color:#FFFFFF;font-weight:700;text-decoration:none;">Facebook</a>
-    &nbsp;·&nbsp;<a href="${link('/news', 'footer-news')}" style="color:#FFFFFF;font-weight:700;text-decoration:none;">News</a>
+    <a href="${link('/', 'footer-site')}" style="color:#FFFFFF;font-weight:700;text-decoration:none;display:inline-block;padding:10px 2px;">rramelbourne.com</a>
+    &nbsp;·&nbsp;<a href="https://www.instagram.com/rramelbourne" style="color:#FFFFFF;font-weight:700;text-decoration:none;display:inline-block;padding:10px 2px;">Instagram</a>
+    &nbsp;·&nbsp;<a href="https://www.facebook.com/share/1HsxoaRXWP/?mibextid=wwXIfr" style="color:#FFFFFF;font-weight:700;text-decoration:none;display:inline-block;padding:10px 2px;">Facebook</a>
+    &nbsp;·&nbsp;<a href="${link('/news', 'footer-news')}" style="color:#FFFFFF;font-weight:700;text-decoration:none;display:inline-block;padding:10px 2px;">News</a>
   </p>
   <p style="margin:0 0 10px;font-family:${FONT};font-size:12px;line-height:18px;color:#A9ADBD;">You’re receiving this because you registered for, enquired about or bought from a Rajasthan Royals Academy Melbourne program. We send it every second Tuesday.</p>
-  <p style="margin:0 0 10px;font-family:${FONT};font-size:12px;line-height:18px;color:#A9ADBD;"><a href="${UNSUBSCRIBE}" style="color:#FFFFFF;text-decoration:underline;">Unsubscribe</a> &nbsp;·&nbsp; <a href="${link('/privacy-policy', 'footer-privacy')}" style="color:#FFFFFF;text-decoration:underline;">Privacy policy</a></p>
+  <p style="margin:0 0 10px;font-family:${FONT};font-size:12px;line-height:18px;color:#A9ADBD;"><a href="${UNSUBSCRIBE}" style="color:#FFFFFF;text-decoration:underline;display:inline-block;padding:10px 2px;">Unsubscribe</a> &nbsp;·&nbsp; <a href="${link('/privacy-policy', 'footer-privacy')}" style="color:#FFFFFF;text-decoration:underline;display:inline-block;padding:10px 2px;">Privacy policy</a></p>
   <p style="margin:0;font-family:${FONT};font-size:12px;line-height:18px;color:#7F8496;">${esc(POSTAL)}</p>
 </td></tr>`;
 
@@ -189,8 +197,9 @@ ${button(sh.cta, sh.slot, { bg: C.blue })}`);
 <meta name="supported-color-schemes" content="light dark">
 <title>The Royals Report · Issue ${i.issue}</title>
 <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
+<!--[if mso]><style>*{font-family:Arial,sans-serif!important}</style><![endif]-->
+<!--[if !mso]><!--><style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap');</style><!--<![endif]-->
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap');
 body{margin:0;padding:0;width:100%!important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
 img{-ms-interpolation-mode:bicubic}
 a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important}
@@ -209,6 +218,7 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
   .t-muted{color:#B5B9C8!important}
   .prog{border-top-color:#2A3244!important;border-right-color:#2A3244!important;border-bottom-color:#2A3244!important}
   .tip{background:#2A1426!important}
+  .kick-tip{color:#FF8FD0!important}
 }
 [data-ogsc] .card{background:#161C27!important}
 [data-ogsc] .t-ink,[data-ogsc] .t-body{color:#F2F3F7!important}
@@ -223,11 +233,11 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 ${masthead}
 ${letter}
 ${spacer()}
+${programs}
+${spacer()}
 ${feature}
 ${spacer()}
 ${players}
-${spacer()}
-${programs}
 ${spacer()}
 ${story}
 ${spacer()}
@@ -246,12 +256,12 @@ ${footer}
 }
 
 export function buildText(i) {
-  const u = (href, slot) => `${new URL(href, SITE)}?utm_source=newsletter&utm_medium=email&utm_campaign=${i.campaign}&utm_content=${slot}`;
+  const u = (href, slot) => { const x = new URL(href, SITE); x.searchParams.set('utm_source', 'newsletter'); x.searchParams.set('utm_medium', 'email'); x.searchParams.set('utm_campaign', i.campaign); x.searchParams.set('utm_content', slot); return x.toString(); };
   const L = [];
-  L.push(`THE ROYALS REPORT · Issue ${i.issue} · ${i.monthLabel}`, 'From the Academy Director', '', i.greeting, '', ...i.intro.flatMap((t) => [t, '']), `${i.signoff.name}, ${i.signoff.role}`, '');
+  L.push(`THE ROYALS REPORT · Issue ${i.issue} · ${i.monthLabel}`, 'From the Academy Director', '', i.greeting, '', ...i.intro.flatMap((t) => [t, '']), ...(i.letterCta ? [i.letterCta.text, `${i.letterCta.cta.label}: ${u(i.letterCta.cta.href, i.letterCta.slot)}`, ''] : []), 'Thanks for being part of it.', '', `${i.signoff.name}, ${i.signoff.role}`, '', ...(i.ps ? [i.ps.text, `${i.ps.cta.label}: ${u(i.ps.cta.href, i.ps.slot)}`, ''] : []));
+  L.push('---', i.programs.kicker.toUpperCase(), ...i.programs.items.flatMap((p) => [`${p.title} (${p.tag})`, p.body, `${p.cta.label}: ${u(p.cta.href, p.slot)}`, '']));
   const f = i.feature; L.push('---', f.kicker.toUpperCase(), f.title, f.body, `${f.cta.label}: ${u(f.cta.href, f.slot)}`, '');
   L.push('---', i.players.kicker.toUpperCase(), ...i.players.cards.flatMap((c) => [c.title, c.body, `${c.cta.label}: ${u(c.cta.href, c.slot)}`, '']));
-  L.push('---', i.programs.kicker.toUpperCase(), ...i.programs.items.flatMap((p) => [`${p.title} (${p.tag})`, p.body, `${p.cta.label}: ${u(p.cta.href, p.slot)}`, '']));
   const s = i.story; L.push('---', s.kicker.toUpperCase(), s.title, s.body, `${s.cta.label}: ${u(s.cta.href, s.slot)}`, '');
   L.push('---', i.tip.kicker.toUpperCase(), i.tip.title, i.tip.body, '');
   L.push('---', i.shop.kicker.toUpperCase(), ...i.shop.items.map((x) => `${x.name} ${x.price}${x.note ? ` (${x.note})` : ''}`), `${i.shop.cta.label}: ${u(i.shop.cta.href, i.shop.slot)}`, '');
@@ -273,4 +283,5 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const kb = (Buffer.byteLength(html) / 1024).toFixed(1);
   console.log(`${name}.html ${kb} KB${kb > 100 ? '  ⚠ over Gmail’s 102 KB clip limit' : ''}`);
   if (issue.tip?.needsApproval) console.log('note: tip copy flagged for Andy’s approval');
+  if (POSTAL.includes('[')) console.log('⚠ footer postal address/ABN is a placeholder: set NEWSLETTER_POSTAL. send.mjs refuses to send until it is set.');
 }
