@@ -204,6 +204,16 @@ python3 captions.py pieces.json <outdir>  # captions per audience
 ```
 Name the unzipped pack folders as in `PACKS` in build_pieces.py (03-feed, elite-melbourne, ...).
 
+## 5e. Scope and vibrancy (Andy, 24 Nov 2026)
+
+- **This studio makes photos and still creatives only.** No video or reels unless Andy asks again.
+- **Match the vibrancy of the home page (rramelbourne.com).** Use the site's three-stop gradient
+  `linear-gradient(150deg,#001D48 0%,#1226AA 42%,#E11F8F 100%)` (Admiral Blue in the middle), not
+  the two-stop navy-to-pink, which goes muddy purple.
+- **Photos stay in full colour** with a little punch (`saturate(1.3) contrast(1.1)`), fading
+  into the gradient at the edges. No desaturating or pink tinting.
+- This replaces the earlier gradient in section 1 and the "desaturated duotone" photo treatment.
+
 ## 6. Build and render
 
 Build each frame as static HTML at exact pixel size, local images and embedded Montserrat,
