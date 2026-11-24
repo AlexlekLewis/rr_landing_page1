@@ -24,7 +24,7 @@ Rajasthan Royals is one of the world's leading cricket development organisations
   - Match-play based training, not endless nets.
   - An environment where players play with freedom and without judgement.
 - **Core language:** "play with freedom", "play without fear", aggressive intent. Kumar Sangakkara clips in the content folder back this up. Use them.
-- **Tagline:** Finding a way to WIN from anywhere. **War cry:** HALLA BOL!
+- **War cry:** HALLA BOL! (use sparingly, styled well, never as a footer strip). **Never use "Finding a way to WIN from anywhere"**: we don't use it (Andy, 24 Nov 2026).
 - **Programs:** Junior Royals · Performance Squad (plays in the Rajasthan Royals Power League) · Elite program (8+, premium add-on) · Holiday camps (modern-game foundation camps) · One-on-ones.
 - **Venues:** Mickleham Indoor Sports Centre · M9 Sports Centre, Ravenhall. Check `brain/FACTS.md` for anything newer.
 - **NEVER say:** "Future Royals", "Performance Royals", "Mini Royals". If you find them in old footage graphics, don't use that footage's graphics.
