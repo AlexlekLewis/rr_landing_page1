@@ -192,6 +192,8 @@ Deliver to Drive `RRA Video / 02 Ready for Review / YYYY-MM-DD – <title>/` wit
 
 Then add a row to the Review Sheet (`RRA Video / Review Sheet`): date, title, type, platform, link, status (Ready for review), and blank columns for Andy's verdict (✅ / 🔁 / ❌) and comments.
 
+**Also post it in the chat (Andy, 24 Nov 2026, standing until he says otherwise):** send every finished video, its cover frame and the style frames straight into the conversation with `SendUserFile` (`display: 'render'`), with a one-line caption, as well as delivering to Drive.
+
 Approved videos move to `03 Approved`. Never delete anything; archive.
 
 ## 7. ACTING WITHOUT BEING ASKED
