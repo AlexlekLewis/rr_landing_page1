@@ -47,6 +47,32 @@ const IMG = '/assets/news';
 
 export const NEWS_STORIES = [
     {
+        // Also in Power Cricket's feed (tagged for both sites). Andy, 25 Nov 2026; image supplied by Andy.
+        slug: 'sooryavanshi-204-off-53-record-night',
+        sites: ['rra-melbourne'],
+        brand: 'Power Cricket',
+        type: 'article',
+        publishedAt: '2026-11-25',
+        title: 'Sooryavanshi, 15, smashes a 28-ball hundred and 204 off 53 in a record-breaking night',
+        excerpt:
+            'Rajasthan Royals teenager Vaibhav Sooryavanshi hit the fastest hundred and fastest double hundred in List A history, with a world-record 28 sixes, as India A beat the UAE in Doha.',
+        heroImage: `${IMG}/sooryavanshi-204-hero.jpg`,
+        heroAlt: 'Vaibhav Sooryavanshi: 204 off 53 balls',
+        gallery: [
+            { src: `${IMG}/sooryavanshi-204-cover.jpg`, alt: 'Vaibhav Sooryavanshi, 204 off 53 balls' },
+            { src: `${IMG}/sooryavanshi-204-records.jpg`, alt: 'The records: 28-ball hundred, 52-ball double hundred, 28 sixes' },
+        ],
+        galleryAspect: '4/5',
+        body: paragraphs(
+            'Vaibhav Sooryavanshi has rewritten cricket’s record books. The 15-year-old Rajasthan Royals batter hit 204 off 53 balls for India A against the UAE at the Asia Cup Rising Stars in Doha overnight, making the fastest hundred and the fastest double hundred ever scored in List A cricket.',
+            'He reached 50 in 16 balls and 100 in 28, one ball quicker than Jake Fraser-McGurk’s previous record of 29. He didn’t stop there, bringing up 200 from his 52nd ball.',
+            'His 204 included 28 sixes, a world record for a List A innings, and seven fours. That is 196 runs in boundaries.',
+            'The UAE had made 8/249. India A raced to 3/254 in just 14.2 overs to win by seven wickets. By the time Sooryavanshi was caught off Basil Hameed in the 13th over, the chase was all but done, and Rinku Singh finished 27 not out.',
+            'The win puts India A into the semi-finals.',
+            'It was power hitting at its most extreme: fearless, clean striking from the first ball to the last.',
+        ),
+    },
+    {
         // Weekend Wrap, 20-22 Nov 2026: written by the Power Cricket journalist and tagged for both sites
         // there. Kept here too so it shows on our site straight away; our copy wins on the same slug.
         slug: 'weekend-wrap-20-22-november',
