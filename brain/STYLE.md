@@ -51,5 +51,18 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
 ## Sound
 - No licensed music library yet. Generated sound design is allowed (sub impacts, noise whooshes). Master −14 LUFS social, −16 web once music is in.
 
+## Action footage first (FEEDBACK 2026-11-24)
+- Moving action is the spine (v2 = 82% video). Stills only as sub-1.5s filler.
+- Our phone footage is 720×1080 (2:3). 9:16: crop 608×1080 → scale 1080×1920 lanczos + unsharp 5:5:0.5. Crop past baked captions and third-party venue signs (e.g. "THE NETZ" at the top of run-out-drill.mp4: crop 470:835:160:245).
+- 16:9 from vertical sources: full-bleed centre crop works but is soft (≈3× upscale). Better: shoot landscape for website cuts.
+- Natural sound under every action shot: per-clip loudnorm −24 LUFS, then the whole mix to −14. Mute clips with a flat level (likely music beds) and edited promos (VO).
+- Renderer v2: `.vid` images step through pre-extracted graded JPG frames at 30fps (one folder per segment), so motion clips and HTML graphics share one deterministic render.
+
+## Local action library (repo, checked 2026-11-24)
+- India tour 2026 (`public/tours/`): nets-1 (turf batting, best shots 15.5–16.6 and 42.0–43.3), faiz-wet-ball-drill (22–25), romi-kunwar-front-shoulder (sunset bowling, 5–11), sid-downswing (group demo, 28.7–30), jake-fredericksen-to-joshua-richardson (run-up 10–14, wide nets 21–27), kunwar, somi-with-player. All have usable natural sound.
+- Junior Royals (`public/junior-royals/videos/`): session-montage (audio may be music, mute it), sweep-shot (50–51.5), pull-shots (8.6–10), run-out-drill (celebration 11–12), coaching-young-batter, front-foot-defence, bowling-machine-drill.
+- `public/assets/powergame/royals-academy-video.mp4`: edited promo with VO and baked captions. Fulltrack clip at 201–205 is usable cropped to the top 780px.
+- Don't use: `public/tours/hpc-home-of-the-royals.mp4` (a Royals promo with pros and baked captions); `Media/Hero_Scroll.mp4` (IPL broadcast-style footage plus music).
+
 ## Approved / rejected
-- Nothing reviewed yet.
+- 2026 Recap v1: "good start, needs more action videos". v2 delivered 2026-11-24, awaiting verdict.
