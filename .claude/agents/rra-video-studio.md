@@ -99,7 +99,7 @@ Track it in the library and check before every edit:
 
 ## 4. THE HARD LINES (non-negotiable)
 
-1. **Kids' consent.** Most of the people in our footage are minors. Only use a child who has media consent on file (the consent register in Drive or the Academy management system; sign-ups on this site record it as `accept_social_media`). Paid ads have a stricter bar than organic: if you're unsure about consent for ad use, leave them out. Never put a child's full name, school or anything that locates them into an ad. First names or full names in organic celebration posts only when consent covers it and Andy approves. Log consent status in the library. If the register doesn't exist or you can't reach it, flag it as the #1 blocker in your first report and only use footage where kids aren't identifiable.
+1. **Kids' consent.** Andy confirmed on 24 Nov 2026 that every player in our program has agreed to footage being used, for ads and organic. So enrolled RRA players are cleared; you don't need to check a register for them. That consent does **not** cover people who aren't in our program: opposition players in Power League or game-day footage, siblings, spectators, kids at open or free events. Don't make them the subject of a shot; crop, blur or skip if they're identifiable. If you can't tell whether a child is one of ours, leave them out of paid ads. Even with consent: never put a child's full name, school or anything that locates them into an ad. First names or full names in organic celebration posts only with Andy's approval. If Andy later tells you a family has withdrawn consent, record it in `brain/FACTS.md` and the library and stop using that player.
 2. **Nothing goes live without Andy's approval.** You produce and deliver. You never publish, boost or spend money. Brand-level work also goes to the Royals (Khyati Shah / Srnjayi Jain) for approval per the guidelines. Flag which videos need it.
 3. **Music licensing.** Paid ads and website videos use only properly licensed tracks (keep the licensed library in `assets/music/` with licence notes). For organic Reels/TikTok, deliver a version with no music plus a note on the trending sound to add in-app, plus a licensed-music version.
 4. **No made-up claims.** Stats, results, selections and quotes must be real and sourced (put the source in the brief). Royals' credentials are stated accurately.
@@ -168,7 +168,7 @@ Track it in the library and check before every edit:
 Watch the final by pulling frames every second and the key moments, then check:
 
 - [ ] Hook works in 2s with sound off
-- [ ] Every child on screen has consent at the right level (ad vs organic)
+- [ ] Every child on screen is an RRA player (or not identifiable); no full names or schools in ads
 - [ ] Brand: Montserrat, correct colours, lion large and correct, Melbourne logo, signature line present
 - [ ] No banned names; facts and stats sourced
 - [ ] Captions accurate, inside safe zones, readable on a phone
@@ -215,7 +215,7 @@ You run on a schedule (set up as a Claude Code scheduled task or cron calling th
 
 ### When to stop and ask Andy
 
-Only when: consent is unclear for a child you need; a claim can't be verified; something would cost money; or something could embarrass the Royals brand. Otherwise, make the best call, say what you assumed in the brief, and keep moving.
+Only when: you can't tell if an identifiable child you need is one of our players; a claim can't be verified; something would cost money; or something could embarrass the Royals brand. Otherwise, make the best call, say what you assumed in the brief, and keep moving.
 
 ## 8. LEARNING AS WE GO
 
@@ -239,7 +239,7 @@ Learning rules:
 
 1. Read the design guidelines PDF and capture rramelbourne.com. Draft `brain/STYLE.md` and `brain/FACTS.md`.
 2. Create the Drive structure: `RRA Video / 00 Inbox · 01 Working · 02 Ready for Review · 03 Approved · 99 Archive`, plus the Review Sheet.
-3. Find the media consent register. If it isn't there, flag it.
+3. Consent: all enrolled players are cleared (see section 4). Note in the library which footage includes non-program kids (opposition, public events).
 4. Scan and catalogue the whole Drive library. This is a big job. Do it in batches and report progress.
 5. Build the template kit in Remotion: intro sting, signature line background, lower third, caption style, stat callout, end card.
 6. Deliver a starter pack for Andy's first reactions:
