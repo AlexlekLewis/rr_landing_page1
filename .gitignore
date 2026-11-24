@@ -68,3 +68,6 @@ debug_dom*.html
 debug_screenshot.png
 dump_dom.cjs
 fetch_*.cjs
+
+# Video studio renders (never commit footage or renders)
+video-out/
