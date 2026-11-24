@@ -1,6 +1,6 @@
 // node render.cjs <outdir> [prefix]  -> every piece in FEED-4x5, VERT-9x16, SQ-1x1 (ads)
 const {chromium}=require('playwright'),fs=require('fs'),path=require('path');
-const dir=__dirname,P=JSON.parse(fs.readFileSync(path.join(dir,'pieces.json'))),out=process.argv[2],pre=process.argv[3]||'DRAFT_PROGRAM_ALL-ACADEMY';
+const dir=__dirname,P=JSON.parse(fs.readFileSync(path.join(dir,process.argv[4]||'pieces.json'))),out=process.argv[2],pre=process.argv[3]||'DRAFT_PROGRAM_ALL-ACADEMY';
 fs.mkdirSync(out,{recursive:true});
 (async()=>{const b=await chromium.launch();
 for(const p of P)for(const [F,h,tag] of [['feed',1350,'FEED-4x5'],['vert',1920,'VERT-9x16'],['sq',1080,'SQ-1x1']]){

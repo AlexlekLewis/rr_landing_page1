@@ -1,0 +1,168 @@
+[
+ {
+  "file": "elite-A-bowler",
+  "chip": "2027",
+  "head": [
+   "ELITE",
+   "T20"
+  ],
+  "photo": "elite-t20-bowler-2026.jpg",
+  "pos": "50% 0%",
+  "vpos": "45% 40%",
+  "photoW": 0.62,
+  "photoH": 0.6,
+  "headW": 0.55,
+  "sub": "The 12-week T20 Program",
+  "stats": [
+   [
+    "12",
+    "Weeks"
+   ],
+   [
+    "48",
+    "Hours of coaching"
+   ],
+   [
+    "8",
+    "Core pillars"
+   ]
+  ],
+  "cta": [
+   "APPLY NOW",
+   "RRAMELBOURNE.COM/ELITE-ROYALS"
+  ]
+ },
+ {
+  "file": "elite-B-runup",
+  "chip": "2027",
+  "head": [
+   "ELITE",
+   "T20"
+  ],
+  "photo": "elite-t20-runup-2026.jpg",
+  "pos": "50% 22%",
+  "vpos": "50% 25%",
+  "photoW": 0.6,
+  "photoH": 0.6,
+  "headW": 0.55,
+  "sub": "The 12-week T20 Program",
+  "stats": [
+   [
+    "12",
+    "Weeks"
+   ],
+   [
+    "48",
+    "Hours of coaching"
+   ],
+   [
+    "8",
+    "Core pillars"
+   ]
+  ],
+  "cta": [
+   "APPLY NOW",
+   "RRAMELBOURNE.COM/ELITE-ROYALS"
+  ]
+ },
+ {
+  "file": "elite-C-48-hours",
+  "chip": "ELITE T20 PROGRAM · 2027",
+  "head": [
+   "48",
+   "HOURS"
+  ],
+  "sub": "Of coaching across 12 weeks",
+  "list": [
+   [
+    "Technical Mastery"
+   ],
+   [
+    "Tactical Execution"
+   ],
+   [
+    "Power Hitting"
+   ],
+   [
+    "Match Impact"
+   ]
+  ],
+  "line": "Plus Physical Conditioning, Mental Resilience, Athletic Fielding and Self-Awareness.",
+  "cta": [
+   "APPLY NOW",
+   "RRAMELBOURNE.COM/ELITE-ROYALS"
+  ]
+ },
+ {
+  "file": "elite-D-8-pillars",
+  "chip": "ELITE T20 PROGRAM · 2027",
+  "head": [
+   "8 CORE",
+   "PILLARS"
+  ],
+  "maxHead": {
+   "feed": 150,
+   "vert": 170,
+   "sq": 110
+  },
+  "list": [
+   [
+    "Technical Mastery"
+   ],
+   [
+    "Tactical Execution"
+   ],
+   [
+    "Physical Conditioning"
+   ],
+   [
+    "Mental Resilience"
+   ],
+   [
+    "Athletic Fielding"
+   ],
+   [
+    "Match Impact"
+   ],
+   [
+    "Power Hitting"
+   ],
+   [
+    "Self-Awareness"
+   ]
+  ],
+  "cta": [
+   "APPLY NOW",
+   "RRAMELBOURNE.COM/ELITE-ROYALS"
+  ]
+ },
+ {
+  "file": "elite-E-12-weeks",
+  "chip": "ELITE T20 PROGRAM · 2027",
+  "head": [
+   "12",
+   "WEEKS"
+  ],
+  "photo": "elite-t20-release-2026.jpg",
+  "pos": "50% 40%",
+  "vpos": "50% 40%",
+  "photoW": 0.55,
+  "photoH": 0.6,
+  "headW": 0.6,
+  "sub": "Our T20 Program is back",
+  "stats": [
+   [
+    "48",
+    "Hours of coaching"
+   ],
+   [
+    "8",
+    "Core pillars"
+   ]
+  ],
+  "cta": [
+   "APPLY NOW",
+   "RRAMELBOURNE.COM/ELITE-ROYALS"
+  ]
+ }
+]
