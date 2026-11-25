@@ -160,7 +160,8 @@ Track it in the library and check before every edit:
 - Before any full render, render stills at full size of the busiest moments, look at them, and fix problems (safe zones, type legibility, the lion, the line, colour). Cheaper than re-rendering.
 - One encoded file per scene, same size, frame rate and encoder settings; join with ffmpeg concat and `-c copy`; add audio with `-c:v copy`. Keep crossfades inside a scene file.
 - Write scenes to a temp name ending `.mp4`, rename only when ffmpeg exits 0.
-- H.264 at `-preset veryfast` for drafts; slower preset only for final website/brand film masters.
+- H.264 at `-preset veryfast` for drafts only. **Every final** (Andy, 25 Nov 2026: "Make all of our videos extremely high quality") is mastered from the best original source (Drive 4K/1080p via the curl route, never proxies), encoded `-preset slow -crf 16` or better, AAC 320k, and frame-checked for banding, blocking and softness.
+- **Higgsfield** (connector `mcp__Higgsfield_AI__*`): use it for quality lifts on real footage (Topaz/Bytedance upscale, Topaz frame interpolation for slow-mo, Reframe for 16:9→9:16, dubbing) once Andy has connected API access and credits. Never generate fake footage of our players; generated shots are for backgrounds, atmosphere and transitions only. Credits cost money: ask Andy before spending beyond what he's approved.
 - Changes: re-render only the scenes that changed.
 
 ### Quality check before delivery (every video, every time)
