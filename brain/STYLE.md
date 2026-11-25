@@ -169,5 +169,23 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
   - Holiday promo 16.9–18.3 (boy bowling in RRA purple)
   - Holiday promo 20.0–21.1 (batter in RRA purple)
 
+
+## Mobile-first 9:16 (v7, FEEDBACK 2026-11-25)
+- Every shot is full-bleed 1080×1920. No panels, letterbox or blurred pillars. Only the 9:16 master is delivered unless asked.
+- Landscape sources: use Higgsfield 4K upscales and crop 1215×2160 (a downscale, so crisp). Track the action with a keyframed crop `x='x0+(x1-x0)*min(t/dur,1)'` (script `v7/extract7.py`).
+  - Where players sit too low under the lower-third text, use a tighter crop with a y offset (≤1.3×), e.g. FrogBox behind-keeper 960×1707 at y=453.
+- FrogBox 4K action centres (4K px, segments in `hf/v6/up_fb.mp4`):
+  - f2 behind keeper: x≈1050 (tight)
+  - f1 umpire end: pan x 0→993 (bowler to batter)
+  - f5 umpire signal: x≈193
+  - f3 shot and run: x 1393→1480
+  - e1: x 593→833
+- Data cards full-bleed: Fulltrack 2K crop 878×1560 at x=0 (keeps the speed/spin panels); Match Centre 2K crop 810×1440 at x=369 (1.33×, the most upscaled shot).
+- **Phone rotation trap:** "Male Player – Mitch Clark – Power Positions.MOV" is stored 3840×2160 with rotation −90. It's portrait, so check `side_data rotation` before framing.
+- **Program/age match:**
+  - Squads/T20 Elite beats use older Elite players: Drive "Mitch Clark – Power Positions" (Elite batter, RRA navy kit, 4K portrait).
+  - "PART 1 v1.3 – Elite Academy.mp4" has baked captions across the lower half; avoid it under our text.
+  - Junior beats use 7–12s; the holiday beat uses the holiday promo.
+
 ## Approved / rejected
 - 2026 Recap v1: "good start, needs more action videos". v2: liked the data scene and the boys/girls line; wanted better graphics, no tagline footer, no whooshes, more match day, bigger 2027. v3 notes: Kumar first, text lower, no duplicates, crisp only, no player scores, clearest Sid take. v4 delivered 2026-11-25. v5 = v4 edit at max quality (lossless chain), delivered 2026-11-25. v6 = kit-rule swaps plus Higgsfield 4K upscales and a 4K 16:9 master, delivered 2026-11-25, awaiting verdict.
