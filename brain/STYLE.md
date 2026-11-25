@@ -116,5 +116,31 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
 - **Drive PL reels** ("Boundaries – 36 checked shots", "Wickets – 11 checked dismissals", "Milestone – Jaskaran Ghotra 85*"): 1080×1350, made from FrogBox with players' names baked into lower thirds and no audio. Soft at our crops; not used. Originals deleted.
 - **Drive "Camp group shot #1–#3.jpeg"** (4032×3024, ids 1tIIuQdJJrlLdJMQZIV-MR4Mp1nLh3OHj, 1_kxzFlgslqTh3KnHr86DBZ_vQhovYSBe, 1jbR-7h4AMSSzrDATToZVe4JV2tV9sApM): crisp camp group photos.
 
+
+## Max-quality pipeline (v5, FEEDBACK 2026-11-25 "extremely high quality")
+- **Sources:** Drive originals via curl (4K/1080p masters). There's no higher-res original on Drive for:
+  - the Fulltrack card (the Elite Academy promo "Part 2 v2" is 720p, as is the repo copy)
+  - the Match Centre iPad card (repo 720p; "Jinang explaining match centre.mov" is a different shot)
+  - the FrogBox broadcast (1080p, heavily compressed)
+  - "[Small Size] Kumar Interview" (1080p, 10Mbps; a bigger master may exist in "KUMAR ANSWERING 3 QUESTIONS.MOV", 8.3GB, or "Kumar Announcing Academy.MOV")
+- **Extraction:** `v5/extract5.py`. Input-seek with 0.5s pre-roll, crop, then `scale ... flags=lanczos+accurate_rnd+full_chroma_int`, grade in gbrp, `unsharp=3:3:0.35` only when upscaling, written as PNG (rgb24) frames. No JPEG anywhere in the chain.
+- **Frame rate:** 24/25p → 30p with `minterpolate=fps=30:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1`. Slight ghosting on fast limbs (FrogBox bowler arm); acceptable. 50/60p → `fps=30`. minterpolate is slow (about 2 min per 2s of 1080p on 4 cores); budget for it.
+- **Grade (consistent):**
+  - All shots: `eq=contrast=1.05:saturation=1.12`.
+  - Indoor (green cast): `colorbalance=rs=-0.01:gs=-0.03:bs=0.03:rm=0.02:gm=-0.035:bm=0.01:gh=-0.02`.
+  - Outdoor/FrogBox: `colorbalance=rs=-0.01:bs=0.03:rm=0.02:gm=-0.01:bm=-0.01`.
+  - No brightness lift (it avoids clipping).
+- **Graphics:** Playwright at the exact frame size (deviceScaleFactor 1), PNG screenshots.
+- **Encode:** `v5/enc.sh`.
+  - `noise=alls=2:allf=t` (dither against banding on navy→pink), `scale=out_color_matrix=bt709:out_range=tv`, yuv420p.
+  - x264 `-preset slow -crf 16 -profile:v high`, BT.709 tags, 30p.
+  - Concat `-c copy`. AAC 320k 48k.
+- **Loudness:** mix in float, then `acompressor=threshold=-26dB:ratio=5:attack=5:release=150:makeup=8` and `alimiter`. Measure with loudnorm and apply a static gain, landing at −14.1 LUFS, TP −0.8.
+- **Max scale 1.3×:**
+  - HPC photo (1600×900) panel height capped at 1170 (1.30×), no Ken Burns zoom.
+  - Data cards 900×700 (1.25× of 720p).
+  - Swapped the girl-batting still (needed 1.4×) for Sid general coaching 24.6–25.4.
+- **4K 16:9 master:** not supported. Only 2 of the 15 shots (Final Andy & Kumar, Sid RR Intro) are 4K; the rest are 1080p or 720p.
+
 ## Approved / rejected
-- 2026 Recap v1: "good start, needs more action videos". v2: liked the data scene and the boys/girls line; wanted better graphics, no tagline footer, no whooshes, more match day, bigger 2027. v3 notes: Kumar first, text lower, no duplicates, crisp only, no player scores, clearest Sid take. v4 delivered 2026-11-25, awaiting verdict.
+- 2026 Recap v1: "good start, needs more action videos". v2: liked the data scene and the boys/girls line; wanted better graphics, no tagline footer, no whooshes, more match day, bigger 2027. v3 notes: Kumar first, text lower, no duplicates, crisp only, no player scores, clearest Sid take. v4 delivered 2026-11-25. v5 = v4 edit at max quality (lossless chain), delivered 2026-11-25, awaiting verdict.
