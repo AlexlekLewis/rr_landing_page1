@@ -21,10 +21,12 @@ export const ORDER = [
     'mihiraj-jayasekara', // 25+ years, academies in UAE, India, Nepal
     'siddhartha-banerjee', // 20 years, ICC-certified
     'hamid-qadri', // 8 seasons county cricket, England U19
+    'harkirat-bajwa', // Australia U19 World Cup, Premier Cricket
     'ikroop-dhanoa', // Essendon First XI, Vic pathway to U19
     'rittin-raman', // MCC First XI, state representative
     'jinang-shah',
     'kavya-khatri',
+    'josh-martin',
 ];
 
 const centreName = (slug) => CENTRES.find((c) => c.slug === slug)?.suburb || slug;
@@ -57,7 +59,37 @@ const fromPrivate = (c) => ({
     link: c.bookable ? coachPath(c.slug) : null,
 });
 
-const BY_SLUG = Object.fromEntries([LEWIS, ...PC_COACHES.map(fromPrivate)].map((c) => [c.slug, c]));
+// Coaches with no private coaching page (Andy, 25 Nov 2026: "Harkirat Bajwa ... needs to be
+// [on the coaches page]. So does Josh Martin, even if they've got no photos").
+// Harkirat: the wording Andy approved for Royals Private Coaching on 13 Nov, before he was taken
+// off private coaching on 20 Nov. Josh Martin: TODO Andy — centre, photo and bio.
+const OTHERS = [
+    {
+        slug: 'harkirat-bajwa',
+        name: 'Harkirat Bajwa',
+        role: 'Royals Academy Coach',
+        where: 'Cranbourne North',
+        centres: ['cranbourne-north'],
+        img: '/assets/coaches/harkirat-bajwa-halla.jpg',
+        pos: '50% 20%',
+        specialism: 'Spin bowling specialist (off spin)',
+        bio: 'Played for Australia at the Under-19 World Cup and plays Premier Cricket. An attacking off spinner who teaches the variations and tactics that win matches.',
+        link: null,
+    },
+    {
+        slug: 'josh-martin',
+        name: 'Josh Martin',
+        role: 'Royals Academy Coach',
+        where: null,
+        centres: [],
+        img: null,
+        specialism: null,
+        bio: null,
+        link: null,
+    },
+];
+
+const BY_SLUG = Object.fromEntries([LEWIS, ...PC_COACHES.map(fromPrivate), ...OTHERS].map((c) => [c.slug, c]));
 
 export const ALL_COACHES = ORDER.map((s) => BY_SLUG[s]).filter(Boolean);
 

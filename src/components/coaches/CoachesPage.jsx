@@ -62,7 +62,7 @@ const CoachesPage = () => {
                                     <div className="prog-body">
                                         <h2>{c.name}</h2>
                                         <p className="coach-role">{c.role}</p>
-                                        <p className="coach-where"><MapPin aria-hidden="true" />{c.where}</p>
+                                        {c.where && <p className="coach-where"><MapPin aria-hidden="true" />{c.where}</p>}
                                         {c.specialism && <p className="prog-line">{c.specialism}</p>}
                                         {c.bio && <p className="prog-detail">{c.bio}</p>}
                                         {c.link && (
