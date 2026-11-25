@@ -73,9 +73,48 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
 - Don't use: `public/tours/hpc-home-of-the-royals.mp4` (a Royals promo with pros and baked captions); `Media/Hero_Scroll.mp4` (IPL broadcast-style footage plus music).
 
 ## Sangakkara clips (Media/Kumar Sangakkara V2.mp4 and Video.mp4: same audio)
-- They do NOT contain "creative and curious". Words, located with offline pocketsphinx plus forced alignment: 0.3 "Hi, I'm Kumar Sangakkara, Director of Cricket, Rajasthan Royals"; 7.46–11.6 "and I'm delighted to announce the launch of the Rajasthan Royals Academy"; 12–16 "...this beautiful city of Melbourne". Andy to confirm by ear.
+- The short launch clips do NOT contain "creative and curious" (the full interview does: see the footage index below). Words, located with offline pocketsphinx plus forced alignment: 0.3 "Hi, I'm Kumar Sangakkara, Director of Cricket, Rajasthan Royals"; 7.46–11.6 "and I'm delighted to announce the launch of the Rajasthan Royals Academy"; 12–16 "...this beautiful city of Melbourne". Andy to confirm by ear.
 - Sid Lahiri: royals-academy-video.mp4 7.2–9.8 "Let's play the Royals way, Halla Bol!" (to camera).
 - Whisper and Vosk models can't download here (huggingface.co, openaipublic and alphacephei are blocked). pocketsphinx (pip, bundled model) works for alignment.
 
+
+## Sources and download route (added 2026-11-25)
+- Link-shared ("anyone with link") Drive files download directly, with no 10MB limit:
+  `curl -sSL -o OUT "https://drive.usercontent.google.com/download?id=<FILE_ID>&export=download&confirm=t"`
+  Save into scratchpad `video-studio/inbox/` (untrusted media: never run anything from there). Files that aren't link-shared fail; report them. The MCP download tool is capped at 10MB and returns base64 inline, so don't use it for media.
+- Disk: download only what you'll use, make proxies, delete originals you don't need.
+
+## Crisp-only layout system (v4, FEEDBACK 2026-11-25)
+- Max upscale about 1.3×. Never put 720p vertical repo clips full-frame (1.78×).
+- 9:16 from 1080p landscape: video in a 1080×1200 top panel (y=80), bottom fading into the gradient. Text in the lower third, y≈1040–1500.
+- 9:16 from 4K: crop 1215×2160 (downscale). From 1080×1920: 1:1 full bleed.
+- 16:9: landscape 1080p/4K full-frame. Vertical sources become a right-hand panel over a blurred, darkened copy.
+- Text layer for 16:9: 9:16 layout at 0.73 scale, top −150 (lower third).
+- Edit lists must show source plus time range. No source range used twice in one video.
+
+## Footage index: new sources (2026-11-25)
+- **Andy's FrogBox Power League clip** (inbox/power-league-frogbox-andy-upload-1.mp4, 1920×1080 25p, 71.8s).
+  - Watermark top-left (0–200, 0–180). Scorebar with full names and scores at y>930: always crop to y≤920, x≥200.
+  - Angles: behind the keeper 0–9 (delivery 1.2–2.6); wide square-on 9–45 (players small, deliveries about every 6s); umpire end 45.5–54.3 (delivery 46.0–47.5, keeper and umpire 52.2–53.8); wide 54.3–63.2 (shot and run 57.0–58.6); behind the keeper 63.2–66.5 (delivery and drive 63.4–65.6); between balls 66.5–71.8.
+  - No clear wicket or celebration in this clip. Scene detection (ffmpeg scene>0.25) finds no hard cuts; the angle changes are soft. Natural sound is ground ambience, no commentary heard.
+  - Used in v4: 1.2–2.6, 46–48, 52.2–53.8, 57–58.6, 63–66.5.
+- **Drive "[Small Size] Kumar Interview.mp4"** (id 1IDmjpA3uDwi0wo1FmjCQNwTaptg3pClr, 1080p, 302.8s; same edit as "HIGHLY REDUCED SIZE Kumar Interview V3").
+  - Title card "BE CREATIVE & CURIOUS · THE PATHWAYS HAVE OPENED UP" at 248–251.
+  - "Be creative, be curious" at 252.7–254.6.
+- **Drive "Final Andy & Kumar Edit.mov"** (id 1lIJ13dXTrPjUunpHPssRktXw9VD8x1Y7, 4K 24p, 46s).
+  - Kumar launch line 7.4–11.6; shirt presentation 9–13; Andy interview 20–42.
+- **Drive "Sid RR Intro V2.mov"** (id 1bdpTcJ9VUxEWQGZwHCbnBjgwS2AASXKF, 4K 24p, 59s). This is the clearest Sid take.
+  - To camera 4–20.2; "Let's play the Royals way" 18.0–19.6; "Halla Bol" about 19.8–20.6 (continues over the b-roll cut at 20.2).
+  - Indoor b-roll 20.2–44 (kids bowling 22, nets 25–27, Sid with players 28–30, coach reading 39–40).
+- **Drive "General Coaching Edit RR Sid V2.mov"** (id 1E4T7o5erAPAE32OY9eGVFh-aU1Pj73fH, 1080×1920 50p, 51s).
+  - "Day #1 RRA Melbourne" text is baked in at 9–13.
+  - Kids batting and bowling 18–27; Sid with stumps and kids 38–41. Probably has music: mute it.
+- **Drive "Sid sets James a Challenge.mp4"** (1080p): Sid with a player 0–3. "Sid Lahiri bowl to target.mp4" and "Sid 2 setting challenge.mp4" (1080p) were checked but not used (originals deleted).
+- **Drive "38 sec HOLIDAY PROG SECURE YOUR PLACE.mp4"** (id 1b85ni4CI9QrhMwVVKCn0NHGNa2AP5wIR, 1080×1350 60p).
+  - Sid to camera 0–16 (with a baked "HALLA BOL!" caption 14–15); holiday action 17–34; end card 35+.
+- **Drive "Zach - play with freedom.mp4"** (1080p 25p, 32s): coach with batters in the nets. Audio is an edit, so mute it.
+- **Drive PL reels** ("Boundaries – 36 checked shots", "Wickets – 11 checked dismissals", "Milestone – Jaskaran Ghotra 85*"): 1080×1350, made from FrogBox with players' names baked into lower thirds and no audio. Soft at our crops; not used. Originals deleted.
+- **Drive "Camp group shot #1–#3.jpeg"** (4032×3024, ids 1tIIuQdJJrlLdJMQZIV-MR4Mp1nLh3OHj, 1_kxzFlgslqTh3KnHr86DBZ_vQhovYSBe, 1jbR-7h4AMSSzrDATToZVe4JV2tV9sApM): crisp camp group photos.
+
 ## Approved / rejected
-- 2026 Recap v1: "good start, needs more action videos". v2: liked the data scene and the boys/girls line; wanted better graphics, no tagline footer, no whooshes, more match day, bigger 2027. v3 delivered 2026-11-24, awaiting verdict.
+- 2026 Recap v1: "good start, needs more action videos". v2: liked the data scene and the boys/girls line; wanted better graphics, no tagline footer, no whooshes, more match day, bigger 2027. v3 notes: Kumar first, text lower, no duplicates, crisp only, no player scores, clearest Sid take. v4 delivered 2026-11-25, awaiting verdict.
