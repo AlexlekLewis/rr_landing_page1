@@ -161,7 +161,12 @@ Track it in the library and check before every edit:
 - One encoded file per scene, same size, frame rate and encoder settings; join with ffmpeg concat and `-c copy`; add audio with `-c:v copy`. Keep crossfades inside a scene file.
 - Write scenes to a temp name ending `.mp4`, rename only when ffmpeg exits 0.
 - H.264 at `-preset veryfast` for drafts only. **Every final** (Andy, 25 Nov 2026: "Make all of our videos extremely high quality") is mastered from the best original source (Drive 4K/1080p via the curl route, never proxies), encoded `-preset slow -crf 16` or better, AAC 320k, and frame-checked for banding, blocking and softness.
-- **Higgsfield** (connector `mcp__Higgsfield_AI__*`): use it for quality lifts on real footage (Topaz/Bytedance upscale, Topaz frame interpolation for slow-mo, Reframe for 16:9→9:16, dubbing) once Andy has connected API access and credits. Never generate fake footage of our players; generated shots are for backgrounds, atmosphere and transitions only. Credits cost money: ask Andy before spending beyond what he's approved.
+- **Higgsfield API** (connected 25 Nov 2026; key saved on this environment, injected by the proxy, never in code or logs). Base `https://api.higgsfield.ai`, no auth header needed from us (the proxy adds `Authorization: Key …`).
+  - Upload: `POST /files/generate-upload-url` `{"content_type":"video/mp4"}` (send `Hf-Expires-After: 86400`), then `PUT` the file to `upload_url` with the returned `upload_headers` (S3), then pass `public_url` as `video_url`.
+  - Upscale (proven): `POST /bytedance/video-upscale` `{"video_url":…, "resolution":"2k"|"4k"|"1080p", "model_version":"pro", "fps":30}`. Poll `GET /requests/{id}/status` until `completed`, download `video.url` (CloudFront). A 4s 1080p clip took ~7 min and came back 2694×1440 at 18 Mb/s, visibly cleaner.
+  - Estimate first: `POST /estimate/<model-path>` with the same body. Model docs: docs.higgsfield.ai/docs/models.md. Other endpoints (Kling, Seedance, Hailuo) generate new footage: backgrounds/atmosphere/transitions only, never fake footage of our players.
+  - Results expire after 7 days (we set 24h): download straight away. Upload only the trimmed segments you need. Report spend per video in the brief.
+  - Allowed hosts: api/docs.higgsfield.ai, the S3 upload bucket, d3snorpfx4xhv8 and d3u0tzju9qaucj .cloudfront.net. If a new CDN host is refused, say which; don't work around it.
 - Changes: re-render only the scenes that changed.
 
 ### Quality check before delivery (every video, every time)
