@@ -294,8 +294,6 @@ export const WeekendWrap = () => {
 
 /* ── Leadership carousel + coaching team row ───────────────────────────── */
 export const Leadership = () => {
-    const [ci, setCi] = useState(0);
-    const show = (i) => setCi((i + LEADERS.length) % LEADERS.length);
     const rowRef = useRef(null);
     const step = () => { const tm = rowRef.current?.querySelector('.tm'); return tm ? (tm.getBoundingClientRect().width + 16) * 2 : 300; };
     // The arrows (Andy, 23 Nov 2026: they did nothing): shown only when the row is wider than the
@@ -321,34 +319,34 @@ export const Leadership = () => {
             <div className="wrap">
                 <div className="strip-head"><h2>LEADING THE ROYALS ACADEMY</h2></div>
                 <p className="strip-sub">Our leadership team brings a wealth of global cricket knowledge and IPL franchise experience as well as elite playing and coaching credentials directly to Melbourne cricketers.</p>
-                <div className="cslider" aria-roledescription="carousel" aria-label="Leadership">
-                    {LEADERS.map((c, k) => {
+                {/* The three leaders together in one block (Andy, 25 Nov 2026: "see our three key leaders in
+                    one block ... so that everyone's faces turn up"), replacing the one-at-a-time carousel. */}
+                <div className="leaders">
+                    {LEADERS.map((c) => {
                         const [first, ...rest] = c.name.split(' ');
                         return (
-                            <article key={c.name} className={`coach${k === ci ? ' on' : ''}`} aria-roledescription="slide" aria-label={`${k + 1} of ${LEADERS.length}`} aria-hidden={k !== ci}>
-                                <div className="cimg"><img src={c.img} alt={c.name} /></div>
-                                <div>
-                                    <h3 className="cname"><span className="first">{first.toUpperCase()}</span><span className="last">{rest.join(' ').toUpperCase()}</span></h3>
-                                    <p className="corg">{c.org}</p>
+                            <article key={c.name} className="leader">
+                                <div className="limg"><img src={c.img} alt={c.name} loading="lazy" decoding="async" /></div>
+                                <div className="ltext">
+                                    <h3 className="cname"><span className="first">{first.toUpperCase()}</span> <span className="last">{rest.join(' ').toUpperCase()}</span></h3>
                                     <p className="crole">{c.role}</p>
+                                    <p className="corg">{c.org}</p>
                                     <p className="cbio">{c.bio}</p>
                                 </div>
                             </article>
                         );
                     })}
-                    <button className="cnav prev" type="button" aria-label="Previous leader" data-cta="leader-prev" onClick={() => show(ci - 1)}><ChevronLeft /></button>
-                    <button className="cnav next" type="button" aria-label="Next leader" data-cta="leader-next" onClick={() => show(ci + 1)}><ChevronRight /></button>
-                    <div className="cdots" role="tablist" aria-label="Choose a leader">
-                        {LEADERS.map((c, k) => <button key={c.name} type="button" role="tab" aria-selected={k === ci} aria-label={c.name} onClick={() => show(k)} />)}
-                    </div>
                 </div>
                 <div className="team">
                     <div className="team-head">
                         <h3>OUR COACHING TEAM</h3>
-                        {canScroll && <div className="team-ctl">
+                        <div className="team-ctl">
+                            <Link className="more" to="/coaches" data-cta="home-all-coaches">Meet all our coaches →</Link>
+                            {canScroll && <>
                             <button type="button" aria-label="Scroll the coaching team left" data-cta="team-prev" onClick={() => scroll(-1)}><ChevronLeft /></button>
                             <button type="button" aria-label="Scroll the coaching team right" data-cta="team-next" onClick={() => scroll(1)}><ChevronRight /></button>
-                        </div>}
+                            </>}
+                        </div>
                     </div>
                     <div className="team-row" ref={rowRef}>
                         {TEAM.map((t) => (
