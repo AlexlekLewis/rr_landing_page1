@@ -142,5 +142,32 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
   - Swapped the girl-batting still (needed 1.4×) for Sid general coaching 24.6–25.4.
 - **4K 16:9 master:** not supported. Only 2 of the 15 shots (Final Andy & Kumar, Sid RR Intro) are 4K; the rest are 1080p or 720p.
 
+
+## Higgsfield (v6, 25 Nov 2026)
+- **Upscale (bytedance/video-upscale, pro, fps 30):** the estimate endpoint returns $0.000, and the connector balance stayed at 10 credits (Ultra) before and after 9 jobs. Upscales are currently free on this account.
+- **Results:**
+  - 1080p→4K: about 7–12 min.
+  - 720p→2K: about 2–3 min.
+  - Output keeps the input aspect (1636×920 → 3842×2160; 1080×1350 → 2160×2700).
+  - fps 30 does clean 24/25→30 conversion (better than minterpolate, no ghosting seen). Even 4K→4K is worth running for the frame-rate conversion alone.
+- **Generation (Kling 3.0 4K/pro text-to-video):** priced at $0.3151/s (4K) and $0.0962/s (1080p). Submitting returns `not_enough_credits`: the API wallet isn't funded and the Ultra plan doesn't cover API generation. Andy must top up API credits before atmosphere plates are possible.
+- **Workflow:**
+  - Cut upload segments with x264 crf 10 and 0.5s handles. Crop the FrogBox scorebar and watermark before upload (1636×920 at x284).
+  - For several shots from one source, concat the segments into one upload and map offsets from the part durations.
+  - Script: `hf/hfup.py` (upload), `hf/poll.py` (poll and download).
+
+## Kit rule audit (v6)
+- **FrogBox Power League (Andy's clip):** both sides are RRA Performance Squads (North Melbourne v South-East Melbourne), all in the purple RRA playing tops. OK.
+- **Cut for other kit:**
+  - Zach clip (batter in a white club shirt)
+  - Sid RR Intro b-roll 22.0–23.3 (boy in a white/red club shirt)
+  - Sid General Coaching 23.0–25.4 (boy in a grey sponsored club shirt)
+  - Jinang match-centre clip: girls in blue tops that aren't clearly RRA kit, so not used.
+- **RRA-kit replacements:**
+  - Sid General Coaching 42.0–45.0 (coach with kids in RRA kit)
+  - Sid General Coaching 19.2–21.3 (batter in RRA kit at the RR backdrop)
+  - Holiday promo 16.9–18.3 (boy bowling in RRA purple)
+  - Holiday promo 20.0–21.1 (batter in RRA purple)
+
 ## Approved / rejected
-- 2026 Recap v1: "good start, needs more action videos". v2: liked the data scene and the boys/girls line; wanted better graphics, no tagline footer, no whooshes, more match day, bigger 2027. v3 notes: Kumar first, text lower, no duplicates, crisp only, no player scores, clearest Sid take. v4 delivered 2026-11-25. v5 = v4 edit at max quality (lossless chain), delivered 2026-11-25, awaiting verdict.
+- 2026 Recap v1: "good start, needs more action videos". v2: liked the data scene and the boys/girls line; wanted better graphics, no tagline footer, no whooshes, more match day, bigger 2027. v3 notes: Kumar first, text lower, no duplicates, crisp only, no player scores, clearest Sid take. v4 delivered 2026-11-25. v5 = v4 edit at max quality (lossless chain), delivered 2026-11-25. v6 = kit-rule swaps plus Higgsfield 4K upscales and a 4K 16:9 master, delivered 2026-11-25, awaiting verdict.
