@@ -538,3 +538,21 @@
 .rrh .coach-where{display:flex;align-items:center;gap:6px;margin:0;font-size:13px;font-weight:600}
 .rrh .coach-where svg{width:14px;height:14px;flex:0 0 auto;color:var(--pink)}
 .rrh .coach-card .prog-btn{margin-top:auto}
+
+/* ── Leading the Royals Academy: three leaders in one block (Andy, 25 Nov 2026) ──
+   Each leader: full portrait on the left, name, role and a short bio on the right. */
+.rrh .leaders{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:6px}
+.rrh .leader{display:flex;align-items:stretch;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden}
+.rrh .leader .limg{position:relative;flex:none;width:132px;overflow:hidden;background:#2A1A44}
+.rrh .leader .limg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.rrh .leader .ltext{padding:14px 16px;min-width:0}
+.rrh .leader .cname{font-size:19px;line-height:1.05}
+.rrh .leader .cname .first,.rrh .leader .cname .last{display:inline}
+.rrh .leader .crole{margin:8px 0 3px;padding:0;border:0;font-size:11.5px;line-height:1.35}
+.rrh .leader .corg{margin:0 0 8px;font-size:10.5px}
+.rrh .leader .cbio{font-size:12.5px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.rrh .team-ctl .more{color:var(--white);margin-right:6px}
+.rrh .team-ctl .more:hover{color:var(--pink-soft)}
+.rrh .leaders + .team{margin-top:28px;padding-top:22px}
+@media (max-width:1100px){.rrh .leaders{grid-template-columns:1fr;gap:12px;max-width:640px}}
+@media (max-width:860px){.rrh .leader .limg{width:104px}.rrh .leader .ltext{padding:12px 14px}.rrh .leader .cname{font-size:18px}.rrh .leader .cbio{-webkit-line-clamp:3}}
