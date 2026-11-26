@@ -45,3 +45,5 @@ Check this before writing any on-screen claim. Add the source and date to every 
 - Sid's visit to Australia: Siddhartha Lahiri coaching groups. Use for "Siddhartha Lahiri is back".
 - Power League folder: "Stories" and "Rajasthan Royals Power League", September and November rounds. Lots of broken-down clips and great images.
 - Suryavanshi footage (Vaibhav Suryavanshi), which got millions of views. Andy wants it in. Confirm which clip and our rights before use (broadcast footage rule).
+- Power League "Match play" footage (Power League folder). Testimonials (Power League/other). HPC videos, not just stills. Rane's videos. (Andy, 26 Nov 2026)
+- Higgsfield budget for the v9 flagship: USD $50 (Andy: "I'd rather you spend a bit more money to do a higher quality video").
