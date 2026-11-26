@@ -187,5 +187,37 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
   - "PART 1 v1.3 – Elite Academy.mp4" has baked captions across the lower half; avoid it under our text.
   - Junior beats use 7–12s; the holiday beat uses the holiday promo.
 
+
+## v8 flagship notes (26 Nov 2026)
+- **130 BPM beat grid** (beat 0.4615s): every scene starts on a beat and montage cuts are 1.5 beats (0.69s). Build the HTML timeline in beats (`v8/build8.py`), so cutdowns and music edits fall on bar lines.
+- **Energy kit (comp8):**
+  - impact zoom on every cut (scale 1.10 → 1.0 in 0.28s)
+  - whip-in on section starts (translateX 260px plus 14px blur, 0.16s)
+  - type slams
+  - white flash only on the big turns
+  - one breath only: real slow-mo from a Higgsfield 60fps upscale played at 30fps, slowed further (ramp 0.62)
+- **Data beats:** no type over screens. Put the title on its own beat over darkened footage, then clean screens with a slow push-in (a wrapper div scales the screen and the highlight ring together) and a pink pulse ring on the key metric. Hide the logo during data beats.
+- **Statement backgrounds = our own footage only** (Andy, 26 Nov): huddles, flags, HPC, Elite training, Power League. Use Higgsfield 4K upscales of our photos and clips, darkened about 45%. No generated plates.
+- **Higgsfield API:**
+  - The API catalogue (`GET https://api.higgsfield.ai/models`, 105 models) has video and image models only. No audio or music: `elevenlabs_music_v2_5` exists only in the app/MCP catalogue.
+  - Kling text-to-video works on the funded API wallet (v3.0 4K $0.3151/s, v3.0 pro $0.0962/s, 2.5 turbo pro about $0.05/s). Upscales are $0.
+  - Upscale `fps:60` gives real slow-mo.
+- **Elite library (Drive folder 1cADHRrpdNZiSTJY9Bz72wRrtxP2zG5Gb, Panasonic 1080p 25p):**
+  - PANA2188 (bowler with ball at his mark)
+  - PANA2193 (bowler to batter)
+  - PANA2191 (player with ball)
+  - PANA2233 (machine batting)
+  - PANA2241 (power swing 6.3s)
+  - PANA2186 (batter in nets)
+  - PANA2185 (keeper, mostly soft)
+  - Xavier Mitchell Bowling (run-up 14–15.5s)
+  - PANA2333/2334 (player interview to camera)
+  - Power folder 1AyzZxuTlUp-tipNNBxX1TVEGeNGYNgGa: Mitch Clark and Mishka Power Positions (4K portrait), velocity bat, weighted ball, IMG_3xxx raw (200MB+)
+- **Junior library (folder 1O53eOsruPhYvcs-ZXHT_mc2l9OT8a2S2, iPhone portrait 30p):**
+  - IMG_2275 and IMG_2278 (batting at the RR backdrop)
+  - "Shan batting against machine"
+  - "Junior Royals hitting legside" and "Junior Royals Preparation" (third-party venue "NETZ" signage, avoid)
+- **Missing:** a genuine Elite fielding/catching clip and a clean keeping clip.
+
 ## Approved / rejected
 - 2026 Recap v1: "good start, needs more action videos". v2: liked the data scene and the boys/girls line; wanted better graphics, no tagline footer, no whooshes, more match day, bigger 2027. v3 notes: Kumar first, text lower, no duplicates, crisp only, no player scores, clearest Sid take. v4 delivered 2026-11-25. v5 = v4 edit at max quality (lossless chain), delivered 2026-11-25. v6 = kit-rule swaps plus Higgsfield 4K upscales and a 4K 16:9 master, delivered 2026-11-25, awaiting verdict.
