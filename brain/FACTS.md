@@ -37,8 +37,8 @@ Check this before writing any on-screen claim. Add the source and date to every 
 - [2026-11-24] Alex Lewis: Director of Cricket and Head Coach, Rajasthan Royals Academy Melbourne. SOURCE: `homeV2Data.js`, news story 13 Nov 2026.
 - [2026-11-24] Rajasthan Royals: 2008 IPL Champions, led by Shane Warne. SOURCE: `homeV2Data.js` (ROYALS_WAY).
 
-## 2027 statements (Andy, 24 Nov 2026, v2 review notes; he is the source)
-- [2026-11-24] T20 Elite Program is back. Junior Royals is back, new and improved. Holiday camps. April: tour to the Rajasthan Royals High Performance Centre, during the IPL. Siddhartha Lahiri is back. SOURCE: Andy. No dates or prices yet.
+## 2027 statements (Andy; he is the source)
+- [2026-11-26] In escalating order for the flagship: Holiday camps. Junior Royals is back, new and improved. Private coaching: 1-on-1, 1-to-2 (small group of 2) and training-partner options (site: rramelbourne.com/private-coaching; pcOptions.js labels "Private 1-on-1", groups of 2-4). T20 Elite program is back. Siddhartha Lahiri is back. The HPC camp is back: April, during the IPL. Framing: "2026 was amazing, but 2027 is going to be bigger and better." SOURCE: Andy 24 + 26 Nov 2026. No dates or prices yet.
 
 ## Content map (Andy, 26 Nov 2026)
 - Bundoora April holidays: holiday program kids in Royals shirts being coached. Strong clips.
@@ -49,3 +49,18 @@ Check this before writing any on-screen claim. Add the source and date to every 
 - Higgsfield budget for the v9 flagship: USD $50 (Andy: "I'd rather you spend a bit more money to do a higher quality video").
 - Kumar Sangakkara, in one of his videos: every player should learn reverse hitting, 360 play, reverse sweeps, power hitting and ramps from a young age. Andy: "It's gold." Locate the exact clip and timecode. (26 Nov 2026)
 - 2027 offer (Andy, 26 Nov 2026): HPC camp back in April (during the IPL); private coaching (one-on-ones, 1-to-2, training partner options), with Alex Thornhill as the one-on-one/1-to-2 coach; T20 Elite program back; Junior Royals back (new and improved); holiday camps; Siddhartha Lahiri back. Story: 2026 was amazing, 2027 is bigger and better.
+
+## Content map additions (catalogued 26-27 Nov 2026; full index in library/assets.csv)
+- Power League → "Match Play Footage/Clips" (10DEODXG74Bf3qWqgPiIQTQSAcF-XIZi7, from Power Cricket): September 2026 (Every 6 / Every Wicket, 28 + 29 Sep) and November 2026 (All Boundaries, All Wickets, Bumrah-like bowling, Jas Ghotra 85). FrogBox 1080p with name scorebars; the 28 Sep close angle shows full POWERLEAGUE + www.rramelbourne.com boards.
+- Power League → Nov 15th 2026 → Instagram Stories / Posts (Alex): name-baked reels, soft. Avoid.
+- Testimonials (13G9s79DmB39YbGvonnq6gavSB4bLkEL3): parent and coach testimonials with baked captions; the opening seconds name children in full, never use those parts.
+- ALEX LEWIS CAMERA CONTENT (1ptFvDq-YFuAvweToN9xzFfdiKV3QVUO8): 4K, best data/iPad footage and a leaping warm-up.
+- HPC X RRA Melbourne content (1qf7mzCOCgz2l3J7nKYULE4ieE1mzfBQG, shared by the Royals): Rane's Video Dump (India Sept 2026, 4K60) and RANE reels video Edits (Rane's finished reels, baked text).
+- T20 Elite Program / Power folder (1AyzZxuTlUp-tipNNBxX1TVEGeNGYNgGa): weighted ball, velocity bats, power positions (Mishka, Mitch Clark), team huddle IMG_2922, Suryavanshi analysis.
+- Alex Thornhill - Hallam: 3 locked-off long-lane clips only; no usable 1-on-1 footage. Alex Thornhill: Performance Coach – Batting / Senior Coach (site: power-game CoachesSection, holiday-programs FAQ).
+- Bundoora April Holidays: all files are 480x848 WhatsApp copies; originals not on Drive.
+
+## Suryavanshi (checked 26 Nov 2026)
+- "Head Coach Analysing V.Suryavanshi.MOV" (1DzS6ea-ipj2P1XX0NIUZXALy60QtdsXK) is our own team-room footage; IPL broadcast pictures of Suryavanshi play on the TV inside the shot.
+- "Aired Version" (1qSjyHrjrRlv-n39Xo2V--1nXvX6J9kiu) is an Indian TV news segment mixing our footage with IPL broadcast footage: broadcast, do not use.
+- "Sooryavanshi" folder: 4 professional stills of unknown ownership + 1 PNG; no video.

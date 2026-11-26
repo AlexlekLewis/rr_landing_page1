@@ -221,3 +221,17 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
 
 ## Approved / rejected
 - 2026 Recap v1: "good start, needs more action videos". v2: liked the data scene and the boys/girls line; wanted better graphics, no tagline footer, no whooshes, more match day, bigger 2027. v3 notes: Kumar first, text lower, no duplicates, crisp only, no player scores, clearest Sid take. v4 delivered 2026-11-25. v5 = v4 edit at max quality (lossless chain), delivered 2026-11-25. v6 = kit-rule swaps plus Higgsfield 4K upscales and a 4K 16:9 master, delivered 2026-11-25, awaiting verdict.
+
+## v9 treatment notes (27 Nov 2026)
+- **Type without washes ("tapes"):** footage full and bright, no gradient or darkening. Each headline line sits on its own tight, solid rectangle: Admiral Blue #1226AA with white Montserrat 900; the payoff line on pink #E11F8F. Kicker = small pink pill (800, tracking .16em). Speech captions = white 800 on solid navy #001D48 tape, pink keyword, 66px. Block left at x=56, bottom edge ~y1490 (above the 400px UI zone), only in clear space. Brand arrow (84px gradient chevron) bleeds off bottom-right on statement beats only. Templates: scratchpad v9/sf/sf.html + shot.mjs.
+- **Baked captions are a transcript:** Sid's "Part 2 v2 - Elite Academy" and the Testimonials clips carry burnt-in captions, so their words are exact. Our caption tape sits over theirs. Offline ASR (pocketsphinx) is too weak for unknown speech; Whisper/faster-whisper are installed but have no model (HF blocked). Make short "listen_*.mp4" previews with burnt timecode for Andy to confirm by ear.
+- **FrogBox signage framing:** a 9:16 crop of 1080p is ~27% of frame width at zoom 1.17 (crop height 920 keeps the scorebar out). The POWERLEAGUE board fits whole if centred on it; frame action and board together or pan from the board to the action. Never leave fragments like "WERLEAGUE".
+- **HPC raw (Rane's dump) is 4K 60fps log-flat:** it needs a strong contrast/saturation grade and gives real slow-mo.
+- **Higgsfield upscale still $0.000 per estimate (26 Nov).**
+- **Catalogue tooling** (scratchpad v9/tools):
+  - fetch.sh (curl from Drive, list TSV)
+  - sheet.py (proxy + contact sheet)
+  - runall.sh
+  - mkcsv.py (builds library/assets.csv)
+  - grab.py (graded 9:16 stills for storyboards)
+  - story.py (storyboard sheets)
