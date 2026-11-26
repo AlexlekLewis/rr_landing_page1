@@ -228,7 +228,7 @@ Name the unzipped pack folders as in `PACKS` in build_pieces.py (03-feed, elite-
   haze, crowd blur, ball, confetti), always under the brand gradient. **Never generate people,
   logos or kit.** They are an option to show Andy, not the default: the Royals' guide has no
   photographic backgrounds.
-- **Any cricket ball shown must be white** (Andy, 26 Nov 2026: we play T20). Never a pink or red ball,
+- **Any cricket ball shown must be white with a black stitched seam** (Andy, 26 Nov 2026: we play T20). Never a pink or red ball,
   in photos, generated backgrounds or icons.
 - The players' shirts carry Royals sponsor logos (Waaree Solar, Oaksmith, Red Bull, Goel TMT).
   Never retouch them out. Raise it with Andy for paid ads.
