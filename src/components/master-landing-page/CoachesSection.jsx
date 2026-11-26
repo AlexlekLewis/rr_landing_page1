@@ -81,10 +81,10 @@ const programTeam = [
         bio: "A dynamic young coach whose passion for player development is matched by his deep understanding of modern T20 cricket. Ikroop brings cultural diversity and fresh tactical thinking to the coaching group, helping every athlete feel seen and supported.",
     },
     {
-        name: "Rittin Raman",
+        name: "Ritin Raman",
         role: "Program Assistant Coach",
         image: "/assets/coaches/rittin-raman.jpg",
-        bio: "Driven by a genuine love for developing cricketers at every level. Rittin's enthusiasm is contagious — he brings high energy, technical precision, and an unwavering commitment to helping young players unlock their potential on and off the pitch.",
+        bio: "Driven by a genuine love for developing cricketers at every level. Ritin's enthusiasm is contagious — he brings high energy, technical precision, and an unwavering commitment to helping young players unlock their potential on and off the pitch.",
     },
 ];
 
