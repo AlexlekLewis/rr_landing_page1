@@ -64,3 +64,8 @@ Check this before writing any on-screen claim. Add the source and date to every 
 - "Head Coach Analysing V.Suryavanshi.MOV" (1DzS6ea-ipj2P1XX0NIUZXALy60QtdsXK) is our own team-room footage; IPL broadcast pictures of Suryavanshi play on the TV inside the shot.
 - "Aired Version" (1qSjyHrjrRlv-n39Xo2V--1nXvX6J9kiu) is an Indian TV news segment mixing our footage with IPL broadcast footage: broadcast, do not use.
 - "Sooryavanshi" folder: 4 professional stills of unknown ownership + 1 PNG; no video.
+
+## Verified quotes (Whisper, 27 Nov 2026)
+- Kumar Sangakkara, [Small Size] Kumar Interview.mp4 ~168.5–180s: "When I was young growing up playing cricket, reverse sweeps were never heard of. I think I played about four in my entire career, but that has to be an absolute part of your game right now. The ability to clear the boundaries and to have power…"
+- Kumar Sangakkara, same file ~250–257s: "I think you have to be curious, curious and creative." (Not "be creative, be curious".)
+- Speech-to-text: openai-whisper 'small' is installed in the scratchpad (model host openaipublic.azureedge.net is allowed). Caption from Whisper text, never from assumptions.
