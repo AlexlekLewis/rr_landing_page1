@@ -47,3 +47,4 @@ Check this before writing any on-screen claim. Add the source and date to every 
 - Suryavanshi footage (Vaibhav Suryavanshi), which got millions of views. Andy wants it in. Confirm which clip and our rights before use (broadcast footage rule).
 - Power League "Match play" footage (Power League folder). Testimonials (Power League/other). HPC videos, not just stills. Rane's videos. (Andy, 26 Nov 2026)
 - Higgsfield budget for the v9 flagship: USD $50 (Andy: "I'd rather you spend a bit more money to do a higher quality video").
+- Kumar Sangakkara, in one of his videos: every player should learn reverse hitting, 360 play, reverse sweeps, power hitting and ramps from a young age. Andy: "It's gold." Locate the exact clip and timecode. (26 Nov 2026)
