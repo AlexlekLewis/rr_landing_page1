@@ -13,28 +13,32 @@ single tab named **India Tour 2026 EOIs**.
 india_tour_2026_eoi (Supabase)
         │  RLS: only authenticated can read directly
         ▼
-export_india_tour_2026_eoi(p_token)   ← SECURITY DEFINER, token-gated RPC
+export_india_tour_2026_eoi(p_token)   ← SECURITY DEFINER, service_role only
         ▲
-        │  HTTPS POST { p_token } with the public anon key, every 1 min
+        │  HTTPS POST with the service_role key (Script Properties), every 1 min
 Apps Script syncIndiaTourEOIs()        ← bound to the sheet
         ▼
 "India Tour 2026 EOIs" tab             ← appends new rows, deduped by id
 ```
 
-The sheet never holds a powerful database key. The only secret is a narrow read
-token (`SYNC_TOKEN`) that unlocks just this one read function. Each run reconciles
-the whole table, so it is self-healing — no rows are missed even if the script is
-paused.
+The service_role key lives only in the script's Script Properties, never in
+`Code.gs` — this repo is public. The export function refuses every caller except
+the service_role key; `p_token` is still accepted but ignored once
+`supabase/migrations/20260927120000_sheet_sync_secrets_to_vault.sql` is applied.
+Each run reconciles the whole table, so it is self-healing — no rows are missed
+even if the script is paused.
 
 ## One-time setup
 
 1. Open the sheet (link above) → **Extensions → Apps Script**.
 2. Replace the default `Code.gs` with [`Code.gs`](./Code.gs) in this folder. Save.
-3. Run `syncIndiaTourEOIs` once → approve the Google authorization prompt.
-4. Run `installTrigger` once → schedules the sync every minute.
+3. **Project Settings → Script properties** → add `SUPABASE_SERVICE_KEY`
+   (Supabase → Project Settings → API → service_role key).
+4. Run `syncIndiaTourEOIs` once → approve the Google authorization prompt.
+5. Run `installTrigger` once → schedules the sync every minute.
 
-Done. To rotate the token later, change it in both `Code.gs` (`SYNC_TOKEN`) and the
-`export_india_tour_2026_eoi` migration, then re-apply the migration.
+Done. Never paste a key or token into `Code.gs` or a migration — this repo is
+public. If the service_role key is rotated, update the Script Property.
 
 ## Columns
 

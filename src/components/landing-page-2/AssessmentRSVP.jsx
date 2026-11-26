@@ -108,21 +108,7 @@ const AssessmentRSVP = () => {
             const { error } = await supabase.from('rsvp_responses').insert(payload);
             if (error) throw error;
 
-            // Fire webhook to Zapier (for Google Sheets routing) — fire and forget
-            // Uses URL-encoded form data to avoid CORS preflight (Zapier doesn't support OPTIONS)
-            const webhookUrl = import.meta.env.VITE_RSVP_WEBHOOK_URL;
-            if (webhookUrl) {
-                const formData = new URLSearchParams();
-                Object.entries(payload).forEach(([key, value]) => {
-                    if (value !== null && value !== undefined) {
-                        formData.append(key, Array.isArray(value) ? value.join(', ') : String(value));
-                    }
-                });
-                fetch(webhookUrl, {
-                    method: 'POST',
-                    body: formData,
-                }).catch(err => console.warn('Zapier webhook warning:', err));
-            }
+            // Zapier webhook removed — LandingPage2 is not routed; RSVP is stored in Supabase above.
 
             setIsSubmitting(false);
             setShowIdentityModal(false);

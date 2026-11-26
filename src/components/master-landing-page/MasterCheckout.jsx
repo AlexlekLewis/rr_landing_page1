@@ -9,8 +9,7 @@ const FLEXIPAY_URL = 'https://buy.stripe.com/fZu8wPbHP9SB2D2bzZ9Zm06';
 const FULL_URL    = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
 
 /* ─── Zapier webhooks for Elite 2026 Waitlist ─── */
-const ZAPIER_APPLICATION_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/23705820/un2nilm/';
-const ZAPIER_ONBOARDING_WEBHOOK  = 'https://hooks.zapier.com/hooks/catch/23705820/un27cu1/';
+// Zapier webhooks removed — this page is retired (/master-page returns 410). The old hook URLs are still in git history.
 
 /* ─── Female cap ─── */
 const FEMALE_CAP = 17;
@@ -301,19 +300,7 @@ const MasterCheckout = () => {
             const { error: waitlistInsertErr } = await supabase.from('elite_2026_waitlist').insert([waitlistPayload]);
             if (waitlistInsertErr) throw waitlistInsertErr;
 
-            // 3. Fire Zapier application webhook (non-blocking, no-cors to avoid preflight)
-            try {
-                fetch(ZAPIER_APPLICATION_WEBHOOK, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({
-                        event: 'application_submitted',
-                        waitlist_id: cohortId,
-                        ...waitlistPayload,
-                    }),
-                }).catch(() => {}); // silent — webhook is best-effort
-            } catch (_) { /* ignore webhook errors */ }
+            // 3. Zapier application webhook removed — page retired (410).
 
             // Store waitlist record ID so onboarding modal can UPDATE the same row
             localStorage.setItem('master_cohort_id', cohortId);
@@ -1089,46 +1076,7 @@ const MasterCheckout = () => {
                                                         }
                                                     }
 
-                                                    // Fire Zapier onboarding webhook (non-blocking, no-cors to avoid preflight)
-                                                    try {
-                                                        fetch(ZAPIER_ONBOARDING_WEBHOOK, {
-                                                            method: 'POST',
-                                                            mode: 'no-cors',
-                                                            headers: { 'Content-Type': 'text/plain' },
-                                                            body: JSON.stringify({
-                                                                event: 'onboarding_completed',
-                                                                waitlist_id: cohortId,
-                                                                player_name: wlPlayerName.trim(),
-                                                                parent_name: wlParentName.trim(),
-                                                                email: wlEmail.trim().toLowerCase(),
-                                                                phone: validPhones[0] || '',
-                                                                gender: wlGender,
-                                                                suburb: wlSuburb.trim(),
-                                                                shirt_name: wlShirtName.trim(),
-                                                                shirt_size: wlSizeTshirt,
-                                                                short_size: wlSizeShort,
-                                                                pant_size: wlSizePants,
-                                                                player_role: wlPlayerRole,
-                                                                competition_level_1: wlCompLevels[0]?.competition || '',
-                                                                club_1: wlCompLevels[0]?.club || '',
-                                                                grade_1: wlCompLevels[0]?.grade || '',
-                                                                best_bat_1_l1: wlCompLevels[0]?.bestBat1 || '',
-                                                                best_bat_2_l1: wlCompLevels[0]?.bestBat2 || '',
-                                                                best_bowl_1_l1: wlCompLevels[0]?.bestBowl1 || '',
-                                                                best_bowl_2_l1: wlCompLevels[0]?.bestBowl2 || '',
-                                                                competition_level_2: wlCompLevels[1]?.competition || '',
-                                                                club_2: wlCompLevels[1]?.club || '',
-                                                                grade_2: wlCompLevels[1]?.grade || '',
-                                                                best_bat_1_l2: wlCompLevels[1]?.bestBat1 || '',
-                                                                best_bat_2_l2: wlCompLevels[1]?.bestBat2 || '',
-                                                                best_bowl_1_l2: wlCompLevels[1]?.bestBowl1 || '',
-                                                                best_bowl_2_l2: wlCompLevels[1]?.bestBowl2 || '',
-                                                                group_chat_consent: wlGroupChatConsent,
-                                                                phone_numbers: validPhones,
-                                                                preferred_comms: wlPreferredComms,
-                                                            }),
-                                                        }).catch(() => {});
-                                                    } catch (_) { /* ignore webhook errors */ }
+                                                    // Zapier onboarding webhook removed — page retired (410).
 
                                                     setWaitlistOnboardingComplete(true);
                                                 } catch (err) {
