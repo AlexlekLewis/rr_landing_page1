@@ -39,3 +39,9 @@ Check this before writing any on-screen claim. Add the source and date to every 
 
 ## 2027 statements (Andy, 24 Nov 2026, v2 review notes; he is the source)
 - [2026-11-24] T20 Elite Program is back. Junior Royals is back, new and improved. Holiday camps. April: tour to the Rajasthan Royals High Performance Centre, during the IPL. Siddhartha Lahiri is back. SOURCE: Andy. No dates or prices yet.
+
+## Content map (Andy, 26 Nov 2026)
+- Bundoora April holidays: holiday program kids in Royals shirts being coached. Strong clips.
+- Sid's visit to Australia: Siddhartha Lahiri coaching groups. Use for "Siddhartha Lahiri is back".
+- Power League folder: "Stories" and "Rajasthan Royals Power League", September and November rounds. Lots of broken-down clips and great images.
+- Suryavanshi footage (Vaibhav Suryavanshi), which got millions of views. Andy wants it in. Confirm which clip and our rights before use (broadcast footage rule).
