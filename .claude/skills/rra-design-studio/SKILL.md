@@ -214,6 +214,24 @@ Name the unzipped pack folders as in `PACKS` in build_pieces.py (03-feed, elite-
   into the gradient at the edges. No desaturating or pink tinting.
 - This replaces the earlier gradient in section 1 and the "desaturated duotone" photo treatment.
 
+## 5f. Royals player images, backgrounds and generated imagery (Andy, 26 Nov 2026)
+
+- **Rajasthan Royals player images** (Drive: ROYALS PLAYER IMAGES / 2026: Jadeja, Parag, Jurel,
+  Sooryavanshi; studio shots on plain grey) **may be used three players at a time. Never one
+  player alone, never two.** Cut-outs: `rembg` (isnet-general-use). Download big Drive files with
+  `https://drive.google.com/uc?export=download&id=<id>` (the connector stops at 10MB).
+- **Brand-correct background** (RRA 26 guide, backdrop/banner/standee templates): the brand
+  gradient with the large lion (white stroke, white, or pink) and players cut out in front. This is
+  the default. Template: `brand/templates/launch-2027/trio.html` (no `bg`).
+- **Generated backgrounds** (Higgsfield API, `api.higgsfield.ai`, key saved on the environment;
+  model `higgsfield-ai/soul/v2/standard`, check `/estimate/...` first): atmosphere only (lights,
+  haze, crowd blur, ball, confetti), always under the brand gradient. **Never generate people,
+  logos or kit.** They are an option to show Andy, not the default: the Royals' guide has no
+  photographic backgrounds.
+- The players' shirts carry Royals sponsor logos (Waaree Solar, Oaksmith, Red Bull, Goel TMT).
+  Never retouch them out. Raise it with Andy for paid ads.
+- The guide's official extras: brush-script "HALLA BOL!" lockup and the lion in three variants.
+
 ## 6. Build and render
 
 Build each frame as static HTML at exact pixel size, local images and embedded Montserrat,

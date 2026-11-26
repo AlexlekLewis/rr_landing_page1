@@ -1,0 +1,57 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- Hero piece with three Rajasthan Royals players (Andy, 26 Nov 2026: Royals player images may be used
+     three at a time, never one alone). Background: generated atmosphere (no people) washed in the brand gradient.
+     window.T = {chip, head:[a,b], sub, cta:[a,b], bg, players:[left, centre, right]}; window.FMT = feed|vert|sq -->
+<style>
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-normal.woff2);font-weight:900}
+:root{--pink:#E11F8F;--navy:#001D48}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:M,sans-serif;color:#fff}
+.frame{position:relative;width:1080px;overflow:hidden}
+.logo{position:absolute;left:64px;z-index:6}
+.chip{position:absolute;z-index:6;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:12px 24px;border-radius:4px;background:var(--pink);white-space:nowrap}
+.h{position:absolute;left:64px;z-index:2;font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;white-space:nowrap;text-shadow:0 10px 50px rgba(0,0,0,.35)}
+.h span{display:block}.h .p{color:var(--pink)}
+.pl{position:absolute;z-index:3;filter:drop-shadow(0 30px 50px rgba(0,10,40,.55))}
+.pl.c{z-index:4}
+.floor{position:absolute;left:0;right:0;z-index:5;background:linear-gradient(180deg,rgba(0,29,72,0) 0%,rgba(0,29,72,.55) 45%,rgba(0,29,72,.96) 100%)}
+.txt{position:absolute;left:64px;z-index:6}
+.sub{font-weight:800;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.sub .pk{color:var(--pink);display:block;margin-top:8px;font-size:.74em;letter-spacing:.08em}
+.cta{display:flex;margin-top:22px}.cta .a{background:var(--pink);font-weight:900;letter-spacing:.04em;display:flex;align-items:center}
+.cta .u{background:var(--navy);font-weight:800;letter-spacing:.06em;display:flex;align-items:center}
+.footer{position:absolute;left:0;right:0;bottom:0;z-index:7;background:var(--navy);display:flex;justify-content:space-between;padding:0 64px}
+.footer b{font-weight:900;letter-spacing:.04em}.footer span{font-weight:800;letter-spacing:.12em;opacity:.85}
+</style></head><body><div class="frame" id="f"></div><script>
+const T=window.T,FMT=window.FMT||'feed';
+const Z={feed:{H:1350,top:64,R:64,foot:100,logo:100,chip:24,k:1,pc:900,ps:800,head:230},
+         vert:{H:1920,top:250,R:124,foot:260,logo:140,chip:26,k:1.1,pc:1120,ps:990,head:230},
+         sq:{H:1080,top:56,R:64,foot:88,logo:84,chip:22,k:.84,pc:700,ps:620,head:190}}[FMT];
+const H=Z.H,k=Z.k,W=1080-64-Z.R,f=document.getElementById('f');f.style.height=H+'px';
+// T.bg set: generated atmosphere under the brand gradient. No T.bg: the Royals' own background (RRA 26 guide
+// backdrop/banner templates): the brand gradient with the large lion behind the players.
+f.style.background=T.bg?`linear-gradient(150deg,rgba(0,29,72,.70) 0%,rgba(18,38,170,.32) 45%,rgba(225,31,143,.50) 100%),url(${T.bg}) center 30%/cover`
+  :'linear-gradient(150deg,#001D48 0%,#1226AA 42%,#E11F8F 100%)';
+const base=Z.foot-10; // players stand just behind the footer bar
+f.innerHTML=(T.bg?'':`<img src="../../logos/lion-rampant-white.png" style="position:absolute;z-index:1;opacity:.8;height:${Math.round(H*.86)}px;right:${FMT==='vert'?-200:-120}px;top:${Math.round(H*.07)}px">`)+`<img class="logo" id="logo" src="../../logos/rra-melbourne-white.svg" style="width:${Z.logo}px;top:${Z.top-8}px">
+<span class="chip" style="top:${Z.top}px;right:${Z.R}px;font-size:${Z.chip}px">${T.chip}</span>
+<div class="h" id="h"><span>${T.head[0]}</span><span class="p">${T.head[1]}</span></div>
+<img class="pl" src="${T.players[0]}" style="height:${Z.ps}px;left:${FMT==='vert'?-30:40}px;bottom:${base}px">
+<img class="pl" src="${T.players[2]}" style="height:${Z.ps}px;right:${FMT==='vert'?-30:40}px;bottom:${base}px">
+<img class="pl c" id="c" src="${T.players[1]}" style="height:${Z.pc}px;bottom:${base}px">
+<div class="floor" style="bottom:${Z.foot}px;height:${Math.round(Z.pc*.42)}px"></div>
+<div class="txt" id="txt"><div class="sub" style="font-size:${30*k}px">${T.sub}</div>
+<div class="cta" style="height:${62*k}px"><span class="a" style="font-size:${28*k}px;padding:0 ${26*k}px">${T.cta[0]}</span><span class="u" style="font-size:${22*k}px;padding:0 ${22*k}px">${T.cta[1]}</span></div></div>
+<div class="footer" style="height:${Z.foot}px;align-items:${FMT==='vert'?'flex-start':'center'};padding-top:${FMT==='vert'?44:0}px"><b style="font-size:${FMT==='sq'?32:38}px">HALLA BOL!</b><span style="font-size:${FMT==='sq'?19:22}px">RRAMELBOURNE.COM</span></div>`;
+const $=i=>document.getElementById(i),h=$('h'),wid=el=>{const r=document.createRange();r.selectNodeContents(el);return r.getBoundingClientRect().width};
+Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.load('900 100px M')).then(()=>document.fonts.ready).then(()=>{
+  const c=$('c');c.style.left=((1080-c.getBoundingClientRect().width)/2)+'px';
+  let fs=Z.head;h.style.fontSize=fs+'px';while(Math.max(...[...h.children].map(wid))>W&&fs>80){fs-=2;h.style.fontSize=fs+'px'}
+  const cap=$('logo').getBoundingClientRect().bottom+(FMT==='sq'?30:50);h.style.top=(cap-0.098*fs)+'px';
+  // headline stays fully readable: players' heads start just under it; legs run off behind the text and footer
+  const headBottom=cap+1.58*fs, cTop=headBottom-(FMT==='sq'?10:24);
+  document.querySelectorAll('.pl').forEach(p=>{const hgt=p.getBoundingClientRect().height, isC=p.id==='c';
+    const top=isC?cTop:cTop+hgt*0.13; p.style.bottom='auto'; p.style.top=top+'px'});
+  const t=$('txt');t.style.top=(H-Z.foot-t.getBoundingClientRect().height-(FMT==='vert'?44:34))+'px';
+  document.body.dataset.ready='1'});
+</script></body></html>
