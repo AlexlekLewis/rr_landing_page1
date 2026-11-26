@@ -10,11 +10,12 @@
 //
 // Every one of those surfaces checks lpJrDayOpen() and drops the event by itself
 // once registrations close, so nothing keeps selling a morning nobody can book
-// (19 Oct 2026). The morning was CANCELLED on 23 Oct 2026 and registrations closed
-// at 8:30am that day, so every surface has already dropped it.
+// (19 Oct 2026). The 25 October morning was called off for the weather (23 Oct);
+// it is BACK ON for Sunday 15 November (Alex, 30 Oct 2026), so every surface shows
+// it again until registrations close (Fri 13 Nov, 9pm).
 //
-// REVIEW 26 OCT 2026: the morning would have been Sunday 25 October. Remove every
-// import of this file that day (the five files above). The page is already out of
+// REVIEW 16 NOV 2026: the morning is over. Remove every import of this file that
+// day (the five files above), and take /lower-plenty-junior-royals-day out of
 // public/sitemap.xml.
 // ─────────────────────────────────────────────────────────────
 
