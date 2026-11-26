@@ -48,3 +48,4 @@ Check this before writing any on-screen claim. Add the source and date to every 
 - Power League "Match play" footage (Power League folder). Testimonials (Power League/other). HPC videos, not just stills. Rane's videos. (Andy, 26 Nov 2026)
 - Higgsfield budget for the v9 flagship: USD $50 (Andy: "I'd rather you spend a bit more money to do a higher quality video").
 - Kumar Sangakkara, in one of his videos: every player should learn reverse hitting, 360 play, reverse sweeps, power hitting and ramps from a young age. Andy: "It's gold." Locate the exact clip and timecode. (26 Nov 2026)
+- 2027 offer (Andy, 26 Nov 2026): HPC camp back in April (during the IPL); private coaching (one-on-ones, 1-to-2, training partner options), with Alex Thornhill as the one-on-one/1-to-2 coach; T20 Elite program back; Junior Royals back (new and improved); holiday camps; Siddhartha Lahiri back. Story: 2026 was amazing, 2027 is bigger and better.
