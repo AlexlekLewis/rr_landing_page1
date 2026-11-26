@@ -56,13 +56,15 @@ const SZ={feed:{H:1350,top:64,R:64,foot:100,logo:100,chip:24,k:1},vert:{H:1920,t
 const H=SZ.H, W=1080-64-SZ.R, k=SZ.k, f=document.getElementById('f'); f.style.height=H+'px';
 const e=(s)=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 let html='';
+// P.bg: full-bleed atmospheric background (e.g. AI-generated stadium lights, never people), washed with the brand gradient
+if(P.bg){f.style.background=`linear-gradient(150deg,rgba(0,29,72,.62) 0%,rgba(18,38,170,.30) 45%,rgba(225,31,143,.50) 100%),url(${P.bg}) center ${P.bgPos||'30%'}/cover`}
 // background art: photo (right side), cut-out player, or the lion
 if(P.photo){const vert=FMT==='vert'; const pw=vert?1080:Math.round(1080*(P.photoW||.56));
   const top=vert?0:Math.round((H-SZ.foot)*(P.photoTop||0)); const ph=vert?Math.round(H*.5):Math.round((H-SZ.foot)*(P.photoH||1))-top;
   const mask=vert?'linear-gradient(180deg,transparent 2%,#000 22%,#000 55%,transparent 88%)':'linear-gradient(90deg,transparent 0%,#000 42%),linear-gradient(180deg,#000 58%,transparent 100%)';
   html+=`<div class="photo" style="width:${pw}px;height:${ph}px;top:${top}px;-webkit-mask-image:${mask};-webkit-mask-composite:source-in;mask-composite:intersect"><img src="${P.photo}" style="object-position:${(vert&&P.vpos)||P.pos||'center'}"></div>`}
 else if(P.cut){const ch=FMT==='vert'?1180:FMT==='sq'?820:1050; html+=`<img class="cut" src="${P.cut}" style="height:${ch}px;right:${FMT==='vert'?-60:-40}px;bottom:${SZ.foot}px">`}
-else html+=`<img class="lion" src="../../logos/lion-rampant-white.png" style="top:${FMT==='vert'?330:110}px;right:${FMT==='vert'?-170:-110}px;height:${FMT==='vert'?1300:FMT==='sq'?900:1080}px">`;
+else if(!P.bg) html+=`<img class="lion" src="../../logos/lion-rampant-white.png" style="top:${FMT==='vert'?330:110}px;right:${FMT==='vert'?-170:-110}px;height:${FMT==='vert'?1300:FMT==='sq'?900:1080}px">`;
 html+=`<img class="logo" id="logo" src="../../logos/rra-melbourne-white.svg" style="width:${SZ.logo}px;top:${SZ.top-8}px">
 <span class="chip" style="top:${SZ.top}px;right:${SZ.R}px;font-size:${SZ.chip}px">${e(P.chip)}</span>
 <div class="blk h" id="h"><span>${e(P.head[0])}</span><span class="p">${e(P.head[1])}</span></div>`;

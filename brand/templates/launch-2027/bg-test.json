@@ -1,0 +1,57 @@
+[
+ {
+  "file": "01-bring-on-2027",
+  "chip": "2027 PROGRAMS",
+  "head": [
+   "BRING ON",
+   "2027"
+  ],
+  "sub": "Join the Royals Academy<br><span class=\"pk\">North · East · South-East · West Melbourne</span>",
+  "list": [
+   [
+    "Elite T20 Program"
+   ],
+   [
+    "Performance Squads"
+   ],
+   [
+    "Power League"
+   ],
+   [
+    "Junior Royals"
+   ]
+  ],
+  "cta": [
+   "FIND YOUR PROGRAM",
+   "RRAMELBOURNE.COM"
+  ]
+ },
+ {
+  "file": "01b-bring-on-2027-stadium",
+  "chip": "2027 PROGRAMS",
+  "head": [
+   "BRING ON",
+   "2027"
+  ],
+  "sub": "Join the Royals Academy<br><span class=\"pk\">North · East · South-East · West Melbourne</span>",
+  "list": [
+   [
+    "Elite T20 Program"
+   ],
+   [
+    "Performance Squads"
+   ],
+   [
+    "Power League"
+   ],
+   [
+    "Junior Royals"
+   ]
+  ],
+  "cta": [
+   "FIND YOUR PROGRAM",
+   "RRAMELBOURNE.COM"
+  ],
+  "bg": "bg-stadium-lights.jpg"
+ }
+]
