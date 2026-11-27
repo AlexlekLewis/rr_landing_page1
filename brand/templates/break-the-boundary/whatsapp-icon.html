@@ -1,0 +1,23 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- BREAK THE BOUNDARY FESTIVAL WhatsApp group icon, 1024x1024, designed for WhatsApp's circular crop.
+     Uses the approved logo (btb-logo.js) unchanged. ?o=navy|dusk|big
+     navy: full logo on navy-to-pink gradient. dusk: full logo on the dusk key-art sky.
+     big: same as navy with the logo as large as the circle allows, for legibility at the small size WhatsApp shows. -->
+<style>
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-italic.woff2);font-weight:900;font-style:italic}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1024px;height:1024px;position:relative;overflow:hidden;background:#001D48;font-family:M;color:#fff}
+.c{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+#guide{position:absolute;inset:0;border-radius:50%;box-shadow:0 0 0 2000px rgba(0,0,0,.55);display:none}
+</style><script src="btb-logo.js"></script></head><body><script>
+const q=new URLSearchParams(location.search),o=q.get('o')||'navy';
+const bg={navy:'linear-gradient(160deg,#001D48 0%,#001D48 38%,#1226AA 70%,#E11F8F 115%)',
+          dusk:'url(art/dusk.jpg) 30% 30%/cover',big:'linear-gradient(160deg,#001D48 0%,#001D48 38%,#1226AA 70%,#E11F8F 115%)'}[o];
+let h=`<div style="position:absolute;inset:0;background:${bg}"></div>`;
+if(o==='dusk')h+=`<div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(0,10,36,.55) 0%,rgba(0,10,36,.35) 45%,rgba(0,10,36,.75) 75%)"></div>`;
+h+=`<div class="c" id="lg">${btbLogo(o==='big'?720:620)}</div>`;
+h+='<div id="guide"></div>';
+document.body.innerHTML=h;
+if(q.get('guide'))document.getElementById('guide').style.display='block';
+Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.load('italic 900 100px M')).then(()=>document.fonts.ready).then(()=>document.body.dataset.ready='1');
+</script></body></html>

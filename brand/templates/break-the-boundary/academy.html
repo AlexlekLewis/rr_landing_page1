@@ -1,0 +1,61 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- BREAK THE BOUNDARY FESTIVAL creative featuring real Academy players (Andy: "our own academy kids and adults
+     of all ages, playing cricket and having fun, inside the festival creative"). Same layout as hero.html:
+     logo top left, details below it, the action on the right. Real photos only, full colour, never retouched.
+     The photographer's watermark must stay visible in frame: check every render.
+     ?p=<photo key> &f=feed|vert|sq &d=full|short &loc=Torquay, Geelong|Torquay, Victoria -->
+<style>
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-italic.woff2);font-weight:900;font-style:italic}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-normal.woff2);font-weight:900}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:M;color:#fff;position:relative;overflow:hidden;background:#000A24;width:1080px}
+.l{position:absolute}
+.d{z-index:6;background:linear-gradient(90deg,rgba(0,10,36,.9),rgba(0,10,36,.74));border-left:6px solid #E11F8F;backdrop-filter:blur(3px)}
+.date{font:italic 900 1em M;text-transform:uppercase;line-height:1.08;letter-spacing:.01em}
+.date b{color:#E11F8F;font-weight:900}
+.row{display:flex;align-items:center;border-top:2px solid rgba(255,255,255,.22);font-weight:800;line-height:1.15}
+.row i{font:normal 900 .8em M;color:#E11F8F;min-width:2em}
+.grain{inset:0;opacity:.08;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>")}
+</style><script src="btb-logo.js"></script></head><body><script>
+const q=new URLSearchParams(location.search),F=q.get('f')||'feed',D=q.get('d')||'full',LOC=q.get('loc')||'Torquay, Geelong',K=q.get('p')||'bowler';
+// Photo placement per format: h = rendered photo height, x/y = offset of the photo's top-left corner.
+const PH={
+ bowler:{src:'../academy-promo/photos/bowler-leap.jpg',feed:{h:1560,x:-1150,y:-150},vert:{h:2100,x:-1720,y:-60},sq:{h:1250,x:-900,y:-120}},
+ huddle:{src:'../academy-promo/photos/team-huddle.jpg',feed:{h:1400,x:-560,y:-20},vert:{h:1920,x:-1110,y:0},sq:{h:1120,x:-420,y:-20}},
+ batter:{src:'../academy-promo/photos/batter-drive.jpg',feed:{h:1350,x:-450,y:0},vert:{h:1920,x:-1100,y:0},sq:{h:1080,x:-300,y:0}},
+ squad:{src:'../academy-promo/photos/squad-photo.jpg',feed:{h:1350,x:-560,y:0},vert:{h:1920,x:-1100,y:0},sq:{h:1080,x:-380,y:0}},
+}[K];
+const Z={feed:{H:1350,foot:14,lw:420,lx:274,ly:30,d:[64,456,34,24]},
+         vert:{H:1920,foot:230,lw:480,lx:304,ly:236,d:[64,480,50,26]},
+         sq:{H:1080,foot:10,lw:286,lx:226,ly:18,d:[48,416,22,19.5]}}[F];
+const P=PH[F];
+document.body.style.height=Z.H+'px';
+const [dl,dw,dg,df]=Z.d;
+const fade='linear-gradient(90deg,rgba(0,10,36,.95) 0%,rgba(0,10,36,.8) 30%,rgba(0,10,36,0) 56%),linear-gradient(180deg,rgba(0,10,36,.72) 0%,rgba(0,10,36,0) 24%)';
+const details=D==='full'?`
+  <div class="row" style="padding:${df*.55}px 0"><i>01</i><span>T10 Senior Tournament</span></div>
+  <div class="row" style="padding:${df*.55}px 0"><i>02</i><span>Junior and Senior Modern Cricket Coaching Clinic</span></div>
+  <div class="row" style="padding:${df*.55}px 0"><i>03</i><span>Scholarship offers for players</span></div>
+  <div class="row" style="padding:${df*.55}px 0"><i>04</i><span>Private coaching sessions with Rajasthan Royals IPL coaches awarded</span></div>
+  <div class="row" style="padding:${df*.7}px 0 ${df*.3}px;gap:${df*.7}px;align-items:center">
+    <img src="art/qr-break-the-boundary.svg" style="width:${df*5.2}px;height:${df*5.2}px;border-radius:8px;flex:none">
+    <div><div style="font:normal 900 ${df*1.02}px M;color:#E11F8F;letter-spacing:.06em;text-transform:uppercase">Places are limited</div>
+    <div style="font-weight:800;font-size:${df*.82}px;margin-top:${df*.25}px">Players welcome from around Victoria</div>
+    <div style="font:italic 900 ${df*.95}px M;margin-top:${df*.4}px;letter-spacing:.08em">RRAMELBOURNE.COM</div></div>
+  </div>`:`
+  <div class="row" style="padding:${df*.7}px 0 ${df*.2}px;display:block">
+    <div style="font-weight:800;font-size:${df}px">Players welcome from around Victoria</div>
+    <div style="font:italic 900 ${df*1.1}px M;margin-top:${df*.45}px;letter-spacing:.08em">RRAMELBOURNE.COM</div>
+  </div>`;
+document.body.innerHTML=`<img class="l" src="${PH.src}" style="height:${P.h}px;left:${P.x}px;top:${P.y}px;filter:saturate(1.05) contrast(1.06) brightness(.94)">
+<div class="l" style="inset:0;background:linear-gradient(200deg,rgba(225,31,143,.22) 0%,rgba(18,38,170,.18) 55%,rgba(0,29,72,.25) 100%);mix-blend-mode:soft-light"></div>
+<div class="l" style="inset:0;background:${fade}"></div>
+<div class="l" style="left:0;right:0;bottom:0;height:${Math.round(Z.H*.2)}px;background:linear-gradient(180deg,rgba(0,10,36,0),rgba(0,10,36,.55))"></div>
+<div class="l" id="lg" style="left:${Z.lx-Z.lw/2}px;top:${Z.ly}px;z-index:5;filter:drop-shadow(0 10px 40px rgba(0,10,36,.7))">${btbLogo(Z.lw,{loc:LOC})}</div>
+<div class="l d" style="left:${dl}px;width:${dw}px;bottom:${Z.foot+dg}px;padding:${df*.9}px ${df*.9}px ${df*.5}px;font-size:${df}px">
+  <div class="date" style="font-size:${df*1.42}px;margin-bottom:${df*.7}px">Sunday 17 <b>&amp;</b><br>Monday 18 January</div>${details}
+</div>
+<div class="l grain" style="z-index:9"></div>`;
+Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.load('italic 900 100px M')).then(()=>document.fonts.load('800 30px M')).then(()=>document.fonts.ready).then(()=>document.body.dataset.ready='1');
+</script></body></html>
