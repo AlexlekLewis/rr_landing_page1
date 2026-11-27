@@ -13,3 +13,5 @@ Updated 2026-11-27 (v9 catalogue). Top items go in every run report.
 9. **(v10) Sid Lahiri, Halla Bol, re-shot wider:** the RR Intro V2 take can't be framed 9:16 without the backdrop's "HA" peeking or his ear touching the edge. A vertical phone take (Sid centred, plain backdrop area behind his head) would fix it.
 10. **(v10) Power League from behind the bowler's arm, tighter:** the FrogBox close angle can't hold bowler, ball and batter in one vertical frame. A phone on the sightscreen side gives full deliveries in 9:16.
 11. **(v10) Clean statement plates:** 2-3s locked-off shots at the RR backdrop with an empty floor in the lower half (one per program), so type never touches a player.
+12. **(v11) Reverse sweeps, filmed square-on and centred:** the best we have (Shan, Williamstown) drifts to the frame edge. Put the phone on a tripod square to the batter with room on both sides, slow-mo, at the RR backdrop. Get 3–4 kids, girls included.
+13. **(v11) HPC trip footage via the Inbox:** Rane's 4K60 dump is blocked by the Drive download quota. Ask Rane for a shared-drive copy or a direct upload of the best 10 clips (match play, venue wide with signage, team, faces).

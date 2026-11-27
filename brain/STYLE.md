@@ -260,3 +260,21 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
 - **Shots that look right but aren't:** IMG_3028 2-4 is a batter in gloves (not a bowler); Rane VID_1013's Fulltrack insert is at our Melbourne centre (not HPC); IMG_3081's dive is at 26.0, not 24.7; IMG_9053 starts with a boy in a maroon club shirt (8.0-8.6).
 - **TEMP music now has a shape** (`v10/final/music.py`): intro pad → hit → light groove → DROP at match days → pull-back under the kids → build → breakdown (Andy VO) → biggest drop at 2027 → hits on every statement → drums out under Sid → big hit on "Halla Bol!" → chord rings out on the end frame.
 - **Whisper on short isolated clips** mishears names ("They're under arrest" for Sooryavanshi): verify short clips against the full-context transcript, and pad clips with 0.8s silence before transcribing.
+
+## v11 flagship notes (27 Nov 2026)
+- **Soundscape = voices + music only** (FEEDBACK 27 Nov). Pipeline `v11/final/audio.py`:
+  - Voice chain: `highpass=80, lowpass=12k, afftdn=nr=10:nf=-40:tn=1, acompressor 2.5:1 @ -22dB, loudnorm -16 LUFS, 40ms fade-in / 60ms fade-out`.
+  - Music: one continuous bed (a low pad runs under everything, so no section is ever silent). Sidechain-style duck −11 dB under each voice, 250ms attack ramp before the line and 400ms release after.
+  - Never duck under a placeholder: with no voice there yet, the dip reads as the music "dropping out". Add the placeholder windows to the duck list when the VO arrives.
+  - Master: limiter → two-pass loudnorm (linear) → limiter at 0.82 → −14.1 LUFS / −1.1 dBTP.
+  - QC: per-beat RMS of the music stem, voice stem and mix, plus a check that the music is present in every second and every 100ms window.
+- **Centre-zone QC** (`v11/tools/centre.py`): 6fps, motion centroid with camera pan removed by phase correlation. It reports % of samples inside the middle 60% and draws strips with guide lines.
+  - The centroid is noisy on wide FrogBox shots: the fielders, umpire and crowd all move. Confirm those by eye on `tools/grid3.py` (5 frames per shot with 20/50/80% guides).
+- **Auto-tracking** (`v11/tools/autotrack.py`, `auto=True` in the EDL): motion centroid, Gaussian-smoothed, led by 0.12–0.15s (anticipation) and speed-limited (no snapping). Use `xoff` when the bat or ball pulls the centroid off the body.
+  - A crop can't move past the source edge. If the batter is at the edge of a phone frame, use a tighter crop of a Higgsfield 2K upscale (≤1.35×) or replace the shot.
+- **Speakers:** centre the face from a full-frame grid (5% lines), then crop and upscale.
+  - Kumar 253s: face x≈1065/1920 → crop 528 at x=801. Kumar 169s: x≈1140 → crop x=876. Alex Lewis 78s: x≈795 → crop x=519.
+  - Sid RR Intro V2 19.3s: face x≈.445 of 4K (cx .445, z 1.2). A partial "HA" from the backdrop stays at the left edge, which is unavoidable.
+  - OpenCV 5 has no Haar cascades, and the torchvision weights host is blocked.
+- **Drive:** the HPC "Rane's Video Dump" 4K60 files are now "Quota exceeded" for direct download. Remote ffprobe/ffmpeg seeks (HTTP range) worked for about half of them, then failed too. The iPhone .mov files in HPC Day 1–6 have the moov atom at the end, so remote reads fail; they need a full download once the quota resets.
+- **Transitions:** impact zoom only on section and statement starts (02a, 04a, 09a, 10a, 11a–d); hard cuts everywhere else. A Q→A from one take plays as one continuous shot, never a jump cut.
