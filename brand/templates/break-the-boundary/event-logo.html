@@ -6,6 +6,6 @@
 </style><script src="btb-logo.js"></script></head><body><script>
 const q=new URLSearchParams(location.search),bg=q.get('bg')||'navy';
 document.body.style.background={navy:'#001D48',gradient:'linear-gradient(150deg,#001D48 0%,#1226AA 42%,#E11F8F 100%)',white:'#fff',none:'transparent'}[bg];
-document.body.innerHTML=btbLogo(940,{mode:bg==='white'?'light':'dark',torquay:q.get('t')==='1'});
+document.body.innerHTML=btbLogo(940,{mode:bg==='white'?'light':'dark',loc:q.get('loc')||''});
 Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.load('italic 900 100px M')).then(()=>document.fonts.ready).then(()=>document.body.dataset.ready='1');
 </script></body></html>
