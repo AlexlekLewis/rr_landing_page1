@@ -18,7 +18,7 @@ export const PROGRAM = {
 // Spin Club runs every Wednesday as a weekly subscription that holds your spot,
 // paused over the Christmas break.
 //
-// DATES BELOW ARE PROPOSED, NOT YET CONFIRMED BY ALEX: three Wednesdays before
+// Dates confirmed by Alex, 27 Nov 2026: three Wednesdays before
 // Christmas, the break, then back on 27 January. scOptions.test.ts checks every
 // date is a Wednesday (the first draft's 3/10/17 Dec were Thursdays). Change
 // them here and nowhere else — the hero, dates strip, form and break line all
@@ -156,7 +156,7 @@ export const PRICES = [
 
 // The terms a parent needs before they subscribe. Every line is also in the
 // form's tick-box, so nobody can say they were not told.
-// "How to stop" is a PROPOSED process, not yet confirmed by Alex.
+// "Email info@ to stop" confirmed by Alex, 27 Nov 2026.
 export const SUBSCRIPTION_TERMS = [
     ['$60 every week', 'Charged on Wednesdays. It holds your spot, so it is charged whether or not you make it that night.'],
     ['Paused over Christmas', 'After Wednesday 16 December, nothing is charged until Wednesday 27 January.'],
