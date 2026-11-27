@@ -18,7 +18,7 @@ function btbLogo(W,o={}){const mode=o.mode||'dark',ink=mode==='light'?'#001D48':
     <i style="width:${W*.12}px;height:${W*.008}px;background:#E11F8F;transform:skewX(-20deg)"></i>
   </div>
   ${o.torquay?`<div style="display:flex;align-items:center;gap:${W*.03}px;margin-top:${W*.045}px">
-    <svg viewBox="0 0 120 24" style="width:${W*.13}px;height:${W*.026}px"><path d="M2 14 Q 17 0 32 14 T 62 14 T 92 14 T 118 14" fill="none" stroke="#E11F8F" stroke-width="5" stroke-linecap="round"/></svg>
-    <span style="font:italic 900 ${W*.062}px M;letter-spacing:.42em;margin-right:-.42em;color:${ink}">Torquay</span>
-    <svg viewBox="0 0 120 24" style="width:${W*.13}px;height:${W*.026}px"><path d="M2 14 Q 17 0 32 14 T 62 14 T 92 14 T 118 14" fill="none" stroke="#E11F8F" stroke-width="5" stroke-linecap="round"/></svg></div>`:''}
+    <svg viewBox="0 0 120 24" style="width:${W*.09}px;height:${W*.018}px"><path d="M2 14 Q 17 0 32 14 T 62 14 T 92 14 T 118 14" fill="none" stroke="#E11F8F" stroke-width="5" stroke-linecap="round"/></svg>
+    <span style="font:italic 900 ${W*.05}px M;letter-spacing:.2em;margin-right:-.2em;color:${ink};white-space:nowrap">Torquay, Geelong</span>
+    <svg viewBox="0 0 120 24" style="width:${W*.09}px;height:${W*.018}px"><path d="M2 14 Q 17 0 32 14 T 62 14 T 92 14 T 118 14" fill="none" stroke="#E11F8F" stroke-width="5" stroke-linecap="round"/></svg></div>`:''}
   </div>`}

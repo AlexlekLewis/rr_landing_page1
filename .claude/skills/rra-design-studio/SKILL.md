@@ -245,7 +245,7 @@ Name the unzipped pack folders as in `PACKS` in build_pieces.py (03-feed, elite-
 - **Break the Boundary promotional players: Dhruv Jurel and Vaibhav Sooryavanshi only** (Andy, 27 Nov 2026).
   This overrides the 'three at a time' rule for this event. Group players tight (overlapping shoulders),
   large, cropped at the thigh; never spaced apart.
-- Torquay variant: logo with TORQUAY + wave mark, coastal background (`art/coast.jpg`).
+- Location line is **TORQUAY, GEELONG** (Andy, 27 Nov 2026); Andy prefers the coastal background over stage lights. Logo variant with the wave mark, background (`art/coast.jpg`).
 - Wording: Rajasthan Royals Academy · BREAK THE BOUNDARY · FESTIVAL. Nothing else unless Andy adds it.
 - Template: `brand/templates/break-the-boundary/` (`btb-logo.js`, `event-logo.html`, `hero.html`).
 
