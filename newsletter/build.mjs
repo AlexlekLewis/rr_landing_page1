@@ -170,7 +170,8 @@ ${button(sh.cta, sh.slot, { bg: C.blue })}`);
 
   const contact = section(`
 <h3 class="t-ink" style="margin:0 0 8px;font-family:${FONT};font-size:19px;line-height:24px;font-weight:800;color:${C.ink};">Questions? Just reply.</h3>
-<p class="t-body" style="margin:0;font-family:${FONT};font-size:15px;line-height:23px;color:${C.ink};">Replies come straight to me. You can also text us on <a href="sms:+61421261825" style="color:${C.pink};font-weight:700;text-decoration:none;">0421&nbsp;261&nbsp;825</a> or email <a href="mailto:info@rramelbourne.com" style="color:${C.pink};font-weight:700;text-decoration:none;">info@rramelbourne.com</a>.</p>`, { pad: '28px 32px' });
+<p class="t-body" style="margin:0;font-family:${FONT};font-size:15px;line-height:23px;color:${C.ink};">Replies come straight to me. You can also text us on <a href="sms:+61421261825" style="color:${C.pink};font-weight:700;text-decoration:none;">0421&nbsp;261&nbsp;825</a> or email <a href="mailto:info@rramelbourne.com" style="color:${C.pink};font-weight:700;text-decoration:none;">info@rramelbourne.com</a>.</p>
+${i.layout === 'cover' && i.ps ? `<p class="t-muted" style="margin:16px 0 0;font-family:${FONT};font-size:15px;line-height:23px;color:${C.muted};">${esc(i.ps.text)} ${textLink(i.ps.cta, i.ps.slot)}</p>` : ''}`, { pad: '28px 32px' });
 
   const footer = `
 <tr><td class="px" bgcolor="${C.dark}" style="background:${C.dark};padding:28px 32px 32px;" align="center">
@@ -184,6 +185,71 @@ ${button(sh.cta, sh.slot, { bg: C.blue })}`);
   <p style="margin:0 0 10px;font-family:${FONT};font-size:12px;line-height:18px;color:#A9ADBD;"><a href="${UNSUBSCRIBE}" style="color:#FFFFFF;text-decoration:underline;display:inline-block;padding:10px 2px;">Unsubscribe</a> &nbsp;·&nbsp; <a href="${link('/privacy-policy', 'footer-privacy')}" style="color:#FFFFFF;text-decoration:underline;display:inline-block;padding:10px 2px;">Privacy policy</a></p>
   <p style="margin:0;font-family:${FONT};font-size:12px;line-height:18px;color:#7F8496;">${esc(POSTAL)}</p>
 </td></tr>`;
+
+  // ── Direction C, "magazine cover" (Andy, 27 Nov 2026: "C is easily the best") ──────────
+  const cv = i.cover;
+  let coverRows = '';
+  if (i.layout === 'cover') {
+    if (!cv) throw new Error('layout "cover" needs a cover block');
+    // The pull quote must be Andy's own words from this issue's note, never written for him.
+    if (cv.quote && !i.intro.join(' ').includes(cv.quote.replace(/[.”"]+$/, ''))) throw new Error(`cover.quote is not in the intro: "${cv.quote}"`);
+    const coverSrc = preview && cv.previewFile && existsSync(cv.previewFile)
+      ? `data:image/jpeg;base64,${readFileSync(cv.previewFile).toString('base64')}`
+      : esc(cv.url || 'https://rramelbourne.com/assets/newsletter/cover-missing.jpg');
+    const coverAlt = `The Royals Report, issue ${i.issue}. ${cv.kicker || 'Cover story'}: ${cv.title}. ${(cv.lines || []).map((l) => `${l.hi}: ${l.text}`).join('. ')}.`;
+    const banner = i.letterCta ? `
+<tr><td class="px" bgcolor="${C.dark}" style="background:${C.dark};padding:26px 28px 28px;">
+  ${kicker(i.letterCta.kicker || 'Coming up', '#FF8FD0')}
+  <p style="margin:0 0 16px;font-family:${FONT};font-size:24px;line-height:29px;font-weight:900;color:#FFFFFF;">${esc(i.letterCta.text)}</p>
+  ${button(i.letterCta.cta, i.letterCta.slot)}
+</td></tr>` : '';
+    const contents = (cv.lines || []).filter((l) => l.href).map((l, n) => `
+<tr><td style="padding:0;border-bottom:2px solid ${C.ink};" class="rule">
+  <a href="${link(l.href, l.slot)}" style="display:block;text-decoration:none;color:${C.ink};padding:14px 0;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+    <td width="52" valign="middle" style="width:52px;font-family:${FONT};font-size:28px;line-height:32px;font-weight:900;color:${C.pink};">${String(n + 1).padStart(2, '0')}</td>
+    <td valign="middle" class="t-ink" style="font-family:${FONT};font-size:17px;line-height:22px;font-weight:800;color:${C.ink};"><span style="color:${C.pink};">${esc(l.hi)}</span>&nbsp; ${esc(l.text)}</td>
+    <td width="24" valign="middle" align="right" class="t-ink" style="width:24px;font-family:${FONT};font-size:20px;font-weight:900;color:${C.ink};">&rarr;</td>
+  </tr></table></a>
+</td></tr>`).join('');
+    coverRows = `
+<tr><td bgcolor="${C.navy}" style="background:${C.navy};padding:0;line-height:0;">
+  <a href="${link(cv.href || i.story?.cta.href || '/news', 'cover')}"><img src="${coverSrc}" width="600" alt="${esc(coverAlt)}" class="fluid" style="display:block;width:100%;max-width:600px;height:auto;border:0;color:#FFFFFF;font-family:${FONT};font-size:18px;font-weight:800;line-height:24px;"></a>
+</td></tr>
+${section(`
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+  <td class="col" width="150" valign="top" style="width:150px;padding-right:24px;">
+    <img src="${img(i.signoff.photo)}" width="150" alt="" class="fluid" style="display:block;width:150px;height:auto;border:0;border-radius:5px;">
+    <p class="t-ink" style="margin:10px 0 0;font-family:${FONT};font-size:14px;line-height:18px;font-weight:800;color:${C.ink};">${esc(i.signoff.name)}</p>
+    <p class="t-muted" style="margin:2px 0 0;font-family:${FONT};font-size:12px;line-height:16px;color:${C.muted};">${esc(i.signoff.role)}</p>
+  </td>
+  <td class="col col-2" valign="top">
+    ${kicker('Director’s note')}
+    ${cv.quote ? `<p class="t-ink" style="margin:0 0 14px;font-family:${FONT};font-size:26px;line-height:31px;font-weight:900;color:${C.ink};">“${esc(cv.quote)}”</p>` : ''}
+    ${p(i.greeting, 'font-size:15px;line-height:23px;font-weight:700;')}
+    ${i.intro.map((t) => p(t, 'font-size:15px;line-height:23px;')).join('')}
+    ${p('Thanks for being part of it.', 'font-size:15px;line-height:23px;margin:0;')}
+  </td>
+</tr></table>`)}
+${banner}
+${section(`${kicker('In this issue')}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:6px;">${contents}</table>`, { pad: '28px 32px 30px' })}`;
+  }
+  // Program cards with photos (cover layout): two per row, one per row on phones.
+  const progCard = (it, n) => `
+<a href="${link(it.cta.href, it.slot)}"><img src="${img(it.image)}" width="260" alt="${esc(it.alt || it.title)}" class="fluid" style="display:block;width:100%;max-width:260px;height:auto;border:0;border-radius:5px 5px 0 0;"></a>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="prog" style="border:1px solid ${C.line};border-top:0;border-radius:0 0 5px 5px;padding:14px 16px 16px;">
+  <p class="t-muted" style="margin:0 0 4px;font-family:${FONT};font-size:11px;line-height:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:${C.muted};">${esc(it.tag)}</p>
+  <h3 class="t-ink" style="margin:0 0 6px;font-family:${FONT};font-size:18px;line-height:23px;font-weight:800;color:${C.ink};">${esc(it.title)}</h3>
+  <p class="t-body" style="margin:0 0 12px;font-family:${FONT};font-size:14px;line-height:21px;color:${C.ink};">${esc(it.body)}</p>
+  ${button(it.cta, it.slot, { bg: n % 2 ? C.blue : C.pink })}
+</td></tr></table>`;
+  const programsGrid = i.layout === 'cover' && pr.items.every((it) => it.image) ? section(`${kicker(pr.kicker)}${h2(pr.title)}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:6px;">
+${Array.from({ length: Math.ceil(pr.items.length / 2) }, (_, r) => `<tr>
+  <td class="col" width="260" valign="top" style="width:260px;padding:0 12px 20px 0;">${progCard(pr.items[r * 2], r * 2)}</td>
+  <td class="col" width="260" valign="top" style="width:260px;padding:0 0 20px 12px;">${pr.items[r * 2 + 1] ? progCard(pr.items[r * 2 + 1], r * 2 + 1) : ''}</td>
+</tr>`).join('')}
+</table>`) : programs;
 
   const html = `<!doctype html>
 <html lang="en-AU" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -210,6 +276,7 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
   .col-2{padding-top:28px!important}
   .fluid{max-width:100%!important}
   .shopcol{padding:0 3px!important}
+  .col img{max-width:100%!important}
 }
 @media (prefers-color-scheme:dark){
   .bg-page,body,.outer{background:#0B0F16!important}
@@ -219,6 +286,7 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
   .prog{border-top-color:#2A3244!important;border-right-color:#2A3244!important;border-bottom-color:#2A3244!important}
   .tip{background:#2A1426!important}
   .kick-tip{color:#FF8FD0!important}
+  .rule{border-bottom-color:#F2F3F7!important}
 }
 [data-ogsc] .card{background:#161C27!important}
 [data-ogsc] .t-ink,[data-ogsc] .t-body{color:#F2F3F7!important}
@@ -230,10 +298,10 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 <tr><td align="center" style="padding:16px 8px 24px;">
 <!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
 <table role="presentation" class="wrap" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;">
-${masthead}
-${letter}
+${i.layout === 'cover' ? coverRows : `${masthead}
+${letter}`}
 ${spacer()}
-${programs}
+${programsGrid}
 ${spacer()}
 ${feature}
 ${spacer()}
@@ -259,6 +327,7 @@ export function buildText(i) {
   const u = (href, slot) => { const x = new URL(href, SITE); x.searchParams.set('utm_source', 'newsletter'); x.searchParams.set('utm_medium', 'email'); x.searchParams.set('utm_campaign', i.campaign); x.searchParams.set('utm_content', slot); return x.toString(); };
   const L = [];
   L.push(`THE ROYALS REPORT · Issue ${i.issue} · ${i.monthLabel}`, 'From the Academy Director', '', i.greeting, '', ...i.intro.flatMap((t) => [t, '']), ...(i.letterCta ? [i.letterCta.text, `${i.letterCta.cta.label}: ${u(i.letterCta.cta.href, i.letterCta.slot)}`, ''] : []), 'Thanks for being part of it.', '', `${i.signoff.name}, ${i.signoff.role}`, '', ...(i.ps ? [i.ps.text, `${i.ps.cta.label}: ${u(i.ps.cta.href, i.ps.slot)}`, ''] : []));
+  if (i.layout === 'cover' && i.cover) L.push('---', 'IN THIS ISSUE', ...(i.cover.lines || []).filter((l) => l.href).map((l, n) => `${n + 1}. ${l.hi}: ${l.text} ${u(l.href, l.slot)}`), '');
   L.push('---', i.programs.kicker.toUpperCase(), ...i.programs.items.flatMap((p) => [`${p.title} (${p.tag})`, p.body, `${p.cta.label}: ${u(p.cta.href, p.slot)}`, '']));
   const f = i.feature; L.push('---', f.kicker.toUpperCase(), f.title, f.body, `${f.cta.label}: ${u(f.cta.href, f.slot)}`, '');
   L.push('---', i.players.kicker.toUpperCase(), ...i.players.cards.flatMap((c) => [c.title, c.body, `${c.cta.label}: ${u(c.cta.href, c.slot)}`, '']));
@@ -275,6 +344,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const issue = JSON.parse(readFileSync(file, 'utf8'));
   const name = basename(file, '.json');
   const out = join(ROOT, 'newsletter', 'out');
+  if (issue.cover) issue.cover.previewFile = join(out, `${name}.cover.jpg`);
   mkdirSync(out, { recursive: true });
   const html = build(issue);
   writeFileSync(join(out, `${name}.html`), html);

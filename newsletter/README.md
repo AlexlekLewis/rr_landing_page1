@@ -102,10 +102,30 @@ named in a published story.
 Copy: plain English (many families speak English as a second language), Australian spelling,
 short sentences, one idea per paragraph, buttons say exactly what happens ("Join this week").
 
+## 4a. The look: "magazine cover" (direction C, Andy 27 Nov 2026)
+
+From issue 2 every issue sets `"layout": "cover"` (see `issues/001c-2026-12-01-cover-demo.json`):
+
+* **Cover image** (`cover` block): a real Academy photo with ROYALS REPORT across the top, the
+  cover story's title, and three cover lines (`lines`: a pink highlight + a few words + a link).
+  `node newsletter/cover.mjs <issue>` renders it (1200 × 1560 JPEG, keep under 250 KB).
+  It is one image because Outlook can't lay text over photos; the same lines appear straight
+  under it as live text ("In this issue"), and its alt text carries them too.
+* **Director's note** with Andy's photo and a pull quote. `cover.quote` must be a sentence
+  from Andy's own note in that issue: the build refuses anything else.
+* **Banner** (dark): the one thing to buy now (`letterCta`), then **In this issue**,
+  **Coming up** as photo cards (each program needs `image` + `alt`), then the feature,
+  our players, the story, the tip, the store, contact + P.S., footer.
+* Design reference: canvas "Royals Report Redesign" (Bolder directions › C) and the
+  "Royals Academy" design system. Canva templates for the cover and results card follow.
+* At send time `send.mjs` uploads the cover to the public Supabase Storage bucket
+  `newsletter` and links it from there.
+
 ## 5. How an issue is made (files)
 
 ```
 newsletter/issues/NNN-YYYY-MM-DD.json   the content (edit this)
+node newsletter/cover.mjs newsletter/issues/NNN-YYYY-MM-DD.json   (cover layout)
 node newsletter/build.mjs newsletter/issues/NNN-YYYY-MM-DD.json
 newsletter/out/NNN-….html               send version (absolute images, UTM links, unsubscribe tag)
 newsletter/out/NNN-….txt                plain-text part

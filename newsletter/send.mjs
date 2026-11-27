@@ -14,6 +14,7 @@
 //   - From is Andy, Reply-To is Andy, so replies reach a person
 //   - addresses never leave Supabase/Resend: nothing is printed except counts
 import { readFileSync } from 'node:fs';
+import { basename, dirname, join } from 'node:path';
 import { build, buildText, POSTAL } from './build.mjs';
 
 const FROM = process.env.NEWSLETTER_FROM || 'Andy Crook | Royals Academy <andy.crook@rramelbourne.com>';
@@ -76,6 +77,16 @@ async function schedule(file) {
   // Wave 2 (older contacts) goes 24 h after wave 1, so a problem shows on the engaged half first.
   const sendAt = new Date(Date.parse(row.send_at) + (wave === 2 ? 864e5 : 0));
   const subject = row.subject || issue.subjects[0];
+  // Cover layout: the cover image is hosted in the public Supabase bucket "newsletter".
+  if (issue.layout === 'cover' && !issue.cover.url) {
+    const name = `${basename(file, '.json')}.cover.jpg`;
+    const bytes = readFileSync(join(dirname(file), '..', 'out', name));
+    if (GO) {
+      const up = await fetch(`${env('SUPABASE_URL')}/storage/v1/object/newsletter/${name}`, { method: 'POST', headers: { Authorization: `Bearer ${env('SUPABASE_SERVICE_ROLE_KEY')}`, 'Content-Type': 'image/jpeg', 'x-upsert': 'true' }, body: bytes });
+      if (!up.ok) throw new Error(`cover upload: ${up.status} ${await up.text()}`);
+    }
+    issue.cover.url = `${env('SUPABASE_URL')}/storage/v1/object/public/newsletter/${name}`;
+  }
   const body = { audience_id: env(`RESEND_AUDIENCE_ID_WAVE${wave}`), from: FROM, reply_to: REPLY_TO, subject, html: build(issue), text: buildText(issue), name: `Royals Report #${issue.issue} wave ${wave}` };
   if (!GO) { console.log(`[dry run] would schedule '${subject}' to wave ${wave} at ${sendAt.toISOString()}`); return; }
   const created = await rs('broadcasts', { method: 'POST', body: JSON.stringify(body) });
