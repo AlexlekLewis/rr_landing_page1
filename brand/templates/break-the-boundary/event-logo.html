@@ -1,10 +1,11 @@
-<!doctype html><html><head><meta charset="utf-8"><style>
+<!doctype html><html><head><meta charset="utf-8">
+<!-- Padded logo files (1600x1600, generous clear space so it can be trimmed). ?bg=navy|gradient|white|none &t=1 (Torquay) -->
+<style>
 @font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-italic.woff2);font-weight:900;font-style:italic}
-*{margin:0;padding:0;box-sizing:border-box}body{width:2400px;height:1000px;display:flex}
-.p{width:800px;height:1000px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+*{margin:0;padding:0;box-sizing:border-box}body{width:1600px;height:1600px;display:flex;align-items:center;justify-content:center}
 </style><script src="btb-logo.js"></script></head><body><script>
-document.body.innerHTML=`<div class="p" style="background:#001D48">${btbLogo(620)}</div>
-<div class="p" style="background:linear-gradient(150deg,#001D48 0%,#1226AA 42%,#E11F8F 100%)">${btbLogo(620)}</div>
-<div class="p" style="background:#fff">${btbLogo(620,{mode:'light'})}</div>`;
+const q=new URLSearchParams(location.search),bg=q.get('bg')||'navy';
+document.body.style.background={navy:'#001D48',gradient:'linear-gradient(150deg,#001D48 0%,#1226AA 42%,#E11F8F 100%)',white:'#fff',none:'transparent'}[bg];
+document.body.innerHTML=btbLogo(940,{mode:bg==='white'?'light':'dark',torquay:q.get('t')==='1'});
 Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.load('italic 900 100px M')).then(()=>document.fonts.ready).then(()=>document.body.dataset.ready='1');
 </script></body></html>

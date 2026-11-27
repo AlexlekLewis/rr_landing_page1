@@ -16,4 +16,9 @@ function btbLogo(W,o={}){const mode=o.mode||'dark',ink=mode==='light'?'#001D48':
     <i style="width:${W*.12}px;height:${W*.008}px;background:${ink};transform:skewX(-20deg)"></i>
     <div style="background:${ink};color:${mode==='light'?'#fff':'#001D48'};font:italic 900 ${W*.066}px M;letter-spacing:.3em;padding:${W*.016}px ${W*.03}px ${W*.014}px ${W*.05}px;transform:skewX(-12deg)"><span style="display:inline-block;transform:skewX(12deg)">Festival</span></div>
     <i style="width:${W*.12}px;height:${W*.008}px;background:#E11F8F;transform:skewX(-20deg)"></i>
-  </div></div>`}
+  </div>
+  ${o.torquay?`<div style="display:flex;align-items:center;gap:${W*.03}px;margin-top:${W*.045}px">
+    <svg viewBox="0 0 120 24" style="width:${W*.13}px;height:${W*.026}px"><path d="M2 14 Q 17 0 32 14 T 62 14 T 92 14 T 118 14" fill="none" stroke="#E11F8F" stroke-width="5" stroke-linecap="round"/></svg>
+    <span style="font:italic 900 ${W*.062}px M;letter-spacing:.42em;margin-right:-.42em;color:${ink}">Torquay</span>
+    <svg viewBox="0 0 120 24" style="width:${W*.13}px;height:${W*.026}px"><path d="M2 14 Q 17 0 32 14 T 62 14 T 92 14 T 118 14" fill="none" stroke="#E11F8F" stroke-width="5" stroke-linecap="round"/></svg></div>`:''}
+  </div>`}

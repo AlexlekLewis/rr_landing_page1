@@ -1,35 +1,30 @@
 <!doctype html><html><head><meta charset="utf-8">
-<!-- BREAK THE BOUNDARY key visual: three Royals players (always three), headline behind them for depth. ?f=feed|vert|sq -->
+<!-- BREAK THE BOUNDARY FESTIVAL key visual. Three Royals players (always three), grouped tight and large, cropped
+     at the thigh like broadcast key art. ?f=feed|vert|sq  &v=lights|coast -->
 <style>
-@font-face{font-family:M;src:url(../../fonts/montserrat-latin-800-normal.woff2);font-weight:800}
 @font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-italic.woff2);font-weight:900;font-style:italic}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:M;color:#fff;position:relative;overflow:hidden;background:#000A24}
+body{font-family:M;color:#fff;position:relative;overflow:hidden;background:#000A24;width:1080px}
 .l{position:absolute}
-.bg{inset:0;background:url(../launch-2027/bg/lights.jpg) center 18%/cover;filter:saturate(1.25) brightness(.8)}
-.tone{inset:0;background:linear-gradient(180deg,rgba(0,10,36,.93) 0%,rgba(0,14,50,.82) 42%,rgba(0,20,72,.2) 62%,rgba(120,10,90,.25) 68%,rgba(0,10,36,.96) 100%)}
-.w{left:0;right:0;text-align:center;font-weight:900;text-transform:uppercase;line-height:.84;letter-spacing:-.03em;white-space:nowrap}
-.w1{color:#fff}.w2{color:#E11F8F;text-shadow:0 0 60px rgba(225,31,143,.55)}
-.pl{filter:drop-shadow(-10px 0 22px rgba(225,31,143,.55)) drop-shadow(12px 0 24px rgba(40,70,255,.6)) drop-shadow(0 30px 40px rgba(0,0,0,.6)) contrast(1.08) saturate(1.1)}
-.floor{left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(0,10,36,0) 0%,rgba(0,10,36,.8) 45%,#000A24 78%)}
-.fest{left:0;right:0;text-align:center;font-weight:800;letter-spacing:.62em;padding-left:.62em;text-transform:uppercase}
-.rule{height:3px;background:#E11F8F}
+.pl{filter:drop-shadow(-10px 0 22px rgba(225,31,143,.5)) drop-shadow(12px 0 24px rgba(40,70,255,.55)) drop-shadow(0 30px 40px rgba(0,0,0,.6)) contrast(1.08) saturate(1.1)}
 .grain{inset:0;opacity:.10;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>")}
 </style><script src="btb-logo.js"></script></head><body><script>
-const F=new URLSearchParams(location.search).get('f')||'feed';
-const Z={feed:{H:1350,lw:700,wy:44,pc:700,ps:615,fy:1400},vert:{H:1920,lw:760,wy:236,pc:900,ps:790,fy:1880},sq:{H:1080,lw:520,wy:24,pc:640,ps:560,fy:1120}}[F];
-document.body.style.width='1080px';document.body.style.height=Z.H+'px';
-const base=Z.H-Z.fy+ (F==='vert'?-40:-60); // feet hidden in the floor fade
-document.body.innerHTML=`<div class="l bg"></div><div class="l tone"></div>
-
-<div class="l" id="lg" style="left:50%;top:${Z.wy}px;z-index:5;filter:drop-shadow(0 10px 40px rgba(0,10,36,.7))">${btbLogo(Z.lw)}</div>
-<img class="l pl" src="../launch-2027/players/soorya-6626.png" style="height:${Z.ps}px;left:${F==='vert'?-70:-10}px;bottom:${base}px;z-index:2">
-<img class="l pl" src="../launch-2027/players/jurel-0417.png" style="height:${Z.ps}px;right:${F==='vert'?-110:-40}px;bottom:${base}px;z-index:2">
-<img class="l pl" id="c" src="../launch-2027/players/jadeja-2536.png" style="height:${Z.pc}px;bottom:${base}px;z-index:3">
-<div class="l floor" style="height:${Math.round(Z.pc*.5)}px;z-index:4"></div>
+const q=new URLSearchParams(location.search),F=q.get('f')||'feed',V=q.get('v')||'lights';
+// lw = logo width, ly = logo top, pt = top of the centre player's head, pc = centre player height
+const Z={feed:{H:1350,lw:520,ly:34,pt:650,pc:1050},vert:{H:1920,lw:640,ly:236,pt:960,pc:1100},sq:{H:1080,lw:380,ly:20,pt:452,pc:900}}[F];
+document.body.style.height=Z.H+'px';
+const bg=V==='coast'?'art/coast.jpg':'../launch-2027/bg/lights.jpg';
+const ps=Z.pc*.9, side=Z.pc*.235; // side players sit behind the centre player's shoulders
+document.body.innerHTML=`<div class="l" style="inset:0;background:url(${bg}) center ${V==='coast'?'60%':'18%'}/cover;filter:saturate(1.2) brightness(${V==='coast'?.95:.8})"></div>
+<div class="l" style="inset:0;background:linear-gradient(180deg,rgba(0,10,36,.94) 0%,rgba(0,12,44,.8) ${Math.round(Z.pt/Z.H*100)-6}%,rgba(0,20,72,.1) ${Math.round(Z.pt/Z.H*100)+14}%,rgba(0,10,36,0) 80%)"></div>
+<img class="l pl" id="a" src="../launch-2027/players/soorya-6626.png" style="height:${ps}px;top:${Z.pt+Z.pc*.105}px;z-index:2">
+<img class="l pl" id="b" src="../launch-2027/players/jurel-0417.png" style="height:${ps}px;top:${Z.pt+Z.pc*.09}px;z-index:2">
+<img class="l pl" id="c" src="../launch-2027/players/jadeja-2536.png" style="height:${Z.pc}px;top:${Z.pt}px;z-index:3">
+<div class="l" style="left:0;right:0;bottom:0;height:${Math.round(Z.H*.2)}px;z-index:4;background:linear-gradient(180deg,rgba(0,10,36,0),rgba(0,10,36,.92))"></div>
+<div class="l" id="lg" style="left:50%;top:${Z.ly}px;margin-left:${-Z.lw/2}px;z-index:5;filter:drop-shadow(0 10px 40px rgba(0,10,36,.7))">${btbLogo(Z.lw,{torquay:V==='coast'})}</div>
 <div class="l grain" style="z-index:7"></div>`;
 Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.load('italic 900 100px M')).then(()=>document.fonts.ready).then(()=>{
- const c=document.getElementById('c');c.style.left=((1080-c.getBoundingClientRect().width)/2)+'px';
- const lg=document.getElementById('lg');lg.style.marginLeft=(-Z.lw/2)+'px';
+ const w=id=>document.getElementById(id).getBoundingClientRect().width, set=(id,x)=>document.getElementById(id).style.left=x+'px';
+ const cx=540; set('c',cx-w('c')/2); set('a',cx-w('c')/2-w('a')*.6); set('b',cx+w('c')*.16);
  document.body.dataset.ready='1'});
 </script></body></html>
