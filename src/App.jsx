@@ -32,6 +32,9 @@ import IndiaTour2026 from './components/india-tour-2026/IndiaTour2026';
 import HomePage from './components/home-page/HomePage';
 import NewsPage from './components/news/NewsPage';
 import ProgramsPage from './components/programs/ProgramsPage';
+import LocationsPage from './components/locations/LocationsPage';
+import VenuePage from './components/locations/VenuePage';
+import { VENUES, SHORT_LINKS, LOCATIONS_ROUTE } from './components/locations/venues';
 import StoryPage from './components/news/StoryPage';
 import InductionPage from './components/induction/InductionPage';
 import CoachesDay from './components/coaches-day/CoachesDay';
@@ -247,8 +250,13 @@ function App() {
             (Andy, 22 Nov 2026), further down. */}
         {/* Andy, 23 Nov 2026: /mickleham now goes to Royals Private Coaching (/private-coaching), so old
             ads, flyers and QR codes land on the new page. vercel.json redirects it too. */}
-        <Route path="/mickleham" element={<Navigate to="/private-coaching" replace />} />
-        <Route path="/Mickleham" element={<Navigate to="/private-coaching" replace />} />
+        {/* Our centres (Andy, 27 Nov 2026): /locations to search them, one page per venue, and the
+            short suburb links (/mickleham, /cranbourne-north, /hallam, /surf-coast) go to that
+            venue's page. /mickleham used to go to Private Coaching (23 Nov 2026); vercel.json
+            redirects the short links too. One entry in components/locations/venues.js = one page. */}
+        <Route path={LOCATIONS_ROUTE} element={<LocationsPage />} />
+        {VENUES.map((v) => <Route key={v.route} path={v.route} element={<VenuePage venue={v} />} />)}
+        {SHORT_LINKS.map((l) => <Route key={l.from} path={l.from} element={<Navigate to={l.to} replace />} />)}
         {/* Mickleham 30-Day Launch Special — campaign page for the front-desk flyer
             QR code + Instagram link. /Mickleham_Launch is the published short link;
             /launch kept as a fallback so nothing already shared breaks. */}

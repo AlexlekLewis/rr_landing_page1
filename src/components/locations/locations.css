@@ -1,0 +1,76 @@
+/* /locations and the centre pages (LocationsPage.jsx, VenuePage.jsx). Builds on homeV2.css:
+   same tokens, cards and buttons as /programs and /coaches. No shadows on resting cards. */
+.rrh .pg-hero h1{text-transform:uppercase;text-wrap:balance}
+.rrh .loc-back{display:inline-block;margin-bottom:14px;font-size:13px;font-weight:600;color:rgba(255,255,255,.85);text-decoration:none}
+.rrh .loc-back:hover{color:var(--white);text-decoration:underline}
+.rrh .pg-hero .loc-addr{display:flex;align-items:center;gap:8px;margin-top:14px;font-weight:700;color:var(--white)}
+.rrh .loc-addr svg{width:18px;height:18px;flex:none}
+.rrh .loc-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.rrh .prog-help .loc-actions{margin-top:0}
+.rrh .loc-actions .btn{height:46px}
+.rrh .loc-actions .btn svg,.rrh .loc-find .btn svg{width:16px;height:16px}
+
+/* search */
+.rrh .loc-search{display:flex;align-items:center;gap:10px;max-width:560px;height:54px;margin-top:22px;padding:0 14px;border-radius:6px;background:var(--white);color:var(--ink)}
+.rrh .loc-search:focus-within{outline:3px solid var(--pink-soft);outline-offset:2px}
+.rrh .loc-search > svg{width:20px;height:20px;flex:none;color:var(--muted)}
+.rrh .loc-search input{flex:1;min-width:0;height:100%;border:0;background:transparent;font:500 16px var(--font);color:var(--ink);outline:0}
+.rrh .loc-search input::-webkit-search-cancel-button{display:none}
+.rrh .loc-search button{display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin-right:-10px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.rrh .loc-search button svg{width:18px;height:18px}
+.rrh .loc-count{margin:0 0 16px;font-size:13px;font-weight:600;color:var(--muted)}
+.rrh .loc-empty{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:20px;border:1px solid var(--line);border-radius:5px;background:var(--card)}
+.rrh .loc-empty p{margin:0;font-size:15px}
+
+/* centre cards on /locations */
+.rrh .loc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.rrh .loc-card{display:flex;flex-direction:column;gap:10px;padding:20px;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--pink);border-radius:5px;color:var(--ink);text-decoration:none;transition:transform .2s,box-shadow .2s}
+.rrh .loc-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(20,10,44,.12)}
+.rrh .loc-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.rrh .loc-card-top .eyebrow{margin:0}
+.rrh .loc-card h2{margin:0;font-size:20px;font-weight:800;line-height:1.15;text-transform:uppercase;text-wrap:balance}
+.rrh .loc-card-addr{display:flex;align-items:flex-start;gap:6px;margin:0;font-size:14px;font-weight:600;line-height:1.4}
+.rrh .loc-card-addr svg,.rrh .loc-here svg{width:15px;height:15px;flex:none;margin-top:2px;color:var(--pink)}
+.rrh .loc-card .prog-btn{transform:none;margin-top:auto}
+.rrh .loc-chips{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 8px;padding:0;list-style:none}
+.rrh .loc-chips li{padding:5px 10px;border-radius:999px;background:var(--page);border:1px solid var(--line);font-size:12px;font-weight:600;line-height:1.2}
+
+/* centre page */
+.rrh .prog-body h3{margin:0;font-size:20px;font-weight:800;line-height:1.15;text-transform:uppercase}
+.rrh .loc-here{display:flex;align-items:flex-start;gap:6px;color:var(--ink)}
+.rrh .loc-note{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 20px;padding:14px 16px;border:1px solid var(--line);border-left:3px solid var(--pink);border-radius:5px;background:var(--card);color:var(--ink);text-decoration:none;font-size:14px}
+.rrh .loc-note-go{display:inline-flex;align-items:center;gap:6px;margin-left:auto;font-weight:700;color:var(--pink);white-space:nowrap}
+.rrh .loc-note-go svg{width:15px;height:15px}
+.rrh .loc-coaches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.rrh .loc-coach{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--line);border-radius:5px;background:var(--card);color:var(--ink);text-decoration:none}
+.rrh .loc-coach:hover{border-color:var(--pink)}
+.rrh .loc-coach-img{flex:none;width:72px;height:72px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2a1150,#E50695);color:rgba(255,255,255,.9);font-size:22px;font-weight:800}
+.rrh .loc-coach-img img{width:100%;height:100%;object-fit:cover;display:block}
+.rrh .loc-coach-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+.rrh .loc-coach-txt b{font-size:16px;line-height:1.2}
+.rrh .loc-coach-txt .coach-role{font-size:11px}
+.rrh .loc-coach-spec{font-size:12.5px;line-height:1.4;color:var(--muted)}
+.rrh .loc-find{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:24px;align-items:stretch;margin-top:14px}
+.rrh .loc-find.nomap{grid-template-columns:1fr}
+.rrh .loc-find-txt{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:22px;border:1px solid var(--line);border-radius:5px;background:var(--card)}
+.rrh .loc-find-txt h3{margin:0;font-size:18px;font-weight:800;text-transform:uppercase}
+.rrh .loc-find-addr{margin:0;font-size:15px;font-weight:600}
+.rrh .loc-find-label{margin:8px 0 0;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rrh .loc-find .btn{margin-top:auto;height:46px}
+.rrh .loc-map{width:100%;height:100%;min-height:320px;border:1px solid var(--line);border-radius:5px;background:var(--card)}
+.rrh .loc-others{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px}
+.rrh .loc-other{display:flex;flex-direction:column;gap:4px;padding:16px;border:1px solid var(--line);border-radius:5px;background:var(--page);color:var(--ink);text-decoration:none}
+.rrh .loc-other:hover{border-color:var(--pink)}
+.rrh .loc-other b{font-size:15px;line-height:1.25}
+.rrh .loc-other span{font-size:12.5px;color:var(--muted)}
+
+@media (max-width:980px){
+  .rrh .loc-grid,.rrh .loc-coaches,.rrh .loc-others{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rrh .loc-find{grid-template-columns:1fr}
+}
+@media (max-width:620px){
+  .rrh .loc-grid,.rrh .loc-coaches,.rrh .loc-others{grid-template-columns:1fr}
+  .rrh .loc-actions .btn{flex:1 1 100%}
+  .rrh .loc-note-go{margin-left:0}
+  .rrh .loc-map{min-height:260px}
+}

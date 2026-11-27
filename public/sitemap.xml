@@ -27,6 +27,38 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+  <!-- Our centres (Andy, 27 Nov 2026): /locations and one page per venue. A new venue in
+       src/components/locations/venues.js goes here too (locations.test.ts checks). -->
+  <url>
+    <loc>https://rramelbourne.com/locations</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/mickleham-indoor-sports-centre</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/cranbourne-north-elite-cricket-centre</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/hallam-elite-cricket-centre</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/ravenhall-m9-sports-centre</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/surf-coast-cricket-club</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- Core program / money pages -->
   <url>
     <loc>https://rramelbourne.com/junior-royals</loc>

@@ -11,6 +11,7 @@ import { COACHES } from '../components/premium-coaching/premiumCoachingData.js';
 
 import { NEWS_STORIES } from '../components/news/newsStories.js';
 import { INVITATION_SEO } from '../components/invitation/invitations.js';
+import { LOCATIONS_SEO } from '../components/locations/venues.js';
 
 export const SITE = {
   name: 'Rajasthan Royals Academy Melbourne',
@@ -302,6 +303,9 @@ export const PAGE_SEO = {
 // components/news/newsStories.js so a new story gets its own share preview (headline,
 // summary, photo) with no extra step. scripts/prerender-seo.mjs bakes these into the HTML.
 const clip = (s, n) => (s.length <= n ? s : `${s.slice(0, n - 1).replace(/\s+\S*$/, '')}…`);
+// Our centres (Andy, 27 Nov 2026): /locations and one page per venue. Titles, descriptions and
+// the local-business structured data are built from components/locations/venues.js.
+Object.assign(PAGE_SEO, LOCATIONS_SEO);
 PAGE_SEO['/programs'] = {
   title: 'Cricket Programs Melbourne | Rajasthan Royals Academy',
   description: 'Every Rajasthan Royals Academy Melbourne program in one place: Junior Royals, Spin Club, Performance Squads, Private Coaching and our High Performance Camp in India.',

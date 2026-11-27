@@ -40,7 +40,11 @@ const { NEWS_STORIES } = await import('../src/components/news/newsStories.js');
 // News: the /news page and every story, so each story's link previews with its own photo.
 const NEWS_ROUTES = ['/news', ...NEWS_STORIES.map((n) => `/news/${n.slug}`)];
 
-const ROUTES = [...NEWS_ROUTES, '/programs', '/performance-squads', '/performance-squads-open-trial', '/sid-juniors', '/junior-royals', '/spin-club', '/power-league', '/lower-plenty-junior-royals-day'];
+// Our centres: /locations and one page per venue, so Google and link previews get each
+// centre's own title, description and address.
+const { LOCATION_ROUTES } = await import('../src/components/locations/venues.js');
+
+const ROUTES = [...NEWS_ROUTES, ...LOCATION_ROUTES, '/programs', '/performance-squads', '/performance-squads-open-trial', '/sid-juniors', '/junior-royals', '/spin-club', '/power-league', '/lower-plenty-junior-royals-day'];
 
 const escapeAttr = (s) =>
     String(s)

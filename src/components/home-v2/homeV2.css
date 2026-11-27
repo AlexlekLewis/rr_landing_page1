@@ -49,6 +49,8 @@
 .rrh .toplinks{display:flex;align-items:center}
 .rrh .toplinks a,.rrh .toplinks span{color:var(--white);font-size:11px;font-weight:700;text-decoration:none;padding:0 12px;line-height:14px}
 .rrh .toplinks > * + *{border-left:1px solid rgba(255,255,255,.5)}
+.rrh .toplinks .topcentres a{padding:0}
+.rrh .toplinks .topcentres a:hover{text-decoration:underline}
 .rrh .topright{display:flex;align-items:center;gap:14px;color:var(--white);font-size:11px;font-weight:700}
 .rrh .topright a{display:flex;color:var(--white)}
 .rrh .topright .sep{width:1px;height:14px;background:rgba(255,255,255,.5)}

@@ -11,8 +11,18 @@ import { supabase } from '../../lib/supabase';
 const INTERESTS = ['Everything', 'Junior Royals', 'Performance Squads', 'Private Coaching', 'Spin Club', 'High Performance Camp · India'];
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
-const Newsletter = ({ source = 'home' }) => {
-    const [form, setForm] = useState({ first_name: '', email: '', interest: 'Everything', consent: false });
+// A centre page that is not open yet (locations/VenuePage.jsx) reuses this form as "tell me when
+// it starts": it passes its own heading and a fixed `interest` (the centre's name), which is
+// saved in the interest column and replaces the "most interested in" list.
+const Newsletter = ({
+    source = 'home', interest = null,
+    eyebrow = 'Register for more information',
+    title = 'THE ACADEMY NEWSLETTER',
+    body = 'New programs, trial dates, tour news and player stories from Rajasthan Royals Academy Melbourne, straight to your inbox.',
+    doneText = 'Look out for our next update. You can unsubscribe at any time.',
+    button = 'Sign Up',
+}) => {
+    const [form, setForm] = useState({ first_name: '', email: '', interest: interest || 'Everything', consent: false });
     const [state, setState] = useState('idle'); // idle | sending | done | already | error
     const [msg, setMsg] = useState('');
     const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
@@ -45,16 +55,16 @@ const Newsletter = ({ source = 'home' }) => {
             <div className="wrap">
                 <div className="nlbox">
                     <div className="nl-copy">
-                        <span className="eyebrow">Register for more information</span>
-                        <h2>THE ACADEMY NEWSLETTER</h2>
-                        <p>New programs, trial dates, tour news and player stories from Rajasthan Royals Academy Melbourne, straight to your inbox.</p>
+                        <span className="eyebrow">{eyebrow}</span>
+                        <h2>{title}</h2>
+                        <p>{body}</p>
                     </div>
                     {finished ? (
                         <div className="nl-done" role="status">
                             <span className="nl-tick"><Check /></span>
                             <div>
                                 <b>{state === 'done' ? `You're on the list${form.first_name.trim() ? `, ${form.first_name.trim()}` : ''}!` : "You're already on the list."}</b>
-                                <span>Look out for our next update. You can unsubscribe at any time.</span>
+                                <span>{doneText}</span>
                             </div>
                         </div>
                     ) : (
@@ -67,18 +77,20 @@ const Newsletter = ({ source = 'home' }) => {
                                     <input type="email" inputMode="email" autoComplete="email" required maxLength={254} value={form.email} onChange={set('email')} placeholder="you@email.com" />
                                 </label>
                             </div>
-                            <label className="nl-field"><span>Most interested in</span>
-                                <select value={form.interest} onChange={set('interest')}>
-                                    {INTERESTS.map((i) => <option key={i}>{i}</option>)}
-                                </select>
-                            </label>
+                            {!interest && (
+                                <label className="nl-field"><span>Most interested in</span>
+                                    <select value={form.interest} onChange={set('interest')}>
+                                        {INTERESTS.map((i) => <option key={i}>{i}</option>)}
+                                    </select>
+                                </label>
+                            )}
                             <label className="nl-consent">
                                 <input type="checkbox" checked={form.consent} onChange={set('consent')} />
                                 <span>I'm happy to receive emails from Rajasthan Royals Academy Melbourne. Unsubscribe any time. <Link to="/privacy-policy">Privacy Policy</Link></span>
                             </label>
                             {state === 'error' && <p className="nl-err" role="alert">{msg}</p>}
                             <button className="btn nl-btn" type="submit" disabled={state === 'sending'} data-cta={`newsletter-signup-${source}`}>
-                                {state === 'sending' ? 'Signing up…' : <>Sign Up <ArrowRight /></>}
+                                {state === 'sending' ? 'Signing up…' : <>{button} <ArrowRight /></>}
                             </button>
                         </form>
                     )}

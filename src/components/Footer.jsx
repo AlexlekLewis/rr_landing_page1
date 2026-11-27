@@ -27,6 +27,7 @@ export const PROGRAMS = [
 ];
 
 export const ACADEMY = [
+    { label: 'Our Centres', to: '/locations' },
     { label: 'Our Coaches', to: '/coaches' },
     { label: 'News & Features', to: '/news' },
     { label: 'Coaching Jobs — We\'re Hiring', to: '/careers' },

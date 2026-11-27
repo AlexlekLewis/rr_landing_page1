@@ -129,18 +129,33 @@
   ],
   "redirects": [
     {
+      "source": "/cranbourne-north",
+      "destination": "/cranbourne-north-elite-cricket-centre",
+      "permanent": false
+    },
+    {
+      "source": "/hallam",
+      "destination": "/hallam-elite-cricket-centre",
+      "permanent": false
+    },
+    {
+      "source": "/surf-coast",
+      "destination": "/surf-coast-cricket-club",
+      "permanent": false
+    },
+    {
       "source": "/mickleham",
-      "destination": "/private-coaching",
+      "destination": "/mickleham-indoor-sports-centre",
       "permanent": false
     },
     {
       "source": "/mickleham/",
-      "destination": "/private-coaching",
+      "destination": "/mickleham-indoor-sports-centre",
       "permanent": false
     },
     {
       "source": "/Mickleham",
-      "destination": "/private-coaching",
+      "destination": "/mickleham-indoor-sports-centre",
       "permanent": false
     },
     {

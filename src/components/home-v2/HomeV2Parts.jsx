@@ -4,6 +4,7 @@ import { ChevronDown, ChevronLeft, ChevronRight, Menu, X, ShoppingCart, Calendar
 import { PROGRAMS_DROPDOWN } from '../Navbar';
 import { ANNOUNCEMENTS } from '../home-page/openDaysData';
 import { faqs } from '../home-page/HomeFAQ';
+import { VENUES, LOCATIONS_ROUTE } from '../locations/venues';
 import { PROGRAMS as FOOTER_PROGRAMS, ACADEMY as FOOTER_ACADEMY, COMPANY as FOOTER_COMPANY } from '../Footer';
 import { useStories, storyPath } from '../news/news';
 import { useWeekendWrap } from '../news/weekendWrap';
@@ -24,6 +25,9 @@ const tagClass = (badgeColor) => (/green/.test(badgeColor || '') ? 'tag green' :
 const isExternal = (href) => /^https?:/.test(href);
 
 /* ── Header: two rows, like rajasthanroyals.com ─────────────────────────── */
+// The centres named in the top bar: open ones only (order: locations/venues.js).
+const OPEN_VENUES = VENUES.filter((v) => !v.comingSoon);
+
 export const HomeHeader = ({ onRegister }) => {
     const [progOpen, setProgOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
@@ -56,8 +60,12 @@ export const HomeHeader = ({ onRegister }) => {
                     <div className="hdr-top">
                         <div className="toplinks">
                             <a href="https://www.rajasthanroyals.com" target="_blank" rel="noopener noreferrer">rajasthanroyals.com</a>
-                            {/* Every centre (Andy, 23 Nov 2026) */}
-                            <span>Mickleham · Cranbourne North · Hallam · Ravenhall</span>
+                            {/* Every centre (Andy, 23 Nov 2026), each linked to its own page (27 Nov 2026) */}
+                            <span className="topcentres">
+                                {OPEN_VENUES.map((v, i) => (
+                                    <React.Fragment key={v.slug}>{i > 0 && ' · '}<Link to={v.route} data-cta={`top-centre-${v.slug}`}>{v.suburb}</Link></React.Fragment>
+                                ))}
+                            </span>
                         </div>
                         <div className="topright">
                             <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer" aria-label="Follow RRA Melbourne on Instagram"><IgIcon /></a>
@@ -79,6 +87,7 @@ export const HomeHeader = ({ onRegister }) => {
                             </div>
                             <div className="ni"><a className="nl" href="#about" data-cta="nav-about" onClick={jump('about')}>About</a></div>
                             <div className="ni"><a className="nl" href="#coaches" data-cta="nav-coaches" onClick={jump('coaches')}>Coaches</a></div>
+                            <div className="ni"><Link className="nl" to={LOCATIONS_ROUTE} data-cta="nav-locations">Locations</Link></div>
                             <div className="ni"><Link className="nl" to="/private-coaching" data-cta="nav-private-coaching">Private Coaching</Link></div>
                             <div className="ni"><Link className="nl" to="/news" data-cta="nav-news">News</Link></div>
                             <div className="ni"><Link className="nl" to="/careers" data-cta="nav-careers">Careers</Link></div>
@@ -100,6 +109,7 @@ export const HomeHeader = ({ onRegister }) => {
                     <div className="msub">{progLinks}<Link to="/programs" data-cta="nav-phone-all-programs" onClick={() => setMenuOpen(false)}>View All Programs →</Link></div>
                     <a href="#about" onClick={jump('about')}>About</a>
                     <a href="#coaches" onClick={jump('coaches')}>Coaches</a>
+                    <Link to={LOCATIONS_ROUTE} data-cta="nav-phone-locations">Locations</Link>
                     <Link to="/private-coaching">Private Coaching</Link>
                     <Link to="/news">News</Link>
                     <Link to="/careers">Careers</Link>
