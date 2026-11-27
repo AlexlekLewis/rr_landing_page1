@@ -2,12 +2,12 @@
 <!-- BREAK THE BOUNDARY key visual: three Royals players (always three), headline behind them for depth. ?f=feed|vert|sq -->
 <style>
 @font-face{font-family:M;src:url(../../fonts/montserrat-latin-800-normal.woff2);font-weight:800}
-@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-normal.woff2);font-weight:900}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-italic.woff2);font-weight:900;font-style:italic}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:M;color:#fff;position:relative;overflow:hidden;background:#000A24}
 .l{position:absolute}
 .bg{inset:0;background:url(../launch-2027/bg/lights.jpg) center 18%/cover;filter:saturate(1.25) brightness(.8)}
-.tone{inset:0;background:linear-gradient(180deg,rgba(0,10,36,.72) 0%,rgba(0,20,72,.15) 38%,rgba(120,10,90,.25) 68%,rgba(0,10,36,.96) 100%)}
+.tone{inset:0;background:linear-gradient(180deg,rgba(0,10,36,.93) 0%,rgba(0,14,50,.82) 42%,rgba(0,20,72,.2) 62%,rgba(120,10,90,.25) 68%,rgba(0,10,36,.96) 100%)}
 .w{left:0;right:0;text-align:center;font-weight:900;text-transform:uppercase;line-height:.84;letter-spacing:-.03em;white-space:nowrap}
 .w1{color:#fff}.w2{color:#E11F8F;text-shadow:0 0 60px rgba(225,31,143,.55)}
 .pl{filter:drop-shadow(-10px 0 22px rgba(225,31,143,.55)) drop-shadow(12px 0 24px rgba(40,70,255,.6)) drop-shadow(0 30px 40px rgba(0,0,0,.6)) contrast(1.08) saturate(1.1)}
@@ -17,18 +17,18 @@ body{font-family:M;color:#fff;position:relative;overflow:hidden;background:#000A
 .grain{inset:0;opacity:.10;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>")}
 </style><script src="btb-logo.js"></script></head><body><script>
 const F=new URLSearchParams(location.search).get('f')||'feed';
-const Z={feed:{H:1350,lw:780,wy:170,pc:715,ps:625,logo:104,ly:44,fy:1230},vert:{H:1920,lw:840,wy:420,pc:810,ps:705,logo:136,ly:246,fy:1640},sq:{H:1080,lw:640,wy:122,pc:590,ps:515,logo:80,ly:28,fy:1010}}[F];
+const Z={feed:{H:1350,lw:700,wy:44,pc:700,ps:615,fy:1400},vert:{H:1920,lw:760,wy:236,pc:900,ps:790,fy:1880},sq:{H:1080,lw:520,wy:24,pc:640,ps:560,fy:1120}}[F];
 document.body.style.width='1080px';document.body.style.height=Z.H+'px';
 const base=Z.H-Z.fy+ (F==='vert'?-40:-60); // feet hidden in the floor fade
-document.body.innerHTML=`<div class="l bg"></div><div class="l tone"></div><div class="l" style="inset:0;background:url(../launch-2027/bg/confetti.jpg) center/cover;mix-blend-mode:screen;opacity:.55;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 55%,transparent 85%)"></div>
-<img class="l" src="../../logos/rra-melbourne-white.svg" style="height:${Z.logo}px;top:${Z.ly}px;left:50%;transform:translateX(-50%);z-index:6">
-<div class="l" id="lg" style="left:50%;top:${Z.wy}px;z-index:1;filter:drop-shadow(0 10px 40px rgba(0,10,36,.6))">${btbLogo(Z.lw)}</div>
+document.body.innerHTML=`<div class="l bg"></div><div class="l tone"></div>
+
+<div class="l" id="lg" style="left:50%;top:${Z.wy}px;z-index:5;filter:drop-shadow(0 10px 40px rgba(0,10,36,.7))">${btbLogo(Z.lw)}</div>
 <img class="l pl" src="../launch-2027/players/soorya-6626.png" style="height:${Z.ps}px;left:${F==='vert'?-70:-10}px;bottom:${base}px;z-index:2">
 <img class="l pl" src="../launch-2027/players/jurel-0417.png" style="height:${Z.ps}px;right:${F==='vert'?-110:-40}px;bottom:${base}px;z-index:2">
 <img class="l pl" id="c" src="../launch-2027/players/jadeja-2536.png" style="height:${Z.pc}px;bottom:${base}px;z-index:3">
 <div class="l floor" style="height:${Math.round(Z.pc*.5)}px;z-index:4"></div>
 <div class="l grain" style="z-index:7"></div>`;
-Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.load('900 100px M')).then(()=>document.fonts.ready).then(()=>{
+Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.load('italic 900 100px M')).then(()=>document.fonts.ready).then(()=>{
  const c=document.getElementById('c');c.style.left=((1080-c.getBoundingClientRect().width)/2)+'px';
  const lg=document.getElementById('lg');lg.style.marginLeft=(-Z.lw/2)+'px';
  document.body.dataset.ready='1'});

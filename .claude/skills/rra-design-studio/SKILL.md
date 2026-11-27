@@ -234,6 +234,17 @@ Name the unzipped pack folders as in `PACKS` in build_pieces.py (03-feed, elite-
   Never retouch them out. Raise it with Andy for paid ads.
 - The guide's official extras: brush-script "HALLA BOL!" lockup and the lion in three variants.
 
+## 5g. Events and festivals (Andy, 27 Nov 2026, Break the Boundary Festival)
+
+- This is the Rajasthan Royals: events look like **big sporting events (T20 energy)**, never
+  community fetes. No bunting, confetti, ribbons or clip-art balls. Italic 900 type, angular cuts,
+  stage lighting, real players (in threes).
+- The **Royals Academy logo is a major part of every event lock-up** (about as tall as the
+  wordmark), and for events it is the version **without "Melbourne"**:
+  `brand/logos/rra-academy-white.png` (pink: `rra-academy-blue.png`, misnamed in the kit).
+- Wording: Rajasthan Royals Academy · BREAK THE BOUNDARY · FESTIVAL. Nothing else unless Andy adds it.
+- Template: `brand/templates/break-the-boundary/` (`btb-logo.js`, `event-logo.html`, `hero.html`).
+
 ## 6. Build and render
 
 Build each frame as static HTML at exact pixel size, local images and embedded Montserrat,
