@@ -58,3 +58,6 @@ Newest wins. Update an old line instead of keeping both.
 - [2026-11-27] RULE: Music must have dynamics: build, drop, pull back, hit. Impactful hits on key moments, not a flat bed. WHY: "the music needs to come and go a little bit and be a little bit more impactful." FROM: v9
 - [2026-11-27] RULE: The closing scene must be a strong, designed payoff (our best footage with signage, big logo, one clear CTA), never an afterthought. WHY: "The closing scene is awful." FROM: v9
 - [2026-11-27] KEEP: the Kumar "curious and creative" beat; the High Performance Camp beat. FROM: v9
+- [2026-11-27] RULE: Let a skill shot play out. Hold a clip long enough to show the full action (set-up, shot, finish), e.g. the whole reverse sweep, before cutting. Fast cuts are for energy between actions, never mid-action. WHY: "the kids reverse sweeping, they don't actually show the reverse sweeps. It's almost like they clip out of them too fast." FROM: v9
+- [2026-11-27] RULE: Show balance: we coach proper/traditional cricket too (technique, defence, fundamentals), but the identity is a T20 program. Include a beat of classical skill inside a T20-first story. WHY: "We also need to show that we don't ignore normal cricket, but ... the Royals are still a T20 program." FROM: v9
+- [2026-11-27] KEEP: bringing people in to speak (voice relay) works. FROM: v9
