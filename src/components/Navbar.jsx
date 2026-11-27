@@ -82,7 +82,7 @@ const PC_NAV = [
 //                        REVIEW 26 OCT 2026: pull the row and its import.
 //   Spin Club          — every Wednesday, weekly subscription, $60 incl. GST
 //                        (Alex, 27 Nov 2026; spin-club/scOptions.js).
-//                        REVIEW 18 DEC 2026: Christmas break until 28 Jan.
+//                        REVIEW 18 DEC 2026: Christmas break until 27 Jan.
 export const PROGRAMS_DROPDOWN = [
     ...(lpJrDayOpen() ? [{ label: LP_JR_DAY_ROW.navLabel, route: LP_JR_DAY_ROUTE, badge: LP_JR_DAY_ROW.navBadge, badgeColor: 'bg-rr-pink' }] : []),
     { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Wednesdays · $60 a week', badgeColor: 'bg-rr-pink' },

@@ -283,7 +283,7 @@ const SCForm = () => {
                             week including GST, charged on Wednesdays to hold my spot.
                             <span className="block text-rr-dark/60 font-medium mt-1">
                                 It is charged whether or not we make it that night. It pauses over
-                                Christmas (nothing charged after 17 December until 28 January), and we can stop any time by
+                                Christmas (nothing charged after 16 December until 27 January), and we can stop any time by
                                 emailing info@rramelbourne.com before a Wednesday.
                             </span>
                         </span>

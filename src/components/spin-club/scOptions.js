@@ -19,28 +19,30 @@ export const PROGRAM = {
 // paused over the Christmas break.
 //
 // DATES BELOW ARE PROPOSED, NOT YET CONFIRMED BY ALEX: three Wednesdays before
-// Christmas, the break, then back on 28 January. Change them here and nowhere
-// else — the hero, the dates strip, the form and the break line all read this.
+// Christmas, the break, then back on 27 January. scOptions.test.ts checks every
+// date is a Wednesday (the first draft's 3/10/17 Dec were Thursdays). Change
+// them here and nowhere else — the hero, dates strip, form and break line all
+// read this.
 export const NIGHT_DATES = [
-    { label: '3 December', iso: '2026-12-03' },
-    { label: '10 December', iso: '2026-12-10' },
-    { label: '17 December', iso: '2026-12-17' },
-    { label: '28 January', iso: '2027-01-28' },
-    { label: '4 February', iso: '2027-02-04' },
-    { label: '11 February', iso: '2027-02-11' },
-    { label: '18 February', iso: '2027-02-18' },
-    { label: '25 February', iso: '2027-02-25' },
-    { label: '4 March', iso: '2027-03-04' },
-    { label: '11 March', iso: '2027-03-11' },
-    { label: '18 March', iso: '2027-03-18' },
-    { label: '25 March', iso: '2027-03-25' },
+    { label: '2 December', iso: '2026-12-02' },
+    { label: '9 December', iso: '2026-12-09' },
+    { label: '16 December', iso: '2026-12-16' },
+    { label: '27 January', iso: '2027-01-27' },
+    { label: '3 February', iso: '2027-02-03' },
+    { label: '10 February', iso: '2027-02-10' },
+    { label: '17 February', iso: '2027-02-17' },
+    { label: '24 February', iso: '2027-02-24' },
+    { label: '3 March', iso: '2027-03-03' },
+    { label: '10 March', iso: '2027-03-10' },
+    { label: '17 March', iso: '2027-03-17' },
+    { label: '24 March', iso: '2027-03-24' },
 ];
 export const NIGHTS = NIGHT_DATES.map((n) => n.label);
 export const START_DATE = `Wednesday ${NIGHT_DATES[0].label}`;
 export const CHRISTMAS_BREAK = {
-    lastNight: 'Wednesday 17 December',
-    backOn: 'Wednesday 28 January',
-    line: 'Paused over the Christmas break \u2014 after Wednesday 17 December, nothing is charged until Wednesday 28 January.',
+    lastNight: 'Wednesday 16 December',
+    backOn: 'Wednesday 27 January',
+    line: 'Paused over the Christmas break \u2014 after Wednesday 16 December, nothing is charged until Wednesday 27 January.',
 };
 
 // Upcoming nights only, so the form never offers a Wednesday that has passed.
@@ -157,7 +159,7 @@ export const PRICES = [
 // "How to stop" is a PROPOSED process, not yet confirmed by Alex.
 export const SUBSCRIPTION_TERMS = [
     ['$60 every week', 'Charged on Wednesdays. It holds your spot, so it is charged whether or not you make it that night.'],
-    ['Paused over Christmas', 'After Wednesday 17 December, nothing is charged until Wednesday 28 January.'],
+    ['Paused over Christmas', 'After Wednesday 16 December, nothing is charged until Wednesday 27 January.'],
     ['Stop any time', 'Email info@rramelbourne.com before a Wednesday and that week is not charged.'],
 ];
 
