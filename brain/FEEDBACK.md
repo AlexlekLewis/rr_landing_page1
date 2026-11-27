@@ -63,3 +63,4 @@ Newest wins. Update an old line instead of keeping both.
 - [2026-11-27] KEEP: bringing people in to speak (voice relay) works. FROM: v9
 - [2026-11-27] RULE: Make each moment clear: one idea per beat, a clear subject, the action readable at a glance, and the voice, footage and statement all saying the same thing. WHY: "you need to be clearer in the moments. You're nearly there, just haven't quite nailed it." FROM: v9
 - [2026-11-27] RULE: The flagship finishes on Sid saying "Let's play the Royals way. Halla Bol!" (clearest take, framed properly), then a classy, enticing end frame (big logo, our footage and signage, one CTA). WHY: Andy. FROM: v9
+- [2026-11-27] RULE: Give the T20 Elite program and the Royals HPC beats more time, filled with our very best, most iconic footage. These are the showpieces. WHY: "expand a little the T20 Program and the Royals HPC videos as we want to show the very best iconic videos in all that we do." FROM: v9
