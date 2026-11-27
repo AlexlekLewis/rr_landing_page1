@@ -47,6 +47,35 @@ const IMG = '/assets/news';
 
 export const NEWS_STORIES = [
     {
+        // RRA Melbourne only (Andy, 27 Nov 2026): Academy games outside the Power League are not on Power Cricket.
+        // Quotes approved by Andy. Hero: still from Drive "Every 6 from 28th September" (banner behind).
+        slug: 'rra-melbourne-xi-v-fitzroy-doncaster-showcase',
+        sites: ['rra-melbourne'],
+        brand: 'Match Preview',
+        type: 'article',
+        publishedAt: '2026-11-27',
+        title: 'RRA Melbourne XI to take on Fitzroy Doncaster’s Dowling Shield side in T20 showcase',
+        excerpt:
+            'A Rajasthan Royals Academy Melbourne XI meets Fitzroy Doncaster’s Under-16 Dowling Shield team in a T20 showcase on Sunday 6 December, with Andy Edwards called up after back-to-back club hundreds.',
+        heroImage: `${IMG}/rra-xi-v-fitzroy-hero.jpg`,
+        heroAlt: 'A batter swings hard in front of the Power League and rramelbourne.com boundary banner',
+        gallery: [
+            { src: `${IMG}/rra-xi-v-fitzroy-bowler.jpg`, alt: 'A bowler runs in with the rramelbourne.com banner behind' },
+            { src: `${IMG}/rra-xi-v-fitzroy-team.jpg`, alt: 'Academy players walk off in front of the rramelbourne.com and Whitewall banners' },
+            { src: `${IMG}/rra-xi-v-fitzroy-banner.jpg`, alt: 'An Academy player in front of the Rajasthan Royals Academy banner' },
+            { src: `${IMG}/rra-xi-v-fitzroy-tent.jpg`, alt: 'A fielder throws beside the Royals Academy tent' },
+        ],
+        body: paragraphs(
+            'A Rajasthan Royals Academy Melbourne XI will take on Fitzroy Doncaster’s Under-16 Dowling Shield team in a T20 showcase match on Sunday 6 December.',
+            'The game gives players from the Academy’s programs and Performance Squads the chance to test themselves against one of Victoria’s top under-16 sides, away from the Power League.',
+            '“These are the types of games we want our players to have the opportunity to play in,” Academy Director Andy Crook said. “Showcase games like this let players from our programs across the year, and from our Performance Squads, show what they can do in a different environment, outside the Power League.”',
+            '“Playing a Dowling Shield side over 20 overs is a real test, and exactly the kind of challenge we want for the group.”',
+            'Captain-coach Jinang Shah leads the side, and Andy Edwards comes in on the back of consecutive club hundreds for Mill Park.',
+            'Squad: Jinang Shah (c, captain-coach), Andy Edwards, Aston Burns, Ryan Setia, Leith Salwathura, Priyam Sharma, Harry Hume (wk), Veersumatt Singh Sidhu, Jake Frederiksen, Aarnav Porwal, Cooper Lewin, Jake Keena.',
+            'Play starts at 9:30am on Sunday 6 December at Schramms Reserve, Ground 2.',
+        ),
+    },
+    {
         // Also in Power Cricket's feed (tagged for both sites). Andy, 25 Nov 2026; image supplied by Andy.
         slug: 'sooryavanshi-204-off-53-record-night',
         sites: ['rra-melbourne'],
