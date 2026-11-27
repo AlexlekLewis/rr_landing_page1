@@ -118,3 +118,12 @@ left join lateral (
 
 comment on view public.v_spin_club_members is
   'Spin Club weekly subscribers with their latest payment, matched to rra_players_master and the portal players table. Written by the Stripe webhook; see api/_lib/spinClubSubscription.js.';
+
+-- Parent contact details: no access at all for signed-out visitors, and
+-- signed-in users can only read (RLS above limits that to dashboard admins).
+revoke all on public.spin_club_subscriptions from anon;
+revoke all on public.spin_club_payments from anon;
+revoke all on public.v_spin_club_members from anon;
+revoke insert, update, delete, truncate on public.spin_club_subscriptions from authenticated;
+revoke insert, update, delete, truncate on public.spin_club_payments from authenticated;
+revoke insert, update, delete, truncate on public.v_spin_club_members from authenticated;
