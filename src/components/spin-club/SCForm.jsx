@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { CLUBS, PROGRAM, SPIN_TYPES, SQUAD_STATUS, SQUAD_NOTE, PRICES, STRIPE_LINK, upcomingNights } from './scOptions';
+import { CLUBS, PROGRAM, SPIN_TYPES, SQUAD_STATUS, SQUAD_NOTE, PRICES, CHRISTMAS_BREAK, subscriptionCheckoutUrl, upcomingNights } from './scOptions';
 import GovernanceConsents from '../shared/GovernanceConsents';
 import { EMPTY_CONSENTS, consentErrors, consentColumns } from '../../lib/governance';
 
@@ -33,6 +33,10 @@ const SCForm = () => {
     const [error, setError] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    // The applications.id of this sign-up. Made here, not by the database, so it
+    // can go to Stripe as client_reference_id and the webhook can file every
+    // weekly payment against this exact row.
+    const [applicationId, setApplicationId] = useState(null);
     // Governance boxes (Andy, 10 Nov 2026), saved in the four accept_* columns of `applications`.
     // Players 18 and over aren't asked the Parent/Guardian Code.
     const [consents, setConsents] = useState(EMPTY_CONSENTS);
@@ -47,12 +51,12 @@ const SCForm = () => {
         if (!form.age || Number.isNaN(ageNum)) return 'Please tell us the player’s age.';
         if (ageNum < 10 || ageNum > 25) return 'Spin Club is for players aged 10 to 25.';
         if (!form.club_choice) return 'Please pick Spin Club North or Spin Club South.';
-        if (!form.night) return 'Please pick the Wednesday you want to come to.';
+        if (!form.night) return 'Please pick your first Wednesday.';
         if (!form.spin_type) return 'Please tell us what you bowl.';
         if (!form.email.trim() || !form.email.includes('@')) return 'Please give us an email address we can reply to.';
         if (!form.phone.trim()) return 'Please give us a phone number.';
         if (ageNum < 18 && !form.parent_name.trim()) return 'For players under 18, please give a parent or guardian’s name.';
-        if (!form.intent) return 'Please tick the box to say you will come on the night you picked.';
+        if (!form.intent) return 'Please tick the box to say you understand how the weekly subscription works.';
         const missing = consentErrors(consents, { adult: ageNum >= 18 });
         setConsentErr(missing);
         if (Object.keys(missing).length) return 'Please tick the Agreements & Consent boxes.';
@@ -73,13 +77,15 @@ const SCForm = () => {
         const name = form.player_name.trim();
         const utmParams = getUTMParams();
         const notes = [
-            `Night requested: Wednesday ${form.night}`,
+            `First Wednesday: ${form.night}`,
             form.notes.trim(),
-            'Will come on the night picked: yes',
+            'Understands the weekly subscription: yes',
         ].filter(Boolean).join('\n\n');
 
+        const id = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : undefined;
         const { error: insertError } = await supabase.from('applications').insert([
             {
+                ...(id ? { id } : {}),
                 first_name: name.split(' ')[0],
                 last_name: name.split(' ').slice(1).join(' ') || null,
                 age: ageNum,
@@ -92,9 +98,8 @@ const SCForm = () => {
                 location: club?.key || null,
                 program: club?.name || null,
                 program_type: 'Spin Club',
-                // One night at a time is the only thing sold now, so the night
-                // they picked IS the purchase. `applications` has no date column.
-                payment_option_selected: `One night \u2014 Wednesday ${form.night} (${PRICES[0].headline} inc GST)`,
+                // `applications` has no date column, so the first night rides here.
+                payment_option_selected: `Weekly subscription \u2014 first Wednesday ${form.night} (${PRICES[0].headline} a week inc GST)`,
                 source: `spin-club-${club?.key || 'unknown'}`,
                 bio: notes,
                 page_referrer: document.referrer || null,
@@ -109,6 +114,7 @@ const SCForm = () => {
             setError('Something went wrong sending your sign-up. Please try again, or email info@rramelbourne.com and we will add you by hand.');
             return;
         }
+        setApplicationId(id || null);
         setSubmitted(true);
     };
 
@@ -122,27 +128,29 @@ const SCForm = () => {
                     </h2>
                     <p className="text-base text-white/75 font-medium leading-relaxed mb-8">
                         You are down for{' '}
-                        <strong className="text-white">Wednesday {form.night}</strong> at{' '}
-                        <strong className="text-white">{CLUBS.find((c) => c.key === form.club_choice)?.name}</strong>.
-                        One thing left — pay for the night and your place is locked in.
+                        <strong className="text-white">{CLUBS.find((c) => c.key === form.club_choice)?.name}</strong>,
+                        starting <strong className="text-white">Wednesday {form.night}</strong>.
+                        One thing left — start your subscription and your spot is held every week.
                     </p>
 
-                    {/* Straight to Stripe. The link is the $60 Spin Club Session Price. */}
+                    {/* Straight to Stripe: the weekly subscription link, tagged with this
+                        sign-up's id so the payment files against this row. */}
                     <a
-                        href={STRIPE_LINK}
+                        href={subscriptionCheckoutUrl(applicationId, form.email.trim().toLowerCase())}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center justify-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-5 rounded-full transition-colors duration-300 mb-5"
                     >
-                        Pay {PRICES[0].headline} for this night
+                        Start my subscription &middot; {PRICES[0].headline} a week
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </a>
 
                     <p className="text-sm text-white/50 font-medium">
-                        Coming more than once? Pay the same amount again for each night. If a night
-                        turns out to be full we will call you and refund it. Questions:{' '}
+                        {PRICES[0].headline} a week, charged on Wednesdays. {CHRISTMAS_BREAK.line} On
+                        the payment page, enter the player&rsquo;s name and pick the same centre.
+                        Questions:{' '}
                         <span className="text-rr-pink">info@rramelbourne.com</span>.
                     </p>
                 </div>
@@ -160,35 +168,26 @@ const SCForm = () => {
                     Sign up
                 </p>
                 <h2 className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-5">
-                    Pick a night and sign up
+                    Hold your spot
                 </h2>
                 <p className="text-base text-rr-dark/70 font-medium leading-relaxed mb-4">
                     <strong className="text-rr-dark">Spin Club is for spin bowlers aged {PROGRAM.ages}.</strong>{' '}
-                    Pick the centre and the Wednesday you want. It is{' '}
-                    <strong className="text-rr-dark">{PRICES[0].headline} a night</strong>, and you
-                    only pay for the nights you come to.
+                    Pick your centre and your first Wednesday. It is{' '}
+                    <strong className="text-rr-dark">{PRICES[0].headline} a week</strong>, and it
+                    holds your spot every Wednesday.
                 </p>
-                {/* The asterisk again, right where a squad member is about to pay full price. */}
-                <div className="bg-rr-pink/5 border-2 border-rr-pink/35 rounded-2xl p-5 mb-5">
-                    <p className="text-sm font-black text-rr-pink uppercase tracking-widest mb-2">
-                        * In a Performance Squad?
-                    </p>
-                    <p className="text-[15px] text-rr-dark/80 font-semibold leading-relaxed mb-3">
-                        {SQUAD_NOTE.members}
-                    </p>
-                    <a href={SQUAD_NOTE.href} className="inline-block text-rr-blue hover:text-rr-pink font-black uppercase tracking-widest text-xs transition-colors duration-300">
-                        {SQUAD_NOTE.joiners} {SQUAD_NOTE.linkLabel} &rarr;
-                    </a>
-                </div>
+                <a href={SQUAD_NOTE.href} className="inline-block mb-5 text-rr-blue hover:text-rr-pink font-black uppercase tracking-widest text-xs transition-colors duration-300">
+                    {SQUAD_NOTE.joiners} {SQUAD_NOTE.linkLabel} &rarr;
+                </a>
                 <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 mb-9">
                     <p className="text-sm font-black text-rr-dark uppercase tracking-widest mb-2">
                         What happens next
                     </p>
                     <p className="text-[15px] text-rr-dark/70 font-medium leading-relaxed">
                         Sign up below and the payment button comes up straight away &mdash;{' '}
-                        <strong className="text-rr-dark">{PRICES[0].headline} for that night</strong>.
-                        Your place is confirmed once you have paid. Lanes are limited, so earlier is
-                        safer.
+                        <strong className="text-rr-dark">{PRICES[0].headline} a week</strong>, charged
+                        on Wednesdays. Your spot is held once your subscription has started. Lanes
+                        are limited, so earlier is safer.
                     </p>
                 </div>
 
@@ -217,7 +216,7 @@ const SCForm = () => {
                     </div>
 
                     <div>
-                        <label className={lc} htmlFor="sc-night">Which Wednesday?</label>
+                        <label className={lc} htmlFor="sc-night">Your first Wednesday</label>
                         <select id="sc-night" className={ic} value={form.night} onChange={set('night')}>
                             <option value="">Choose a night</option>
                             {upcomingNights().map((n) => (
@@ -225,8 +224,7 @@ const SCForm = () => {
                             ))}
                         </select>
                         <p className="text-[13px] text-rr-dark/50 font-medium mt-2">
-                            Want more than one night? Say which in the notes below and we will put
-                            them all on the one payment link.
+                            {CHRISTMAS_BREAK.line}
                         </p>
                     </div>
 
@@ -270,7 +268,7 @@ const SCForm = () => {
 
                     <div>
                         <label className={lc} htmlFor="sc-notes">Anything the coach should know? <span className="text-rr-dark/40 font-bold normal-case tracking-normal">(optional)</span></label>
-                        <textarea id="sc-notes" rows={3} className={ic} value={form.notes} onChange={set('notes')} placeholder="How long you have bowled spin, what you want to get better at, or any other nights you want to come to." />
+                        <textarea id="sc-notes" rows={3} className={ic} value={form.notes} onChange={set('notes')} placeholder="How long you have bowled spin, and what you want to get better at." />
                     </div>
 
                     <label className="flex items-start gap-3 bg-slate-50 border border-slate-200 rounded-2xl p-5 cursor-pointer">
@@ -281,10 +279,12 @@ const SCForm = () => {
                             onChange={(e) => setForm((f) => ({ ...f, intent: e.target.checked }))}
                         />
                         <span className="text-[15px] text-rr-dark font-semibold leading-relaxed">
-                            I will be there on the night I picked.
+                            I understand Spin Club is a weekly subscription: {PRICES[0].headline} a
+                            week including GST, charged on Wednesdays to hold my spot.
                             <span className="block text-rr-dark/60 font-medium mt-1">
-                                We ask because lanes are limited, and a lane held by someone who
-                                won&rsquo;t use it is a lane another spinner missed out on.
+                                It is charged whether or not we make it that night. It pauses over
+                                Christmas (nothing charged after 16 December until 27 January), and we can stop any time by
+                                emailing info@rramelbourne.com before a Wednesday.
                             </span>
                         </span>
                     </label>
@@ -303,7 +303,7 @@ const SCForm = () => {
                         disabled={submitting}
                         className="w-full sm:w-auto bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300"
                     >
-                        {submitting ? 'Sending…' : 'Sign me up for this night'}
+                        {submitting ? 'Sending…' : 'Sign me up'}
                     </button>
                 </form>
             </div>

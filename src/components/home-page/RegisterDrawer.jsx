@@ -20,7 +20,7 @@ const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 // 9:00pm (lpJrDayOpen). REVIEW 26 OCT 2026 — delete it and its import.
 const PROGRAMS = [
     ...(lpJrDayOpen() ? [{ label: LP_JR_DAY_ROW.heroLabel, route: LP_JR_DAY_ROUTE, urgency: LP_JR_DAY_ROW.drawerUrgency }] : []),
-    { label: 'Spin Club', route: '/spin-club', urgency: 'Spin bowlers 10 to 25 — Wednesday nights until 25 Nov at Mickleham and Cranbourne North, $60 a night incl. GST' },
+    { label: 'Spin Club', route: '/spin-club', urgency: 'Spin bowlers 10 to 25 — every Wednesday at Mickleham and Cranbourne North, $60 a week incl. GST' },
     { label: 'Performance Squads', route: '/performance-squads', urgency: 'Register your interest for the next intake' },
     { label: 'Junior Royals', route: '/junior-royals', urgency: 'Join any week — Mondays at Mickleham, Wednesdays at Cranbourne North, 5–7pm, $44.95 a week incl. GST' },
 ];

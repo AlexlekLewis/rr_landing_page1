@@ -23,6 +23,10 @@ import { unpackApplication, buildPaidRow } from './_lib/pgpCheckout.js';
 import { sendPgpConfirmation } from './_lib/pgpEmail.js';
 import { isJrT3Session, classifyJrT3, completeJrT3Registration } from './_lib/jrTerm3.js';
 import { handlePrivateCoachingPaid } from './_lib/privateCoachingPayment.js';
+import {
+  SPIN_CLUB_SUBSCRIPTION_PLINK, SPIN_CLUB_PROGRAM, isSpinClubSession, recordSpinClubCheckout,
+  isSpinClubInvoice, recordSpinClubInvoice, recordSpinClubSubscriptionChange,
+} from './_lib/spinClubSubscription.js';
 
 // Stripe signature verification requires the *raw* request body. Vercel's
 // default body parser returns a parsed object, which would always fail
@@ -119,6 +123,10 @@ const PAYMENT_LINK_PROGRAMS = {
   // already has one (mandatory shirt rule, 9 Nov 2026; the link above now locks the shirt at 1).
   'plink_1Ua0GJIo52UEA50yubADf8P8': { program: 'junior_royals', program_variant: 'term_4_weekly', program_label: 'Junior Royals — weekly ($44.95 a week), has own shirt' },
   'plink_1UR3QNIo52UEA50yq6GKVkSy': { program: 'lower_plenty_jr_day', program_variant: null, program_label: 'Junior Royals are coming to Lower Plenty — $10 entry fee, Sun 25 Oct 2026' },
+  // Spin Club weekly subscription, $60 a week incl. GST (Alex, 27 Nov 2026). The
+  // checkout lands here AND in spin_club_subscriptions; later weeks are invoice
+  // events, handled before the checkout-only gate in the handler below.
+  [SPIN_CLUB_SUBSCRIPTION_PLINK]: SPIN_CLUB_PROGRAM,
 };
 
 // Registration table for the Lower Plenty morning. The form sends the row id as
@@ -303,6 +311,34 @@ export default async function handler(req, res) {
   } catch (err) {
     console.error('Webhook signature failed:', err.message);
     return res.status(400).json({ error: err.message });
+  }
+
+  // ── Subscription weeks, pauses and cancellations ──
+  // A subscription's checkout is only its first week. Every later week is an
+  // invoice event and a pause/cancel is a subscription event. Only Spin Club
+  // records these so far; anything else is acknowledged and ignored as before.
+  if (event.type === 'invoice.paid' || event.type === 'invoice.payment_failed') {
+    try {
+      const supabase = getSupabase();
+      const invoice = event.data.object;
+      if (!(await isSpinClubInvoice(supabase, invoice))) {
+        return res.status(200).json({ received: true, ignored: `${event.type}_not_spin_club` });
+      }
+      await recordSpinClubInvoice(supabase, invoice, event.type);
+      return res.status(200).json({ received: true, kind: 'spin_club_invoice', status: event.type });
+    } catch (err) {
+      console.error('Spin Club invoice record failed:', err.message);
+      return res.status(500).json({ error: 'spin club invoice record failed' });
+    }
+  }
+  if (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted') {
+    try {
+      const out = await recordSpinClubSubscriptionChange(getSupabase(), event.data.object, event.type);
+      return res.status(200).json({ received: true, kind: 'spin_club_subscription', ...out });
+    } catch (err) {
+      console.error('Spin Club subscription update failed:', err.message);
+      return res.status(500).json({ error: 'spin club subscription update failed' });
+    }
   }
 
   if (event.type !== 'checkout.session.completed') {
@@ -561,6 +597,18 @@ export default async function handler(req, res) {
     if (progErr) {
       console.error('program_registrations upsert failed:', progErr);
       return res.status(500).json({ error: progErr.message });
+    }
+
+    // Spin Club: the held spot, with the player's name and centre from the
+    // link's custom fields. Blocking on purpose — both writes are idempotent,
+    // so a retry from Stripe is safe and better than a spot with no player.
+    if (isSpinClubSession(session)) {
+      try {
+        await recordSpinClubCheckout(supabase, session);
+      } catch (e) {
+        console.error('Spin Club checkout record failed:', e.message);
+        return res.status(500).json({ error: 'spin club checkout record failed' });
+      }
     }
 
     // Junior Royals Term 3 — flip the matching jr_term3_* row to completed.

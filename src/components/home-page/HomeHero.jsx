@@ -22,7 +22,7 @@ import { PROGRAM_ROW as LP_JR_DAY_ROW, LP_JR_DAY_ROUTE, lpJrDayOpen } from '../l
 export const PROGRAMS = [
     ...(lpJrDayOpen() ? [{ label: LP_JR_DAY_ROW.heroLabel, route: LP_JR_DAY_ROUTE, badge: LP_JR_DAY_ROW.heroBadge, badgeColor: 'bg-rr-pink' }] : []),
     { label: 'Private Coaching', route: '/private-coaching', badge: '1-to-1 and training partner sessions · enquire now', badgeColor: 'bg-rr-pink' }, // Andy, 23 Nov 2026
-    { label: 'Spin Club', route: '/spin-club', badge: 'Spin bowlers 10 to 25 · Wednesdays, $60 a night', badgeColor: 'bg-rr-pink' },
+    { label: 'Spin Club', route: '/spin-club', badge: 'Spin bowlers 10 to 25 · Wednesdays, $60 a week', badgeColor: 'bg-rr-pink' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register your interest · next intake', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Join any week', badgeColor: 'bg-green-500' },
 ];

@@ -1,11 +1,10 @@
 import React from 'react';
-import { PRICES, INCLUDED, HOW_PAYING_WORKS, PROGRAM, GST_NOTE, SQUAD_NOTE } from './scOptions';
+import { PRICES, INCLUDED, HOW_PAYING_WORKS, GST_NOTE, SQUAD_NOTE, SUBSCRIPTION_TERMS } from './scOptions';
 
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
-// 9 Oct 2026: the 8-night block prices came off. One night at a time is the only
-// thing sold from this page now, and Performance Squad members are sent to their
-// head coach rather than being given a price here.
+// 27 Nov 2026: Spin Club is a weekly subscription — $60 a Wednesday, GST
+// included, the same for everyone (Performance Squad players included).
 const SCPricing = () => (
     <section className="bg-white py-20 md:py-28">
         <div className="max-w-6xl mx-auto px-6">
@@ -13,11 +12,11 @@ const SCPricing = () => (
                 What it costs
             </p>
             <h2 className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6">
-                One price,<br className="hidden md:block" /> one night at a time
+                One price,<br className="hidden md:block" /> every Wednesday
             </h2>
             <p className="text-base md:text-lg text-rr-dark/70 font-medium leading-relaxed max-w-3xl mb-4">
-                You pay for each Wednesday you come to. There is no block to buy and nothing to
-                commit to up front — come to one night, or come to all {PROGRAM.weeks} of them.
+                A weekly subscription holds your spot every Wednesday night. There is no block
+                to buy up front, it pauses over Christmas, and you can stop whenever you like.
             </p>
             {/* ACL: a consumer page must show the total payable, so the big number
                 is GST-inclusive and this says so once, up front. */}
@@ -49,20 +48,25 @@ const SCPricing = () => (
                             onClick={() => scrollTo('apply')}
                             className="mt-auto w-full bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-6 py-4 rounded-full transition-colors duration-300"
                         >
-                            Sign up for a night
+                            Hold your spot
                         </button>
                     </div>
                 ))}
 
-                {/* The asterisk. Squad members never buy from this page. */}
+                {/* What a parent agrees to, in three lines, beside the price. */}
                 <div className="lg:col-span-3 flex flex-col gap-4">
                     <div className="rounded-3xl border-2 border-rr-pink/35 bg-rr-pink/5 p-8">
-                        <p className="text-sm font-black text-rr-pink uppercase tracking-widest mb-3">
-                            * In a Performance Squad?
+                        <p className="text-sm font-black text-rr-pink uppercase tracking-widest mb-4">
+                            How the subscription works
                         </p>
-                        <p className="text-[15px] text-rr-dark/80 font-semibold leading-relaxed">
-                            {SQUAD_NOTE.members}
-                        </p>
+                        <div className="space-y-4">
+                            {SUBSCRIPTION_TERMS.map(([t, d]) => (
+                                <div key={t}>
+                                    <p className="text-[15px] font-black text-rr-dark uppercase tracking-wide mb-1">{t}</p>
+                                    <p className="text-[14px] text-rr-dark/75 font-semibold leading-relaxed">{d}</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                     <div className="rounded-3xl bg-slate-50 border border-slate-200 p-8">
                         <p className="text-base font-black text-rr-dark uppercase tracking-wide mb-2">
@@ -104,8 +108,8 @@ const SCPricing = () => (
                     How signing up works
                 </h3>
                 <p className="text-[15px] text-rr-dark/70 font-medium mb-7 max-w-2xl">
-                    Sign up, pay for the night, turn up. There is nothing to commit to beyond the
-                    Wednesday you picked.
+                    Sign up, start your subscription, turn up. Your spot is yours every Wednesday
+                    until you tell us to stop.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     {HOW_PAYING_WORKS.map(([title, detail], i) => (
