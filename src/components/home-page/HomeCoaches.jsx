@@ -16,9 +16,10 @@ export const coaches = [
         org: 'Rajasthan Royals Academy Melbourne',
         bio: 'An experienced professional cricketer, coach and sports executive, Andy oversees the coaching standards and program delivery across all RRA Melbourne programs, ensuring every session reflects the Royals Way.',
         // Natural-light photo against the real RRA Melbourne backdrop (Andy, 26 Nov 2026: the HALLA BOL!
-        // version's lighting was poor). Cropped from andy-crook.jpg; face highlights toned down to match
-        // Sid and Alex (27 Nov 2026: "still looks far too bright on my face").
-        image: '/assets/coaches/andy-crook-leader-v2.jpg',
+        // version's lighting was poor). Cropped from andy-crook.jpg, with an even exposure reduction over
+        // the whole photo (gamma 1.25) and the backdrop pink matched to the others. Never edit the face on
+        // its own: the 27 Nov skin-only darkening looked flat and grey (Andy: "looks terrible").
+        image: '/assets/coaches/andy-crook-leader-v3.jpg',
         initials: 'AC',
     },
 ];
