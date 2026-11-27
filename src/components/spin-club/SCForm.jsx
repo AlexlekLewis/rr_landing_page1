@@ -173,8 +173,8 @@ const SCForm = () => {
                 <p className="text-base text-rr-dark/70 font-medium leading-relaxed mb-4">
                     <strong className="text-rr-dark">Spin Club is for spin bowlers aged {PROGRAM.ages}.</strong>{' '}
                     Pick your centre and your first Wednesday. It is{' '}
-                    <strong className="text-rr-dark">{PRICES[0].headline} a week</strong>, the same
-                    for everyone, and it holds your spot every Wednesday.
+                    <strong className="text-rr-dark">{PRICES[0].headline} a week</strong>, and it
+                    holds your spot every Wednesday.
                 </p>
                 <a href={SQUAD_NOTE.href} className="inline-block mb-5 text-rr-blue hover:text-rr-pink font-black uppercase tracking-widest text-xs transition-colors duration-300">
                     {SQUAD_NOTE.joiners} {SQUAD_NOTE.linkLabel} &rarr;

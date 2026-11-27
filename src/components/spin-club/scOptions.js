@@ -147,7 +147,7 @@ export const PRICES = [
         unit: 'a week, for the 1.5-hour Wednesday session',
         exGst: '$54.55 plus GST',
         perNight: 'Your spot is held every Wednesday, for as long as you want it.',
-        who: 'Open to any spin bowler aged 10 to 25. Same price for everyone, Performance Squad players included.',
+        who: 'Open to any spin bowler aged 10 to 25.',
         feature: true,
     },
 ];
