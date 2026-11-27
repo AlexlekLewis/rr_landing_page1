@@ -33,7 +33,7 @@ Check this before writing any on-screen claim. Add the source and date to every 
 
 ## People and credentials
 
-- [2026-11-24] Kumar Sangakkara: Director of Cricket, Rajasthan Royals (lower third in the Academy's own video `Media/Kumar Sangakkara V2.mp4`). At the Melbourne Academy launch he advised players to be "creative and curious". SOURCE: `src/components/landing-page-3/AcceptanceForm.jsx`.
+- [2026-11-24] Kumar Sangakkara: Director of Cricket, Rajasthan Royals (lower third in the Academy's own video `Media/Kumar Sangakkara V2.mp4`). At the Melbourne Academy launch his words (Whisper-verified, Kumar Interview 253.5-256.3) were "I think you have to be curious, curious and creative." SOURCE: `src/components/landing-page-3/AcceptanceForm.jsx`.
 - [2026-11-24] Alex Lewis: Director of Cricket and Head Coach, Rajasthan Royals Academy Melbourne. SOURCE: `homeV2Data.js`, news story 13 Nov 2026.
 - [2026-11-24] Rajasthan Royals: 2008 IPL Champions, led by Shane Warne. SOURCE: `homeV2Data.js` (ROYALS_WAY).
 
@@ -69,3 +69,12 @@ Check this before writing any on-screen claim. Add the source and date to every 
 - Kumar Sangakkara, [Small Size] Kumar Interview.mp4 ~168.5–180s: "When I was young growing up playing cricket, reverse sweeps were never heard of. I think I played about four in my entire career, but that has to be an absolute part of your game right now. The ability to clear the boundaries and to have power…"
 - Kumar Sangakkara, same file ~250–257s: "I think you have to be curious, curious and creative." (Not "be creative, be curious".)
 - Speech-to-text: openai-whisper 'small' is installed in the scratchpad (model host openaipublic.azureedge.net is allowed). Caption from Whisper text, never from assumptions.
+
+## Verified soundbites (Whisper small, 27 Nov 2026)
+- Kumar (Kumar Interview 168.0-175.95): "When I was young growing up playing cricket, reverse sweeps were never heard of. I think I played about four in my entire career, but that has to be an absolute part of your game right now. The ability to clear the boundaries and to have power..."
+- Andy Crook (Final Andy & Kumar Edit 30.76-35.92): "Approximately 70% of the elite program is based on helping players develop their T20 skills, with the remaining 30% designed to support the application of those skills in the longer formats." SOURCE for the 70/30 claim: Andy on camera.
+- Alex Lewis (Careers Coaches Alex Lewis v1, 76.85-80.62): "...have fun, explore, take on the game, be really brave". In the same file Andy (2-24s) says the coaches are "a little bit more modern in the way they think because it is a very modern skill set".
+- Sid (Part 2 v2): "The game is power, the game is speed." / "go out there, express themselves, play fearless cricket" (93.9-101.2).
+- Junior player (Elite folder IMG_3265, 1UN85eHL9PNDwY4ivRs9k2L3oOsqEqpjq): favourite player now "Suryavanshi ... because I like how he likes to hit those explosive sixes".
+- Royals HPC coach (Rane reel 1ZBtbRlsU145MkO1V5Cs7rErhBAm3WRUZ): "I have done it with a lot of fast bowlers here and the results have shown immense."
+- No Alex Thornhill talking footage on Drive.

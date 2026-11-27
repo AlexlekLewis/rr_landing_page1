@@ -235,3 +235,16 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
   - mkcsv.py (builds library/assets.csv)
   - grab.py (graded 9:16 stills for storyboards)
   - story.py (storyboard sheets)
+
+## v9 final build notes (27 Nov 2026)
+- Whisper (openai-whisper, "small") is cached at scratchpad/whisper/models: `whisper.load_model('small', download_root=...)`, `transcribe(wav, language='en', fp16=False, word_timestamps=True)`. Use it for every soundbite; pocketsphinx is no longer needed.
+- **Pipeline** (scratchpad v9/final):
+  - edl.py: shot list; START is frame-accurate (round(dur*30)/30)
+  - build_shots.py: per-shot crop, lanczos to 1080x1920, minterpolate 24/25p→30, grade, crf 8 intermediate; parallel 4
+  - ovs.py + ov.html + render_ov.mjs: transparent full-frame tape PNGs; tapes auto-shrink to fit 1030px
+  - music.py: TEMP synth bed
+  - audio.py: Whisper-timed VO, natural sound, music ducking, 2-pass loudnorm −14
+  - final.py: impact-zoom on montage cuts, overlay slide-in, noise dither, x264 slow crf16
+  - stills.py: composite check frames before the full render
+- For 9:16 from landscape interviews, upscale the 9:16 crop region (not the whole frame) with Higgsfield "2k". Find the face x per take first: the Kumar takes differ (253s face at x .55, 169s at .62).
+- Where a source has burnt-in captions, our caption tape must fully cover them. Their vertical position varies per line, so measure on stills.
