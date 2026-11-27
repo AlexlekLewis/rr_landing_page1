@@ -160,15 +160,45 @@ export const Banner = ({ onRegister }) => {
         setOffset((vw - w) / 2 - pos * (w + gap));
     }, [pos]);
     useEffect(() => { measure(); }, [measure]);
-    useEffect(() => { const r = () => { setAnimate(false); measure(); }; window.addEventListener('resize', r); return () => window.removeEventListener('resize', r); }, [measure]);
 
-    const go = useCallback((d) => { setAnimate(true); setPos((p) => p + d); }, []);
+    // Slides going blank after scrolling (Andy, 27 Nov 2026). On phones the address bar showing and
+    // hiding while you scroll fires 'resize'. That used to cancel the slide animation, so the jump
+    // from the end clone back to the real slide (on transitionend) never happened, and autoplay then
+    // ran past the end of the track into empty space. Now: height-only resizes are ignored; the
+    // position is always brought back onto a real slide, by a timer as well as by transitionend;
+    // and autoplay pauses while the banner is off screen or the tab is hidden.
+    const real = useCallback((p) => (p > n ? p - n : p < 1 ? p + n : p), [n]);
+    const lastW = useRef(typeof window !== 'undefined' ? window.innerWidth : 0);
+    useEffect(() => {
+        const r = () => {
+            if (window.innerWidth === lastW.current) return; // address bar, not a real resize
+            lastW.current = window.innerWidth;
+            setAnimate(false); setPos(real); measure();
+        };
+        window.addEventListener('resize', r); return () => window.removeEventListener('resize', r);
+    }, [measure, real]);
+    useEffect(() => {
+        if (pos >= 1 && pos <= n) return undefined;
+        const t = setTimeout(() => { setAnimate(false); setPos(real); }, 700); // the slide takes 600ms
+        return () => clearTimeout(t);
+    }, [pos, n, real]);
+
+    const go = useCallback((d) => { setAnimate(true); setPos((p) => real(p) + d); }, [real]);
     const stop = () => { if (timer.current) clearInterval(timer.current); timer.current = null; };
-    const start = useCallback(() => { if (reduceMotion()) return; stop(); timer.current = setInterval(() => go(1), 5000); }, [go]);
+    const visible = useRef(true);
+    const start = useCallback(() => {
+        if (reduceMotion()) return; stop();
+        timer.current = setInterval(() => { if (visible.current && !document.hidden) go(1); }, 5000);
+    }, [go]);
     useEffect(() => { start(); return stop; }, [start]);
-    const onEnd = () => {
-        if (pos === 0) { setAnimate(false); setPos(n); }
-        else if (pos === n + 1) { setAnimate(false); setPos(1); }
+    useEffect(() => {
+        const el = viewRef.current; if (!el || typeof IntersectionObserver === 'undefined') return undefined;
+        const io = new IntersectionObserver(([e]) => { visible.current = e.isIntersecting; }, { threshold: 0.25 });
+        io.observe(el); return () => io.disconnect();
+    }, []);
+    const onEnd = (e) => {
+        if (e && e.target !== trackRef.current) return; // a slide's own fade, not the track
+        if (pos < 1 || pos > n) { setAnimate(false); setPos(real); }
     };
     const sx = useRef(null);
 
