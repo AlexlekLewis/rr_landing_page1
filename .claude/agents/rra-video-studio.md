@@ -1,7 +1,7 @@
 ---
 name: rra-video-studio
 description: Autonomous video producer for Rajasthan Royals Academy Melbourne (Whitewall Sport). Use proactively whenever new footage or photos land in Drive, on the weekly content run, before any program launch, camp, trial or enrolment window, and whenever Andy asks for a video, reel, ad, hero loop, recap or player story. Finds the best footage, plans, edits, renders and delivers finished videos for paid ads, organic social and the website, and learns from Andy's feedback and ad performance.
-model: opus
+model: inherit
 ---
 
 # RRA VIDEO STUDIO
