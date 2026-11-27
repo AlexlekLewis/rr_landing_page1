@@ -15,24 +15,21 @@ body{font-family:M;color:#fff;position:relative;overflow:hidden;background:#000A
 .fest{left:0;right:0;text-align:center;font-weight:800;letter-spacing:.62em;padding-left:.62em;text-transform:uppercase}
 .rule{height:3px;background:#E11F8F}
 .grain{inset:0;opacity:.10;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>")}
-</style></head><body><script>
+</style><script src="btb-logo.js"></script></head><body><script>
 const F=new URLSearchParams(location.search).get('f')||'feed';
-const Z={feed:{H:1350,fs:206,wy:196,pc:830,ps:720,logo:112,ly:50,fy:1196,ff:40},vert:{H:1920,fs:206,wy:440,pc:935,ps:815,logo:140,ly:250,fy:1560,ff:42},sq:{H:1080,fs:190,wy:142,pc:672,ps:585,logo:86,ly:34,fy:968,ff:34}}[F];
+const Z={feed:{H:1350,lw:780,wy:170,pc:715,ps:625,logo:104,ly:44,fy:1230},vert:{H:1920,lw:840,wy:420,pc:810,ps:705,logo:136,ly:246,fy:1640},sq:{H:1080,lw:640,wy:122,pc:590,ps:515,logo:80,ly:28,fy:1010}}[F];
 document.body.style.width='1080px';document.body.style.height=Z.H+'px';
 const base=Z.H-Z.fy+ (F==='vert'?-40:-60); // feet hidden in the floor fade
-document.body.innerHTML=`<div class="l bg"></div><div class="l tone"></div>
+document.body.innerHTML=`<div class="l bg"></div><div class="l tone"></div><div class="l" style="inset:0;background:url(../launch-2027/bg/confetti.jpg) center/cover;mix-blend-mode:screen;opacity:.55;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 55%,transparent 85%)"></div>
 <img class="l" src="../../logos/rra-melbourne-white.svg" style="height:${Z.logo}px;top:${Z.ly}px;left:50%;transform:translateX(-50%);z-index:6">
-<div class="l w w1" style="top:${Z.wy}px;font-size:${Z.fs*.62}px;letter-spacing:.02em;z-index:1">BREAK THE</div>
-<div class="l w w2" id="b" style="top:${Z.wy+Z.fs*.56}px;font-size:${Z.fs}px;z-index:1">BOUNDARY</div>
+<div class="l" id="lg" style="left:50%;top:${Z.wy}px;z-index:1;filter:drop-shadow(0 10px 40px rgba(0,10,36,.6))">${btbLogo(Z.lw)}</div>
 <img class="l pl" src="../launch-2027/players/soorya-6626.png" style="height:${Z.ps}px;left:${F==='vert'?-70:-10}px;bottom:${base}px;z-index:2">
 <img class="l pl" src="../launch-2027/players/jurel-0417.png" style="height:${Z.ps}px;right:${F==='vert'?-110:-40}px;bottom:${base}px;z-index:2">
 <img class="l pl" id="c" src="../launch-2027/players/jadeja-2536.png" style="height:${Z.pc}px;bottom:${base}px;z-index:3">
 <div class="l floor" style="height:${Math.round(Z.pc*.5)}px;z-index:4"></div>
-<div class="l rule" style="left:50%;width:120px;margin-left:-60px;top:${Z.fy-26}px;z-index:6"></div>
-<div class="l fest" style="top:${Z.fy}px;font-size:${Z.ff}px;z-index:6">Festival</div>
 <div class="l grain" style="z-index:7"></div>`;
 Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.load('900 100px M')).then(()=>document.fonts.ready).then(()=>{
  const c=document.getElementById('c');c.style.left=((1080-c.getBoundingClientRect().width)/2)+'px';
- const b=document.getElementById('b');let f=Z.fs;const r=document.createRange();r.selectNodeContents(b);while(r.getBoundingClientRect().width>1030&&f>80){f-=2;b.style.fontSize=f+'px'}
+ const lg=document.getElementById('lg');lg.style.marginLeft=(-Z.lw/2)+'px';
  document.body.dataset.ready='1'});
 </script></body></html>
