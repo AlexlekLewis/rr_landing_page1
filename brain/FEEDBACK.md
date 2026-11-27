@@ -69,3 +69,5 @@ Newest wins. Update an old line instead of keeping both.
 - [2026-11-27] RULE: Speakers are centred and properly framed (e.g. the Sid end shot). FROM: v10
 - [2026-11-27] RULE: Pick the best and most varied footage per beat; when Andy says there's better, search the full folder (e.g. the HPC India trip has far more varied video). Swap the parent testimonial for another. FROM: v10
 - [2026-11-27] KEEP: the last shot (squad huddle end frame), but with no voice under it. FROM: v10
+- [2026-11-27] PROCESS: Centring check on every single shot is a standard step before any delivery (subject in the middle of frame throughout). Example failure: the late cut against the bowling machine, early in v10. WHY: "Please, can you make that something that you do?" FROM: v10
+- [2026-11-27] RULE: Transitions must be smooth and motivated: cut on action or beat, match motion direction and screen position across cuts, no jump cuts within the same angle, no clumsy dissolves or flash frames, and type animations never straddle a cut awkwardly. WHY: "There are still some awkward transitions between some of the scenes." FROM: v10
