@@ -278,3 +278,10 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
   - OpenCV 5 has no Haar cascades, and the torchvision weights host is blocked.
 - **Drive:** the HPC "Rane's Video Dump" 4K60 files are now "Quota exceeded" for direct download. Remote ffprobe/ffmpeg seeks (HTTP range) worked for about half of them, then failed too. The iPhone .mov files in HPC Day 1–6 have the moov atom at the end, so remote reads fail; they need a full download once the quota resets.
 - **Transitions:** impact zoom only on section and statement starts (02a, 04a, 09a, 10a, 11a–d); hard cuts everywhere else. A Q→A from one take plays as one continuous shot, never a jump cut.
+
+## v12 working notes (27 Nov 2026)
+- **Before removing a criticised shot:** extract its frame from the delivered master and show it (v12 sheet `v12/qc/criticised_frames_v11.jpg`). In v11 I cut the wrong reverse sweep: "the very first reverse-sweep shot" meant v10's 02a (older batter, net 2), not the young child's.
+- **The young child's 360 shots (v9 hf2 up_rRev, up_bRamp) are Andy-approved ("perfect").** up_rRev has a baked edit cut at 0.70s; start at ≥0.75. The source camera pushes in, so track it (z1.15 auto, xoff −0.04) rather than a fixed crop.
+- **"Black bars" on FrogBox crops are the dark tree line above the boundary boards,** not true letterboxing (cropdetect finds none). Start the crop at the board's top edge. On the Sep 28 square-on angle (1pD3, 46.4–49.2, upscale `v11/hf/up_plPull.mp4`) the pull at 47.7 shows clean contact with batter and keeper centred.
+- **The "explosive sixes" line needs contact on the word:** Mitch Clark power hit off the tee (1g0m, contact at 3.25s) lands at jr3 +2.75s, between "explosive" and "sixes".
+- **Length:** v12 is 59.5s after trims (HPC 10d dropped; 04a, 09a, 09d, 09f, 10e, 11b–d and 13a trimmed).
