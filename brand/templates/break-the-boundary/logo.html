@@ -1,0 +1,49 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- BREAK THE BOUNDARY (RRA festival of cricket, Torquay) - WhatsApp group icon, first pass.
+     1024x1024, shown as a circle in WhatsApp: everything important sits inside the centre circle. ?v=a|b|c -->
+<style>
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-normal.woff2);font-weight:900}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1024px;height:1024px;font-family:M;color:#fff;position:relative;overflow:hidden}
+.bg{position:absolute;inset:0}
+.c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.logo{display:block}
+.w{font-weight:900;text-transform:uppercase;line-height:.9;letter-spacing:-.02em}
+.w .p{color:#E11F8F}
+.t{font-weight:800;letter-spacing:.2em;text-transform:uppercase}
+svg{position:absolute;inset:0}
+</style></head><body><script>
+const v=new URLSearchParams(location.search).get('v')||'a';
+// white ball with a black stitched seam (house rule)
+const ball=(x,y,r,rot=0)=>`<g transform="translate(${x} ${y}) rotate(${rot})"><circle r="${r}" fill="#fff"/>
+ <path d="M ${-r*.28} ${-r*.96} Q ${-r*.02} 0 ${-r*.28} ${r*.96}" fill="none" stroke="#111" stroke-width="${r*.07}" stroke-dasharray="${r*.1} ${r*.07}"/>
+ <path d="M ${r*.28} ${-r*.96} Q ${r*.02} 0 ${r*.28} ${r*.96}" fill="none" stroke="#111" stroke-width="${r*.07}" stroke-dasharray="${r*.1} ${r*.07}"/>
+ <path d="M ${-r*.13} ${-r*.99} Q ${r*.0} 0 ${-r*.13} ${r*.99} M ${r*.13} ${-r*.99} Q 0 0 ${r*.13} ${r*.99}" fill="none" stroke="#111" stroke-width="${r*.025}"/></g>`;
+const grad='linear-gradient(150deg,#001D48 0%,#1226AA 45%,#E11F8F 100%)';
+let h='';
+if(v==='a'){ // boundary rope ring, broken top-right where the ball flies out
+  h=`<div class="bg" style="background:${grad}"></div>
+  <svg viewBox="0 0 1024 1024"><circle cx="512" cy="512" r="420" fill="none" stroke="#fff" stroke-width="16" stroke-dasharray="2180 2640" stroke-dashoffset="-560" stroke-linecap="round"/>
+  <path d="M 656 372 L 738 290" stroke="#E11F8F" stroke-width="14" stroke-linecap="round"/><path d="M 622 356 L 682 296" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".7"/><path d="M 676 410 L 736 350" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".7"/>
+  ${ball(782,246,56,35)}</svg>
+  <div class="c" style="padding-top:10px"><img class="logo" src="../../logos/rra-melbourne-white.svg" style="height:250px;margin-bottom:26px">
+  <div class="w" style="font-size:100px">BREAK THE</div><div class="w" style="font-size:100px"><span class="p">BOUNDARY</span></div>
+  <div class="t" style="font-size:27px;margin-top:26px">Festival of Cricket · Torquay</div></div>`;
+}else if(v==='b'){ // wordmark led: the O of BOUNDARY is the ball
+  h=`<div class="bg" style="background:#001D48"></div><div class="bg" style="background:radial-gradient(circle at 70% 30%,rgba(225,31,143,.55),rgba(18,38,170,.25) 45%,rgba(0,29,72,0) 70%)"></div>
+  <div class="c"><img class="logo" src="../../logos/rra-melbourne-white.svg" style="height:230px;margin-bottom:34px">
+  <div class="w" style="font-size:150px">BREAK</div><div class="t" style="font-size:44px;margin:10px 0 12px;letter-spacing:.5em;padding-left:.5em;color:#E11F8F">THE</div>
+  <div class="w" style="font-size:120px;display:flex;align-items:center"><span class="p">B</span><svg viewBox="-60 -60 120 120" style="position:static;width:104px;height:104px;margin:0 3px">${ball(0,0,52,25)}</svg><span class="p">UNDARY</span></div>
+  <div class="t" style="font-size:27px;margin-top:34px">Festival of Cricket · Torquay</div></div>`;
+}else{ // pink, bold, ball smashing through a rope line
+  h=`<div class="bg" style="background:linear-gradient(160deg,#E11F8F 0%,#a3126b 100%)"></div>
+  <svg viewBox="0 0 1024 1024"><path d="M 60 760 Q 300 700 470 742" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round"/><path d="M 640 760 Q 820 790 964 742" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round"/>
+  ${ball(555,736,58,20)}</svg>
+  <div class="c" style="justify-content:flex-start;padding-top:120px"><img class="logo" src="../../logos/rra-melbourne-white.svg" style="height:230px;margin-bottom:30px">
+  <div class="w" style="font-size:118px">BREAK THE</div><div class="w" style="font-size:118px;color:#001D48">BOUNDARY</div></div>
+  <div class="t" style="position:absolute;left:0;right:0;bottom:118px;text-align:center;font-size:25px;color:#fff">Festival of Cricket · Torquay</div>`;
+}
+document.body.innerHTML=h;
+Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.load('900 100px M')).then(()=>document.fonts.ready).then(()=>document.body.dataset.ready='1');
+</script></body></html>
