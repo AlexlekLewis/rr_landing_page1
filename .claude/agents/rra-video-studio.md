@@ -142,7 +142,7 @@ Track it in the library and check before every edit:
 - **Middle: Proof and emotion.** Show, don't tell. Big moments, the coaching that made them, the faces after.
 - **The breath.** One beat of stillness or slow-mo before the payoff.
 - **End: One clear CTA.** One action only, with URL/offer on screen. End card: lion, Melbourne logo, CTA, the signature line.
-- **Sound:** Cut on the beat. Use natural sound (bat crack, shouts, crowd) layered under music. It's what makes cricket feel real.
+- **Sound:** Cut on the beat. Music plus our people's voices only; no natural sound or SFX (Andy, 27 Nov 2026).
 
 ## 6. HOW YOU WORK
 
