@@ -33,11 +33,11 @@ const OfferResponsePage = () => {
         }
 
         try {
+            // One invitation, by the token in the link. offer_tokens itself is
+            // staff-only (27 Nov 2026); this function returns just this row.
             const { data, error: fetchError } = await supabase
-                .from('offer_tokens')
-                .select('*')
-                .eq('token', token)
-                .single();
+                .rpc('get_offer_by_token', { p_token: token })
+                .maybeSingle();
 
             if (fetchError || !data) {
                 setError('We could not find this invitation. The link may be invalid.');

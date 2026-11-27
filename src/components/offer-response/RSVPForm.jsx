@@ -55,13 +55,10 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
             // 2. Mark token as used/responded
             const newStatus = decision === 'yes' || decision === 'yes_but_no_assess' ? 'attended' : 'declined';
 
+            // offer_tokens is staff-only (27 Nov 2026); this function updates
+            // only the invitation whose token is in this link.
             const { error: updateError } = await supabase
-                .from('offer_tokens')
-                .update({
-                    status: newStatus,
-                    responded_at: new Date().toISOString()
-                })
-                .eq('id', tokenData.id);
+                .rpc('set_offer_token_status', { p_token: tokenData.token, p_status: newStatus });
 
             if (updateError) throw updateError;
 
