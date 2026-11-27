@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- BREAK THE BOUNDARY icon on generated artwork (Higgsfield; ball + rope only, never people). ?a=smash2|smash1|emblem2|beach2 -->
+<style>
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-normal.woff2);font-weight:900}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1024px;height:1024px;font-family:M;color:#fff;position:relative;overflow:hidden;background:#001D48}
+.art{position:absolute;inset:0;background-size:cover;background-position:center}
+.wash{position:absolute;inset:0}
+.c{position:absolute;left:0;right:0;text-align:center}
+.w{font-weight:900;text-transform:uppercase;line-height:.9;letter-spacing:-.02em;text-shadow:0 6px 30px rgba(0,10,40,.7)}
+.w .p{color:#E11F8F}
+.t{font-weight:800;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 2px 12px rgba(0,10,40,.8)}
+</style></head><body><script>
+const a=new URLSearchParams(location.search).get('a')||'smash2';
+const L={ // art offset (px down from top) and size, per artwork; words sit in the clear navy above
+ smash2:{y:95,size:'100%',logo:[96,150],words:272,sub:486},
+ smash1:{y:80,size:'100%',logo:[96,150],words:272,sub:486},
+ emblem2:{y:150,size:'86%',logo:[64,120],ring:true},
+ beach2:{y:215,size:'100%',logo:[96,150],words:272,sub:486},
+}[a];
+let h=`<div class="art" style="background-image:url(art/${a}.jpg);background-repeat:no-repeat;background-position:center ${L.y}px;background-size:${L.size};${L.ring?'':'-webkit-mask-image:linear-gradient(180deg,transparent '+(L.y/10.24+2)+'%,#000 '+(L.y/10.24+22)+'%)'}"></div>`;
+if(L.ring){ // emblem: words on an arc is fragile; set them as a band across the ball instead
+  h+=`<div class="c" style="top:${L.logo[0]}px"><img src="../../logos/rra-melbourne-white.svg" style="height:${L.logo[1]}px"></div>
+  <div class="c" style="top:520px;background:rgba(0,29,72,.88);padding:26px 0 24px;border-top:6px solid #E11F8F;border-bottom:6px solid #E11F8F">
+   <div class="w" style="font-size:104px;text-shadow:none">BREAK THE <span class="p">BOUNDARY</span></div></div>
+  <div class="c t" style="top:214px;font-size:24px">Festival of Cricket · Torquay</div>`;
+}else{
+  h+=`<div class="c" style="top:${L.logo[0]}px"><img src="../../logos/rra-melbourne-white.svg" style="height:${L.logo[1]}px"></div>
+  <div class="c" style="top:${L.words}px"><div class="w" style="font-size:104px">BREAK THE</div><div class="w" style="font-size:104px"><span class="p">BOUNDARY</span></div></div>
+  <div class="c t" style="top:${L.sub}px;font-size:25px">Festival of Cricket · Torquay</div>`;
+}
+document.body.innerHTML=h;
+const w=document.querySelector('.c .w');
+Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.load('900 100px M')).then(()=>document.fonts.ready).then(()=>{
+  document.querySelectorAll('.w').forEach(e=>{let f=parseFloat(e.style.fontSize);const r=document.createRange();r.selectNodeContents(e);while(r.getBoundingClientRect().width>700&&f>40){f-=2;e.style.fontSize=f+'px'}});
+  const im=new Image();im.onload=()=>document.body.dataset.ready='1';im.src='art/'+a+'.jpg'});
+</script></body></html>
