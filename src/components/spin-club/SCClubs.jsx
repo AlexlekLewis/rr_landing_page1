@@ -1,5 +1,5 @@
 import React from 'react';
-import { CLUBS, PROGRAM, EVERY_SPIN, START_DATE, NIGHTS } from './scOptions';
+import { CLUBS, PROGRAM, EVERY_SPIN, START_DATE, NIGHT_DATES, CHRISTMAS_BREAK } from './scOptions';
 
 const SCClubs = () => (
     <section className="bg-slate-50 py-20 md:py-28">
@@ -87,27 +87,34 @@ const SCClubs = () => (
                 ))}
             </div>
 
-            {/* All eight dates, so nobody has to count Wednesdays off a calendar. */}
+            {/* Every date, so nobody has to count Wednesdays off a calendar. */}
             <div className="mt-8 bg-white border border-slate-200 rounded-3xl px-6 py-6 md:px-8">
                 <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-3">
-                    The {PROGRAM.weeks} nights
+                    The nights
                 </p>
                 <p className="text-[15px] text-rr-dark/70 font-medium leading-relaxed mb-4">
-                    Both centres run on the same {PROGRAM.weeks} Wednesdays, starting{' '}
-                    <strong className="text-rr-dark">{START_DATE}</strong>.
+                    Both centres run every Wednesday, starting{' '}
+                    <strong className="text-rr-dark">{START_DATE}</strong>.{' '}
+                    {CHRISTMAS_BREAK.line}
                 </p>
-                <div className="flex flex-wrap gap-2">
-                    {NIGHTS.map((n, i) => (
-                        <span
-                            key={n}
-                            className={`text-[13px] font-bold rounded-full px-3.5 py-1.5 ${
-                                i === 0
-                                    ? 'bg-rr-pink text-white'
-                                    : 'bg-slate-100 text-rr-dark/70'
-                            }`}
-                        >
-                            {n}
-                        </span>
+                <div className="flex flex-wrap items-center gap-2">
+                    {NIGHT_DATES.map((n, i) => (
+                        <React.Fragment key={n.iso}>
+                            {n.iso.startsWith('2027') && !NIGHT_DATES[i - 1]?.iso.startsWith('2027') && (
+                                <span className="text-[12px] font-black uppercase tracking-widest text-rr-pink px-2">
+                                    Christmas break
+                                </span>
+                            )}
+                            <span
+                                className={`text-[13px] font-bold rounded-full px-3.5 py-1.5 ${
+                                    i === 0
+                                        ? 'bg-rr-pink text-white'
+                                        : 'bg-slate-100 text-rr-dark/70'
+                                }`}
+                            >
+                                {n.label}
+                            </span>
+                        </React.Fragment>
                     ))}
                 </div>
             </div>

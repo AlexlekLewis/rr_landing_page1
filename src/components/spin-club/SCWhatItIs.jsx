@@ -112,7 +112,7 @@ const SCWhatItIs = () => (
                 </div>
                 <p className="text-[13px] text-white/50 font-medium mt-6">
                     {PROGRAM.time} on a {PROGRAM.day} night. {PROGRAM.sessionLength} on the floor,
-                    for {PROGRAM.weeks} weeks, then straight on through January, February and March.
+                    every week, paused over the Christmas break.
                 </p>
             </div>
         </div>

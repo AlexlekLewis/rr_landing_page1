@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { PROGRAM, START_DATE, END_DATE, FOUNDER, HEADLINE } from './scOptions';
+import { PROGRAM, START_DATE, FOUNDER, HEADLINE, PRICES } from './scOptions';
 
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -9,7 +9,7 @@ const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior:
 // and the price has moved down to the pricing section where the value is explained.
 const FACTS = [
     { title: `Ages ${PROGRAM.ages}`, detail: 'Spin bowlers only, at every standard of cricket' },
-    { title: `${PROGRAM.weeks} Wednesday nights`, detail: `${PROGRAM.time}, ${START_DATE.replace('Wednesday ', '')} through to ${END_DATE.replace('Wednesday ', '')}` },
+    { title: 'Every Wednesday', detail: `${PROGRAM.time}, from ${START_DATE.replace('Wednesday ', '')}. ${PRICES[0].headline} a week holds your spot` },
     { title: 'Two centres', detail: 'Mickleham in the north, Cranbourne North in the south-east' },
 ];
 
@@ -58,7 +58,7 @@ const SCHero = () => (
                         onClick={() => scrollTo('apply')}
                         className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 flex items-center justify-center gap-3"
                     >
-                        Sign up for a night
+                        Hold your spot
                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>

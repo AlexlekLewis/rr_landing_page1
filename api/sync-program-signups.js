@@ -29,7 +29,9 @@
 // ── MONEY: ONLY ONE OF THE FOUR TAKES ANY ───────────────────
 // As at 30 Sep 2026, Open Trial is the only one of these programs that charges
 // anything online ($30 a session, through the Performance Squads Stripe links).
-//   • Spin Club registers interest — nothing to pay.
+//   • Spin Club is a WEEKLY SUBSCRIPTION from 27 Nov 2026 ($60 a week). Its
+//     payments are recorded by the Stripe webhook in spin_club_subscriptions /
+//     spin_club_payments, and the Payment column reads v_spin_club_members.
 //   • Tour Interest is an expression of interest — nothing to pay. The India
 //     Tour deposit page was retired on 5 Aug 2026 having collected $0.
 //   • Juniors with Sid takes BOOKING REQUESTS: paymentLink is null on both
@@ -180,7 +182,7 @@ const TRIAL_FEE_CENTS = 3000;
 // Full sentences on purpose: someone opening this sheet for the first time
 // should not have to ask anyone what a blank column means.
 const NO_PAYMENT_LINE = {
-  'spin-club': 'Nothing to pay — this is a registration of interest only',
+  'spin-club': 'Nothing to pay — this is a registration of interest only', // pre-27 Nov 2026 rows only
   'sid-juniors': 'Booking request — no payment has been taken and no place is held',
   'tour-interest': 'Nothing to pay — this is an expression of interest only',
   'jr-term4': 'Nothing to pay — an entry only. No place is held until we confirm one.',
@@ -521,7 +523,30 @@ export const SPIN_CLUB_HEADERS = [
 // and only buries the note that does. Strip it and keep the person's own words.
 const ACCEPT_LINE = /\n*Intends to accept an offer if selected: yes\s*$/;
 
-export const spinClubRow = (r) => ([
+// The subscription started 27 Nov 2026. Sign-ups before it bought single
+// nights or the 8-week block through one-off links this sheet never tracked.
+const SPIN_SUB_START = '2026-11-27';
+
+const SPIN_STATUS_WORDS = {
+  active: 'Subscribed',
+  paused: 'Paused',
+  payment_failed: 'PAYMENT FAILED',
+  cancelled: 'Cancelled',
+};
+
+// One plain line for the Payment column. `sub` is this row's v_spin_club_members
+// row (matched on application_id, else parent email), or undefined.
+export const spinClubPaymentLine = (r, sub) => {
+  if (sub) {
+    const weeks = Number(sub.weeks_paid || 0);
+    const last = sub.last_paid_at ? `, last paid ${fmtMelb(sub.last_paid_at).split(' ')[0]}` : '';
+    return `${SPIN_STATUS_WORDS[sub.status] || sub.status} — ${weeks} week${weeks === 1 ? '' : 's'} paid (${money(sub.total_paid_cents || 0)})${last}`;
+  }
+  if (String(r.created_at || '') >= SPIN_SUB_START) return 'Not started — no subscription payment yet';
+  return 'Before the subscription — paid per night or block, not tracked here';
+};
+
+export const spinClubRow = (r, subsByApp = new Map(), subsByEmail = new Map()) => ([
   r.id || '',
   asText(fmtMelb(r.created_at)),
   [r.first_name, r.last_name].filter(Boolean).join(' '),
@@ -534,7 +559,7 @@ export const spinClubRow = (r) => ([
   r.experience_level || '',
   SPIN_CLUB_CENTRES[r.location] || r.program || r.location || '',
   (r.bio || '').replace(ACCEPT_LINE, '').trim(),
-  NO_PAYMENT_LINE['spin-club'],
+  spinClubPaymentLine(r, subsByApp.get(r.id) || subsByEmail.get(String(r.email || '').toLowerCase())),
 ]);
 
 // ── Power League (Sunday 25 October 2026) ───────────────────
@@ -1226,8 +1251,12 @@ export const guideLines = (linkLines = [], counts = {}) => {
     [''],
     ['HOW "PAID" IS WORKED OUT'],
     [''],
-    ['The Open Trial and the Lower Plenty Junior Royals Day charge online; Spin Club,'],
-    ['Junior Royals Term 4 and Tour Interest take no money at all, and the junior sessions'],
+    ['SPIN CLUB is a weekly subscription ($60 a week) from 27 Nov 2026. Its Payment'],
+    ['column shows Subscribed / Paused / PAYMENT FAILED / Cancelled and the weeks paid,'],
+    ['straight from the Stripe webhook. Older Spin Club rows paid per night and are not tracked.'],
+    [''],
+    ['The Open Trial and the Lower Plenty Junior Royals Day charge online; Junior Royals'],
+    ['Term 4 and Tour Interest take no money at all, and the junior sessions'],
     ['with Sid are booking requests. The Lower Plenty $10 is matched to the exact'],
     ['registration it was paid for. The Open Trial fee is $30 per player, per'],
     ['session, taken through a Stripe payment link. Stripe does not tell our website'],
@@ -1314,7 +1343,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
   // would quietly stop putting people on a coach's tab with nothing to show it
   // had happened. ROW_CAP is well above any of these (240 in
   // performance_squad_leads at 30 Sep 2026) and hitting it is logged loudly.
-  const [squadLeads, spinClub, sidBookings, tourApps, tourEois, jrTerm4, lpJrDayRaw, powerLeague, invitationsRaw] = await Promise.all([
+  const [squadLeads, spinClub, sidBookings, tourApps, tourEois, jrTerm4, lpJrDayRaw, powerLeague, invitationsRaw, spinSubsRaw] = await Promise.all([
     // ALL performance_squad_leads, not just the open-trial ones: payments are
     // allocated across the whole table so this workbook and the Performance
     // Squads workbook can never disagree about who has paid. Filtered down to
@@ -1328,7 +1357,15 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     sb.from(LP_JR_DAY_TABLE).select('*').order('created_at', { ascending: true }).limit(ROW_CAP),
     sb.from('applications').select('*').eq('program_type', POWER_LEAGUE_PROGRAM).eq('is_test', false).order('created_at', { ascending: true }).limit(ROW_CAP),
     sb.from(INVITATION_TABLE).select('*').order('created_at', { ascending: true }).limit(ROW_CAP),
+    sb.from('v_spin_club_members').select('*').limit(ROW_CAP),
   ]);
+  // Spin Club subscriptions (27 Nov 2026). Missing view → payment column falls
+  // back to words; the rest of the sync is untouched.
+  const spinSubs = spinSubsRaw.error
+    ? (console.warn(`sync-program-signups: v_spin_club_members unavailable (${spinSubsRaw.error.code}) — Spin Club payment column uses words only`), [])
+    : (spinSubsRaw.data || []);
+  const spinSubsByApp = new Map(spinSubs.filter((s) => s.application_id).map((s) => [s.application_id, s]));
+  const spinSubsByEmail = new Map(spinSubs.filter((s) => s.parent_email).map((s) => [String(s.parent_email).toLowerCase(), s]));
   // The newest source: if its table is ever missing (a fresh database, a
   // rename), the other tabs must still sync. Every other error still throws.
   const lpJrDay = lpJrDayRaw.error && ['42P01', 'PGRST205'].includes(lpJrDayRaw.error.code)
@@ -1396,7 +1433,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     {
       key: 'spin-club',
       headers: SPIN_CLUB_HEADERS,
-      rows: (spinClub.data || []).map(spinClubRow),
+      rows: (spinClub.data || []).map((r) => spinClubRow(r, spinSubsByApp, spinSubsByEmail)),
     },
     {
       key: 'sid-juniors',

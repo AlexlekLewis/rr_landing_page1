@@ -11,32 +11,39 @@ export const PROGRAM = {
     time: '6:00–7:30pm',
     sessionLength: '1.5 hours',
     ages: '10 to 25',
-    weeks: 8,
-    totalHours: 12, // 8 nights x 1.5 hours
 };
 
-// Confirmed by Alex, 27 Sep 2026. 7 October 2026 is a Wednesday; eight weekly
-// nights from there run to Wednesday 25 November.
-export const START_DATE = 'Wednesday 7 October';
-export const END_DATE = 'Wednesday 25 November';
-export const NIGHTS = [
-    '7 October', '14 October', '21 October', '28 October',
-    '4 November', '11 November', '18 November', '25 November',
-];
-
-// Same eight nights with their dates attached, so the sign-up form can drop the
-// ones that have already been played rather than offering a night in the past.
+// ── WEEKLY SUBSCRIPTION (Alex, 27 Nov 2026) ─────────────────────────────────
+// The first block (8 Wednesdays, 7 Oct – 25 Nov 2026) is finished. From here
+// Spin Club runs every Wednesday as a weekly subscription that holds your spot,
+// paused over the Christmas break.
+//
+// DATES BELOW ARE PROPOSED, NOT YET CONFIRMED BY ALEX: three Wednesdays before
+// Christmas, the break, then back on 28 January. Change them here and nowhere
+// else — the hero, the dates strip, the form and the break line all read this.
 export const NIGHT_DATES = [
-    { label: '7 October', iso: '2026-10-07' },
-    { label: '14 October', iso: '2026-10-14' },
-    { label: '21 October', iso: '2026-10-21' },
-    { label: '28 October', iso: '2026-10-28' },
-    { label: '4 November', iso: '2026-11-04' },
-    { label: '11 November', iso: '2026-11-11' },
-    { label: '18 November', iso: '2026-11-18' },
-    { label: '25 November', iso: '2026-11-25' },
+    { label: '3 December', iso: '2026-12-03' },
+    { label: '10 December', iso: '2026-12-10' },
+    { label: '17 December', iso: '2026-12-17' },
+    { label: '28 January', iso: '2027-01-28' },
+    { label: '4 February', iso: '2027-02-04' },
+    { label: '11 February', iso: '2027-02-11' },
+    { label: '18 February', iso: '2027-02-18' },
+    { label: '25 February', iso: '2027-02-25' },
+    { label: '4 March', iso: '2027-03-04' },
+    { label: '11 March', iso: '2027-03-11' },
+    { label: '18 March', iso: '2027-03-18' },
+    { label: '25 March', iso: '2027-03-25' },
 ];
+export const NIGHTS = NIGHT_DATES.map((n) => n.label);
+export const START_DATE = `Wednesday ${NIGHT_DATES[0].label}`;
+export const CHRISTMAS_BREAK = {
+    lastNight: 'Wednesday 17 December',
+    backOn: 'Wednesday 28 January',
+    line: 'Paused over the Christmas break \u2014 after Wednesday 17 December, nothing is charged until Wednesday 28 January.',
+};
 
+// Upcoming nights only, so the form never offers a Wednesday that has passed.
 export const upcomingNights = (now = new Date()) => {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     return NIGHT_DATES.filter((n) => {
@@ -127,54 +134,63 @@ export const EVERY_SPIN = {
     long: 'Both centres take every type of spin \u2014 off spin, leg spin, left-arm orthodox, left-arm wrist spin, and anyone still working out what it is they bowl. Your Royal Spin Coach bowls one of them. They coach all of them.',
 };
 
-// Prices. 9 Oct 2026: the 8-night block prices are WITHDRAWN. Spin Club sells
-// one 1.5-hour Wednesday session at a time.
-//
-// Alex, 9 Oct 2026: "$60 including GST for 1.5 hours." So unlike every earlier
-// Spin Club price, this one is GST-INCLUSIVE as stated — $60 is the total
-// payable, and the ex-GST figure is $60 / 1.1 = $54.55.
-//
-// Performance Squad members do not buy from this page at all; their rate is
-// arranged through their head coach.
+// Price (Alex, 27 Nov 2026): "$60 per night" for everyone, as a weekly
+// subscription. GST-INCLUSIVE — $60 is the total payable; ex-GST $54.55.
+// Performance Squad members pay the same; there is no separate squad rate.
 export const GST_NOTE = 'Every price on this page includes GST.';
 
 export const PRICES = [
     {
-        key: 'single',
-        question: 'One Wednesday night',
+        key: 'weekly',
+        question: 'Weekly subscription',
         headline: '$60',
-        unit: 'for the 1.5-hour session',
+        unit: 'a week, for the 1.5-hour Wednesday session',
         exGst: '$54.55 plus GST',
-        perNight: 'You pay for the nights you come to, and nothing else.',
-        who: 'Open to any spin bowler aged 10 to 25. Come to one night or come to all of them.',
+        perNight: 'Your spot is held every Wednesday, for as long as you want it.',
+        who: 'Open to any spin bowler aged 10 to 25. Same price for everyone, Performance Squad players included.',
         feature: true,
     },
 ];
 
+// The terms a parent needs before they subscribe. Every line is also in the
+// form's tick-box, so nobody can say they were not told.
+// "How to stop" is a PROPOSED process, not yet confirmed by Alex.
+export const SUBSCRIPTION_TERMS = [
+    ['$60 every week', 'Charged on Wednesdays. It holds your spot, so it is charged whether or not you make it that night.'],
+    ['Paused over Christmas', 'After Wednesday 17 December, nothing is charged until Wednesday 28 January.'],
+    ['Stop any time', 'Email info@rramelbourne.com before a Wednesday and that week is not charged.'],
+];
 
-// Verified against the live checkout on 9 Oct 2026: the product reads
-// "Spin Club Session Price" and charges A$60.00, which matches PRICES above.
-// Re-check this if the price on the page ever changes — a page and a checkout
-// that disagree is the one thing we must never ship.
-export const STRIPE_LINK = 'https://buy.stripe.com/cNi8wPh29ggZgtScE39Zm0V';
+// The weekly subscription link (Alex's Stripe, 27 Nov 2026): product "Spin
+// Club — Weekly Subscription", A$60.00 a week, GST included, asks for the
+// player's name and the centre. The form appends client_reference_id (its own
+// applications.id) and prefilled_email, so the webhook files the payment
+// against this exact sign-up. Re-check the product if the price ever changes.
+export const STRIPE_SUBSCRIPTION_LINK = 'https://buy.stripe.com/cNibJ1eU14yh91q47x9Zm12';
+
+export const subscriptionCheckoutUrl = (applicationId, email) => {
+    const url = new URL(STRIPE_SUBSCRIPTION_LINK);
+    if (applicationId) url.searchParams.set('client_reference_id', applicationId);
+    if (email) url.searchParams.set('prefilled_email', email);
+    return url.toString();
+};
 
 export const SQUAD_NOTE = {
-    members: 'Already in a Royals Academy Performance Squad? Do not pay here \u2014 speak to your head coach directly and they will sort your rate out with you.',
-    joiners: 'Not in a squad, and want to be?',
+    joiners: 'Not in a Performance Squad, and want to be?',
     linkLabel: 'See the Performance Squads',
     href: '/performance-squads',
 };
 
 export const INCLUDED = [
-    ['12 hours of coaching', '8 nights, an hour and a half each.'],
-    ['Two coaches in the room', 'Six players per coach, so you get looked at properly.'],
-    ['Your own lane time', 'One lane for every six players, every night.'],
+    ['1.5 hours, every Wednesday', 'The same night and the same time, every week.'],
+    ['A Royal Spin Coach', 'Callum Stow at Mickleham, Harkirat Bajwa at Cranbourne North.'],
+    ['Small groups', 'One lane for every three bowlers, so you bowl most of the night.'],
 ];
 
 export const HOW_PAYING_WORKS = [
-    ['Tell us who you are', 'Pick your centre and the Wednesday you want. It takes a minute.'],
-    ['Pay for that night', 'The payment button comes up as soon as you have signed up.'],
-    ['Turn up and bowl', 'We will have a lane and a coach ready for you.'],
+    ['Tell us who you are', 'Pick your centre and your first Wednesday. It takes a minute.'],
+    ['Start your subscription', '$60 a week, charged on Wednesdays. The payment button comes up as soon as you have signed up.'],
+    ['Turn up and bowl', 'Your spot is held every week. We will have a lane and a coach ready for you.'],
 ];
 
 export const SPIN_TYPES = [

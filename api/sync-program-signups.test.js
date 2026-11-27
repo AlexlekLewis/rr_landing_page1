@@ -284,9 +284,23 @@ describe('paymentCheck', () => {
 // Spin Club
 // ------------------------------------------------------------
 describe('spin club rows', () => {
-  it('says in words that nothing is owed', () => {
+  it('says a pre-subscription sign-up is not tracked here', () => {
     const row = spinClubRow(spinLead());
-    expect(row[SPIN_CLUB_HEADERS.indexOf('Payment')]).toBe('Nothing to pay — this is a registration of interest only');
+    expect(row[SPIN_CLUB_HEADERS.indexOf('Payment')]).toBe('Before the subscription — paid per night or block, not tracked here');
+  });
+
+  it('says a new sign-up with no payment has not started', () => {
+    const row = spinClubRow(spinLead({ created_at: '2026-11-28T01:00:00Z' }));
+    expect(row[SPIN_CLUB_HEADERS.indexOf('Payment')]).toBe('Not started — no subscription payment yet');
+  });
+
+  it('shows the subscription matched by the sign-up id, then by email', () => {
+    const sub = { application_id: 'sc-1', parent_email: 'parent@example.com', status: 'active', weeks_paid: 2, total_paid_cents: 12000, last_paid_at: '2026-12-10T08:00:00Z' };
+    const byApp = new Map([['sc-1', sub]]);
+    const line = spinClubRow(spinLead({ created_at: '2026-11-28T01:00:00Z' }), byApp)[SPIN_CLUB_HEADERS.indexOf('Payment')];
+    expect(line).toMatch(/^Subscribed — 2 weeks paid \(\$120(\.00)?\), last paid 2026-12-10$/);
+    const byEmail = new Map([['parent@example.com', { ...sub, status: 'payment_failed', weeks_paid: 1, total_paid_cents: 6000 }]]);
+    expect(spinClubRow(spinLead({ id: 'other' }), new Map(), byEmail)[SPIN_CLUB_HEADERS.indexOf('Payment')]).toMatch(/^PAYMENT FAILED — 1 week paid/);
   });
 
   it('names the venue, not the "north"/"south" code', () => {
