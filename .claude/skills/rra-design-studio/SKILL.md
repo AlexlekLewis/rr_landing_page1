@@ -242,6 +242,10 @@ Name the unzipped pack folders as in `PACKS` in build_pieces.py (03-feed, elite-
 - The **Royals Academy logo is a major part of every event lock-up** (about as tall as the
   wordmark), and for events it is the version **without "Melbourne"**:
   `brand/logos/rra-academy-white.png` (pink: `rra-academy-blue.png`, misnamed in the kit).
+- **Break the Boundary promotional players: Dhruv Jurel and Vaibhav Sooryavanshi only** (Andy, 27 Nov 2026).
+  This overrides the 'three at a time' rule for this event. Group players tight (overlapping shoulders),
+  large, cropped at the thigh; never spaced apart.
+- Torquay variant: logo with TORQUAY + wave mark, coastal background (`art/coast.jpg`).
 - Wording: Rajasthan Royals Academy · BREAK THE BOUNDARY · FESTIVAL. Nothing else unless Andy adds it.
 - Template: `brand/templates/break-the-boundary/` (`btb-logo.js`, `event-logo.html`, `hero.html`).
 
