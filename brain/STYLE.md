@@ -248,3 +248,15 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
   - stills.py: composite check frames before the full render
 - For 9:16 from landscape interviews, upscale the 9:16 crop region (not the whole frame) with Higgsfield "2k". Find the face x per take first: the Kumar takes differ (253s face at x .55, 169s at .62).
 - Where a source has burnt-in captions, our caption tape must fully cover them. Their vertical position varies per line, so measure on stills.
+
+## v10 flagship notes (27 Nov 2026)
+- **Re-tracking FrogBox (Power League):** upscale a 1636x920 landscape region (scorebar out) to 4K with Higgsfield first, then do the 9:16 tracking crop locally with keyframes `kx=[(t, x_px)]` and smoothstep easing (`v10/final/build_shots.py`). Measure positions from a full-width 4fps strip with a 100px grid before setting keyframes; estimates from small contact sheets were off by 150-300px.
+  - A 9:16 crop of 1080p FrogBox is ~460-520 src px wide. Bowler-to-batter in the close angle is ~600-850px, so one crop can't hold both: frame batter + keeper (behind-keeper angle) or follow the ball with a pan after release. Never cut mid-delivery.
+  - Hide the POWERLEAGUE / www board when it can only appear as a fragment: crop y below the board (y>=200-215 on the 28 Sep close angle). Where the board is wanted, end the pan on it whole.
+  - FrogBox watermark ("Frog Box", top-left, y 80-180): crop y>=190 when the crop touches x<200.
+- **Clear space for type (Andy: no text over images):** pick statement shots with an empty floor/pitch/wall band. On 4K portrait sources, a z1.3 crop pushed to the bottom (cy=1.0) lifts the subjects and frees the lower third. If only the top is clear, set the tapes at top=440 under a small logo.
+- **Logo sizing:** Royals Academy logo top-left is 330px tall (visible ~305) where the corner is empty, 180px when a subject is near, and off when it would cover a face or our signage (05c, 06a, 10b, 11b, 12a). The end frame uses the PINK logo (400px) on the white ceiling, with the URL pill beside it.
+- **Sid's HALLA BOL backdrop is a step-and-repeat:** at 9:16 a partial "HA" peeks beside his head unless the crop starts at x>=1440 (4K). v10 crop: z1.075, y150, cx .5117.
+- **Shots that look right but aren't:** IMG_3028 2-4 is a batter in gloves (not a bowler); Rane VID_1013's Fulltrack insert is at our Melbourne centre (not HPC); IMG_3081's dive is at 26.0, not 24.7; IMG_9053 starts with a boy in a maroon club shirt (8.0-8.6).
+- **TEMP music now has a shape** (`v10/final/music.py`): intro pad → hit → light groove → DROP at match days → pull-back under the kids → build → breakdown (Andy VO) → biggest drop at 2027 → hits on every statement → drums out under Sid → big hit on "Halla Bol!" → chord rings out on the end frame.
+- **Whisper on short isolated clips** mishears names ("They're under arrest" for Sooryavanshi): verify short clips against the full-context transcript, and pad clips with 0.8s silence before transcribing.
