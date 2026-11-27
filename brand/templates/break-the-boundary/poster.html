@@ -1,0 +1,54 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- BREAK THE BOUNDARY FESTIVAL poster, dusk version (Andy, 27 Nov 2026: dusk background, no footer stripe,
+     own event branding, better proportions). Stack: crest > players > wordmark > details. ?f=feed|vert|sq &loc=... -->
+<style>
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-italic.woff2);font-weight:900;font-style:italic}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-normal.woff2);font-weight:900}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:M;color:#fff;position:relative;overflow:hidden;background:#000A24;width:1080px}
+.l{position:absolute}
+.pl{filter:drop-shadow(-8px 0 20px rgba(225,31,143,.35)) drop-shadow(10px 0 22px rgba(255,150,80,.3)) drop-shadow(0 30px 40px rgba(0,0,0,.55)) contrast(1.06) saturate(1.08)}
+.date{font:italic 900 1em M;text-transform:uppercase;letter-spacing:.02em;white-space:nowrap}
+.date b{color:#E11F8F}
+.grid{display:grid;grid-template-columns:1fr 1fr;column-gap:1.6em}
+.it{display:flex;gap:.7em;align-items:flex-start;border-top:2px solid rgba(255,255,255,.25);padding:.6em 0;font-weight:800;line-height:1.2}
+.it i{font:normal 900 .85em M;color:#E11F8F;padding-top:.08em}
+.grain{inset:0;opacity:.09;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>")}
+</style><script src="btb-logo.js"></script></head><body><script>
+const q=new URLSearchParams(location.search),F=q.get('f')||'feed',LOC=q.get('loc')||'Torquay, Geelong';
+// ch: crest height, pt/pc: players top/height, wy/ww: wordmark top/width, dy: details top, df: details font px, m: side margin
+const Z={feed:{H:1350,cy:34,ch:170,pt:140,pc:1050,wy:560,ww:640,dy:932,df:22,m:64,bot:40},
+         vert:{H:1920,cy:240,ch:200,pt:390,pc:1250,wy:836,ww:700,dy:1246,df:25,m:64,bot:250},
+         sq:{H:1080,cy:24,ch:120,pt:96,pc:820,wy:458,ww:500,dy:758,df:18.5,m:48,bot:28}}[F];
+document.body.style.height=Z.H+'px';
+const W=1080-2*Z.m, shade=Math.round((Z.wy-60)/Z.H*100);
+document.body.innerHTML=`<div class="l" style="inset:0;background:url(art/dusk.jpg) center top/cover;filter:saturate(1.15)"></div>
+<div class="l" style="inset:0;background:linear-gradient(180deg,rgba(0,10,36,.45) 0%,rgba(0,10,36,0) 16%,rgba(0,10,36,0) ${shade-14}%,rgba(0,10,36,.86) ${shade+6}%,#000A24 ${shade+26}%)"></div>
+<img class="l pl" id="a" src="../launch-2027/players/soorya-6645.png" style="height:${Z.pc}px;top:${Z.pt}px;z-index:3">
+<img class="l pl" id="b" src="../launch-2027/players/jurel-0417.png" style="height:${Z.pc*.98}px;top:${Z.pt+Z.pc*.01}px;z-index:2">
+<div class="l" style="left:0;right:0;top:${Z.wy-120}px;bottom:0;z-index:4;background:linear-gradient(180deg,rgba(0,10,36,0) 0%,rgba(0,10,36,.9) 150px,#000A24 300px)"></div>
+<img class="l" src="../../logos/rra-academy-white.png" style="height:${Z.ch}px;top:${Z.cy}px;left:${Z.m}px;z-index:6;filter:drop-shadow(0 4px 18px rgba(0,10,36,.6))">
+<div class="l" style="left:${540-Z.ww/2}px;top:${Z.wy}px;z-index:6">${btbLogo(Z.ww,{crest:false,loc:LOC})}</div>
+<div class="l" style="left:${Z.m}px;width:${W}px;top:${Z.dy}px;z-index:6;font-size:${Z.df}px">
+  <div class="date" style="font-size:${Z.df*1.7}px;text-align:center;margin-bottom:${Z.df*.7}px">Sunday 17 <b>&amp;</b> Monday 18 January</div>
+  <div class="grid">
+   <div class="it"><i>01</i><span>T10 Senior Tournament</span></div>
+   <div class="it"><i>02</i><span>Junior and Senior Modern Cricket Coaching Clinic</span></div>
+   <div class="it"><i>03</i><span>Scholarship offers for players</span></div>
+   <div class="it"><i>04</i><span>Private coaching sessions with Rajasthan Royals IPL coaches awarded</span></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:${Z.df*.9}px;border-top:2px solid rgba(255,255,255,.25);padding-top:${Z.df*.7}px">
+   <img src="art/qr-break-the-boundary.svg" style="width:${Z.df*4.6}px;height:${Z.df*4.6}px;border-radius:6px;flex:none">
+   <div style="flex:1"><div style="font:normal 900 ${Z.df*1.05}px M;color:#E11F8F;letter-spacing:.08em;text-transform:uppercase">Places are limited</div>
+    <div style="font-weight:800;font-size:${Z.df*.86}px;margin-top:${Z.df*.25}px">Players welcome from around Victoria</div></div>
+   <div style="font:italic 900 ${Z.df*1.25}px M;letter-spacing:.1em;white-space:nowrap">RRAMELBOURNE.COM</div>
+  </div>
+</div>
+<div class="l grain" style="z-index:9"></div>`;
+Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.load('italic 900 100px M')).then(()=>document.fonts.load('800 30px M')).then(()=>document.fonts.ready).then(()=>{
+ const w=id=>document.getElementById(id).getBoundingClientRect().width, set=(id,x)=>document.getElementById(id).style.left=x+'px',cx=600;
+ set('a',cx-w('a')*.86); set('b',cx-w('b')*.36);
+ const d=document.body.children[7].getBoundingClientRect();document.body.dataset.fit=d.bottom<=Z.H-Z.bot?'ok':'OVER '+Math.round(d.bottom-(Z.H-Z.bot));
+ document.body.dataset.ready='1'});
+</script></body></html>

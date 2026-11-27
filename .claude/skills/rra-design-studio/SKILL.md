@@ -246,6 +246,9 @@ Name the unzipped pack folders as in `PACKS` in build_pieces.py (03-feed, elite-
   This overrides the 'three at a time' rule for this event. Group players tight (overlapping shoulders),
   large, cropped at the thigh; never spaced apart.
 - Location line is **TORQUAY, GEELONG** (Andy, 27 Nov 2026); Andy prefers the coastal background over stage lights. Logo variant with the wave mark, background (`art/coast.jpg`).
+- **Events get their own branding set, not the house frame**: no navy footer bar and no HALLA BOL!
+  strip (Andy, 27 Nov 2026). Poster stack: Academy crest, players, wordmark, date, numbered details,
+  QR + website. Dusk coastal background (`art/dusk.jpg`). Template: `poster.html`.
 - Wording: Rajasthan Royals Academy · BREAK THE BOUNDARY · FESTIVAL. Nothing else unless Andy adds it.
 - Template: `brand/templates/break-the-boundary/` (`btb-logo.js`, `event-logo.html`, `hero.html`).
 
