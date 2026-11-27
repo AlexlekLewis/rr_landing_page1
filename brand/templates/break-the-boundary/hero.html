@@ -20,12 +20,12 @@ body{font-family:M;color:#fff;position:relative;overflow:hidden;background:#000A
 </style><script src="btb-logo.js"></script></head><body><script>
 const q=new URLSearchParams(location.search),F=q.get('f')||'feed',LOC=q.get('loc')||'Torquay, Geelong';
 // lw/lx/ly: logo width, centre x, top. pt/pc/cx: players top, height, pair centre. d: details box [left, width, bottom gap above footer, font px]
-const Z={feed:{H:1350,foot:92,lw:420,lx:274,ly:30,pt:190,pc:1300,cx:945,d:[64,456,34,24]},
-         vert:{H:1920,foot:250,lw:480,lx:304,ly:236,pt:380,pc:1500,cx:1070,d:[64,480,50,26]},
-         sq:{H:1080,foot:76,lw:286,lx:226,ly:18,pt:110,pc:1180,cx:820,d:[48,416,22,19.5]}}[F];
+const Z={feed:{H:1350,foot:14,lw:420,lx:274,ly:30,pt:190,pc:1300,cx:945,d:[64,456,34,24]},
+         vert:{H:1920,foot:230,lw:480,lx:304,ly:236,pt:380,pc:1500,cx:1070,d:[64,480,50,26]},
+         sq:{H:1080,foot:10,lw:286,lx:226,ly:18,pt:110,pc:1180,cx:820,d:[48,416,22,19.5]}}[F];
 document.body.style.height=Z.H+'px';
 const [dl,dw,dg,df]=Z.d, fade='linear-gradient(90deg,rgba(0,10,36,.96) 0%,rgba(0,10,36,.78) 36%,rgba(0,10,36,0) 62%),linear-gradient(180deg,rgba(0,10,36,.7) 0%,rgba(0,10,36,0) 22%)';
-document.body.innerHTML=`<div class="l" style="inset:0;background:url(art/coast.jpg) center 60%/cover;filter:saturate(1.2) brightness(.95)"></div>
+document.body.innerHTML=`<div class="l" style="inset:0;background:url(${q.get('v')==='coast'?'art/coast.jpg':'art/dusk.jpg'}) ${q.get('v')==='coast'?'center 60%':'30% 30%'}/cover;filter:saturate(1.2) brightness(.95)"></div>
 <div class="l" style="inset:0;background:${fade}"></div>
 <img class="l pl" id="a" src="../launch-2027/players/soorya-6645.png" style="height:${Z.pc}px;top:${Z.pt}px;z-index:3">
 <img class="l pl" id="b" src="../launch-2027/players/jurel-0417.png" style="height:${Z.pc*.98}px;top:${Z.pt+Z.pc*.01}px;z-index:2">
@@ -41,10 +41,10 @@ document.body.innerHTML=`<div class="l" style="inset:0;background:url(art/coast.
     <img src="art/qr-break-the-boundary.svg" style="width:${df*5.2}px;height:${df*5.2}px;border-radius:8px;flex:none">
     <div><div style="font:normal 900 ${df*1.02}px M;color:#E11F8F;letter-spacing:.06em;text-transform:uppercase">Places are limited</div>
     <div style="font-weight:800;font-size:${df*.82}px;margin-top:${df*.25}px">Players welcome from around Victoria</div>
-    <div style="font-weight:800;font-size:${df*.66}px;margin-top:${df*.4}px;opacity:.85;letter-spacing:.03em">Scan to register</div></div>
+    <div style="font:italic 900 ${df*.95}px M;margin-top:${df*.4}px;letter-spacing:.08em">RRAMELBOURNE.COM</div></div>
   </div>
 </div>
-<div class="l foot" style="height:${Z.foot}px;${F==='vert'?'align-items:flex-start;padding-top:40px':''}"><b>HALLA BOL!</b><span>RRAMELBOURNE.COM</span></div>
+
 <div class="l grain" style="z-index:9"></div>`;
 Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.load('italic 900 100px M')).then(()=>document.fonts.load('800 30px M')).then(()=>document.fonts.ready).then(()=>{
  const w=id=>document.getElementById(id).getBoundingClientRect().width, set=(id,x)=>document.getElementById(id).style.left=x+'px';
