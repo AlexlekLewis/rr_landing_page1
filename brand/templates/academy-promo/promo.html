@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- Academy promo: real Academy photo full-bleed (full colour), short headline, logo, one line, CTA.
+     window.P={photo,pos,head:[a,b],line,cta:[label,url]}; window.FMT=feed|vert|sq -->
+<style>
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-italic.woff2);font-weight:900;font-style:italic}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-normal.woff2);font-weight:900}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:M;color:#fff;position:relative;overflow:hidden;width:1080px;background:#001D48}
+.l{position:absolute}
+.h{font:italic 900 1em M;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;white-space:nowrap}
+.h .p{color:#E11F8F}
+</style></head><body><script>
+const P=window.P,F=window.FMT||'feed';
+const Z={feed:{H:1350,m:64,top:48,logo:150,fs:150,bot:60},vert:{H:1920,m:64,top:250,logo:170,fs:150,bot:280},sq:{H:1080,m:52,top:36,logo:116,fs:118,bot:44}}[F];
+document.body.style.height=Z.H+'px';
+document.body.innerHTML=`<div class="l" style="inset:0;background:url(${P.photo}) ${(P.pos&&P.pos[F])||'center'}/cover;filter:saturate(1.2) contrast(1.06)"></div>
+<div class="l" style="inset:0;background:linear-gradient(180deg,rgba(0,29,72,.62) 0%,rgba(0,29,72,0) 24%,rgba(0,29,72,0) 46%,rgba(0,22,60,.82) 76%,rgba(0,22,60,.96) 100%)"></div>
+<div class="l" style="inset:0;background:linear-gradient(150deg,rgba(18,38,170,.22),rgba(225,31,143,.18));mix-blend-mode:soft-light"></div>
+<img class="l" src="../../logos/rra-academy-white.png" style="height:${Z.logo}px;left:${Z.m}px;top:${Z.top}px;filter:drop-shadow(0 4px 16px rgba(0,20,60,.6))">
+<div class="l" id="b" style="left:${Z.m}px;right:${Z.m}px;bottom:${Z.bot}px">
+  <div class="h" id="h" style="font-size:${Z.fs}px"><div>${P.head[0]}</div><div class="p">${P.head[1]}</div></div>
+  <div style="width:110px;height:6px;background:#E11F8F;transform:skewX(-20deg);margin:${Z.fs*.16}px 0 ${Z.fs*.13}px"></div>
+  <div style="font-weight:800;font-size:${Z.fs*.2}px;line-height:1.25;max-width:${F==='sq'?760:820}px">${P.line}</div>
+  <div style="display:flex;margin-top:${Z.fs*.2}px;height:${Z.fs*.4}px"><span style="background:#E11F8F;font:normal 900 ${Z.fs*.17}px M;letter-spacing:.05em;padding:0 ${Z.fs*.18}px;display:flex;align-items:center">${P.cta[0]}</span><span style="background:#001D48;font:normal 800 ${Z.fs*.14}px M;letter-spacing:.08em;padding:0 ${Z.fs*.16}px;display:flex;align-items:center">${P.cta[1]}</span></div>
+</div>`;
+const h=document.getElementById('h'),wid=el=>{const r=document.createRange();r.selectNodeContents(el);return r.getBoundingClientRect().width};
+const im=new Image();im.src=P.photo;Promise.all([im.decode().catch(()=>{}),...[...document.images].map(i=>i.decode().catch(()=>{}))]).then(()=>document.fonts.load('italic 900 100px M')).then(()=>document.fonts.load('800 30px M')).then(()=>document.fonts.ready).then(()=>{
+ let f=Z.fs;while(Math.max(...[...h.children].map(wid))>1080-2*Z.m&&f>60){f-=2;h.style.fontSize=f+'px'}document.body.dataset.ready='1'});
+</script></body></html>
